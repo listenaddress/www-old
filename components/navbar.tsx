@@ -36,7 +36,8 @@ export default function Navbar() {
     }];
 
     const slugToName: { [key: string]: string } = {
-        "longevity": "Longevity"
+        "longevity": "Longevity",
+        "retreival-and-ranking-with-llms": "Retrieval and Ranking with LLMS",
     }
 
     useEffect(() => {
