@@ -13,7 +13,7 @@ export default function Home() {
   })
   const [streams, setStreams] = useState([])
   const fetchStreams = async () => {
-    const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams')
+    const data = await fetch(window.location.origin + '/api/streams')
     let streamsRes = await data.json()
     streamsRes = streamsRes.map((stream: any) => {
       stream.content = parseContentForTable(stream.content)
