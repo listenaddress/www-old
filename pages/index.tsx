@@ -5,7 +5,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchStreams = async () => {
-      const data = await fetch(window.location.origin + '/api/hello')
+      const data = await fetch(window.location.origin + '/api/streams')
       let streamsRes = await data.json()
       console.log(streamsRes)
       setStreams([streamsRes])

@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import redis from '@/lib/redis-client';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    console.log("Getting pinned streams")
     const pinnedStreamsRes = await redis.get('pinned-streams');
     const pinnedStreams = JSON.parse(pinnedStreamsRes || '[]');
     res.status(200).json(pinnedStreams);
