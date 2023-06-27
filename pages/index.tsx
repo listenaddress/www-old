@@ -21,7 +21,7 @@ export default function Home() {
     })
     setStreams(streamsRes)
   }
-  // Fetch data api/streams
+
   useEffect(() => {
     fetchStreams()
   }, [])
@@ -35,7 +35,7 @@ export default function Home() {
             return (
               <Link href={`/stream/${stream.slug}`} key={streamIndex}>
                 <div
-                  className="flex flex-col justify-center p-6 px-[1.7rem] md:p-8 md:px-[2.3rem] border-2 rounded-xl border-[#EAEAEA] cursor-pointer"
+                  className="flex flex-col justify-center mb-8 p-6 px-[1.7rem] md:p-8 md:px-[2.3rem] border-2 rounded-xl border-[#EAEAEA] cursor-pointer"
                   key={streamIndex}>
                   <strong className="text-sm font-bold">
                     {stream.name}
