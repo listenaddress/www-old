@@ -35,10 +35,34 @@ export default function Home() {
         {
           !streams || streams.length === 0 && (
             <>
-              <Skeleton height={220} className='mb-4' />
-              <Skeleton height={240} className='mb-4' />
-              <Skeleton height={220} className='mb-4' />
-              <Skeleton height={240} className='mb-4' />
+              <Skeleton
+                height={220}
+                className='mb-4'
+                style={{
+                  borderRadius: '.75rem',
+                }}
+              />
+              <Skeleton
+                height={240}
+                className='mb-4'
+                style={{
+                  borderRadius: '.75rem',
+                }}
+              />
+              <Skeleton
+                height={220}
+                className='mb-4'
+                style={{
+                  borderRadius: '.75rem',
+                }}
+              />
+              <Skeleton
+                height={240}
+                className='mb-4'
+                style={{
+                  borderRadius: '.75rem',
+                }}
+              />
             </>
           )
         }
