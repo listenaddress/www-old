@@ -21,7 +21,7 @@ export default function Stream() {
     useEffect(() => {
         if (!slug) return
         const fetchStream = async () => {
-            const data = await fetch(window.location.origin + '/api/streams/' + slug)
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + slug)
             const streamRes = await data.json()
             if (!streamRes.results && typeof streamRes.results !== 'object') {
                 return
@@ -32,7 +32,7 @@ export default function Stream() {
 
         // Todo: Remove this fetch
         const fetchStreamActions = async () => {
-            const data = await fetch(window.location.origin + '/api/streams/' + slug + '/actions')
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + slug + '/actions')
             const streamActionsRes = await data.json()
             if (!streamActionsRes.results && typeof streamActionsRes.results !== 'object') {
                 return
@@ -55,7 +55,7 @@ export default function Stream() {
         try {
             let optimisticNewContentFeedback: ContentFeedback = { ...contentFeedback }
             if (optimisticNewContentFeedback[contentId] && optimisticNewContentFeedback[contentId].type === 'dislike') {
-                await fetch(window.location.origin + 'streams/' + slug + '/actions', {
+                await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + slug + '/actions', {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ export default function Stream() {
             optimisticNewContentFeedback[contentId] = { type: 'like' }
             setContentFeedback(optimisticNewContentFeedback)
 
-            const data = await fetch(window.location.origin + 'streams/' + slug + '/actions', {
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + slug + '/actions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ export default function Stream() {
         try {
             let optimisticNewContentFeedback: ContentFeedback = { ...contentFeedback }
             if (optimisticNewContentFeedback[contentId] && optimisticNewContentFeedback[contentId].type === 'like') {
-                await fetch(window.location.origin + 'streams/' + slug + '/actions', {
+                await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + slug + '/actions', {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -104,7 +104,7 @@ export default function Stream() {
             optimisticNewContentFeedback[contentId] = { type: 'dislike' }
             setContentFeedback(optimisticNewContentFeedback)
 
-            const data = await fetch(window.location.origin + 'streams/' + slug + '/actions', {
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + slug + '/actions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -126,7 +126,7 @@ export default function Stream() {
             delete optimisticNewContentFeedback[contentId]
             setContentFeedback(optimisticNewContentFeedback)
 
-            const data = await fetch(window.location.origin + 'streams/' + slug + '/actions', {
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + slug + '/actions', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -147,7 +147,7 @@ export default function Stream() {
             delete optimisticNewContentFeedback[contentId]
             setContentFeedback(optimisticNewContentFeedback)
 
-            const data = await fetch(window.location.origin + 'streams/' + slug + '/actions', {
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + slug + '/actions', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
