@@ -10,6 +10,8 @@ import Popover from '@/components/popover';
 import { HandThumbUpIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/router'
 import Navbar from '@/components/navbar';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function Stream() {
     const [stream, setStream] = useState({ results: [] })
@@ -27,6 +29,7 @@ export default function Stream() {
                 return
             }
             streamRes.results = parseContentForTable(streamRes.results)
+            console.log(streamRes)
             setStream(streamRes)
         }
 
@@ -179,6 +182,35 @@ export default function Stream() {
         <>
             <Navbar />
             <div className="max-w-[36rem] px-4 m-auto mt-28 mb-24 text-sm">
+                {
+                    !stream || !stream.results || !stream.results.length && (
+                        <div className="w-full">
+                            <Skeleton height={24} width={"320px"} className='mb-2' />
+                            <Skeleton height={48} className='mb-2' />
+                            <Skeleton height={24} width={"240px"} className='mb-2' />
+                            <Skeleton height={180} className='mb-2' />
+                            <Skeleton height={24} width={"160px"} className='mb-2' />
+                            <Skeleton height={24} width={"160px"} className='mb-2' />
+                            <Skeleton height={70} width={"120px"} className='mb-2' />
+                            <div className={`h-[2px] bg-gray-100 my-8`}></div>
+                            <Skeleton height={24} width={"320px"} className='mb-2' />
+                            <Skeleton height={48} className='mb-2' />
+                            <Skeleton height={24} width={"240px"} className='mb-2' />
+                            <Skeleton height={180} className='mb-2' />
+                            <Skeleton height={24} width={"160px"} className='mb-2' />
+                            <Skeleton height={24} width={"160px"} className='mb-2' />
+                            <Skeleton height={70} width={"120px"} className='mb-2' />
+                            <div className={`h-[2px] bg-gray-100 my-8`}></div>
+                            <Skeleton height={24} width={"320px"} className='mb-2' />
+                            <Skeleton height={48} className='mb-2' />
+                            <Skeleton height={24} width={"240px"} className='mb-2' />
+                            <Skeleton height={180} className='mb-2' />
+                            <Skeleton height={24} width={"160px"} className='mb-2' />
+                            <Skeleton height={24} width={"160px"} className='mb-2' />
+                            <Skeleton height={70} width={"120px"} className='mb-2' />
+                        </div>
+                    )
+                }
                 {stream.results && stream.results.map((result: any, index: number) => {
                     const labelString = platformToLabelString[result.venue]
                     const createdAt = moment(result.createdAt);

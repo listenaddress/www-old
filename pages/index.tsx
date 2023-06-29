@@ -4,6 +4,8 @@ import Popover from '@/components/popover'
 import Navbar from '@/components/navbar'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 
 export default function Home() {
@@ -30,6 +32,16 @@ export default function Home() {
     <>
       <Navbar />
       <main className="max-w-lg m-auto mt-28 px-4 text-black">
+        {
+          !streams || streams.length === 0 && (
+            <>
+              <Skeleton height={220} className='mb-4' />
+              <Skeleton height={240} className='mb-4' />
+              <Skeleton height={220} className='mb-4' />
+              <Skeleton height={240} className='mb-4' />
+            </>
+          )
+        }
         {
           streams.map((stream: any, streamIndex: number) => {
             return (
