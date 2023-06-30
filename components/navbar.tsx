@@ -219,7 +219,7 @@ export default function Navbar() {
                     <div className="text-sm flex-grow">
                     </div>
                     <div className="flex justify-end">
-                        {activePage === 'home' && (
+                        {activePage === 'home' || activePage === 'about' && (
                             <Button
                                 onClick={() => router.push('/request-access')}
                                 size='sm'
