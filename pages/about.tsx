@@ -26,7 +26,7 @@ export default function About() {
                     <strong>Who</strong>
                 </p>
                 <p className="mt-2">
-                    I&rsquo;m Thomas O&apos;Brien and am lucky to have Joel Stremmel, Megan McCarthy, Michael Levin, and many others help me along the way. If you&rsquo;re interested in working on this with me, <Link href="mailto:tbobrien612@gmail.com" className='underline cursor-pointer'>hmu</Link>.
+                    I&rsquo;m Thomas O&apos;Brien and am lucky to have Joel Stremmel, Megan McCarthy, Michael Levin, and many others help me along the way. If you&rsquo;re interested in working on this with me, <Link href="mailto:thomas@streams.app" className='underline cursor-pointer'>hmu</Link>.
                 </p>
                 <div>
                     <Link href="/">
