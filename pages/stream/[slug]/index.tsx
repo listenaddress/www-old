@@ -171,11 +171,13 @@ export default function Stream() {
 
     const platformToLabelString: PlatformToString = {
         substack: 'Article on Substack',
-        spotify: 'Podcast on Spotify'
+        spotify: 'Podcast on Spotify',
+        arxiv: 'Paper on Arxiv'
     }
     const platformToCTAString: PlatformToString = {
         substack: 'Read on Substack',
-        spotify: 'Listen on Spotify'
+        spotify: 'Listen on Spotify',
+        arxiv: 'Read on Arxiv'
     }
 
     return (
@@ -212,7 +214,7 @@ export default function Stream() {
                     )
                 }
                 {stream.results && stream.results.map((result: any, index: number) => {
-                    const labelString = platformToLabelString[result.venue]
+                    const labelString = platformToLabelString[result.venue.toLowerCase()]
                     const createdAt = moment(result.createdAt);
                     const now = moment();
                     let date;
@@ -268,6 +270,15 @@ export default function Stream() {
                         console.error(e);
                     }
 
+                    let authors = '';
+                    if (result.authors) {
+                        if (typeof result.authors === 'string') {
+                            authors = result.authors;
+                        } else {
+                            authors = result.authors.join(', ');
+                        }
+                    }
+
                     return (
                         <div className="mt-6" key={index}>
                             <div>
@@ -296,7 +307,7 @@ export default function Stream() {
                                 </h1>
                             </Link>
                             <p className='mt-2 mb-4 text-gray-600'>
-                                By {result.authors}
+                                By {authors}
                             </p>
                             <div className='my-4 bg-gray-200 rounded-xl'>
                                 <div className='p-6 pb-7'>
@@ -322,7 +333,7 @@ export default function Stream() {
                             <div className='my-4'>
                                 <Link href={result.url} className='text-blue-500 cursor-pointer'>
                                     <ArrowUpRightIcon width={18} strokeWidth={2} className='inline-block relative bottom-[2px] mr-2' />
-                                    {platformToCTAString[result.venue]}
+                                    {platformToCTAString[result.venue.toLowerCase()]}
                                 </Link>
                             </div>
                             <div className='my-4 relative w-auto'>
