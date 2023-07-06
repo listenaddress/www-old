@@ -172,12 +172,14 @@ export default function Stream() {
     const platformToLabelString: PlatformToString = {
         substack: 'Article on Substack',
         spotify: 'Podcast on Spotify',
-        arxiv: 'Paper on Arxiv'
+        arxiv: 'Paper on Arxiv',
+        youtube: 'Video on Youtube',
     }
     const platformToCTAString: PlatformToString = {
         substack: 'Read on Substack',
         spotify: 'Listen on Spotify',
-        arxiv: 'Read on Arxiv'
+        arxiv: 'Read on Arxiv',
+        youtube: 'Watch on Youtube',
     }
 
     const getLabelString = (result: any) => {
@@ -196,6 +198,7 @@ export default function Stream() {
                 return strToReturn
             }
         }
+        return string
     }
 
     const getCTAString = (result: any) => {
@@ -210,6 +213,7 @@ export default function Stream() {
                 return `Read on ${result.venue}`
             }
         }
+        return string
     }
 
     return (
@@ -338,9 +342,11 @@ export default function Stream() {
                                     {result.title}
                                 </h1>
                             </Link>
-                            <p className='mt-2 mb-4 text-gray-600'>
-                                By {authors}
-                            </p>
+                            {authors && authors.length > 0 &&
+                                <p className='mt-2 mb-4 text-gray-600'>
+                                    By {authors}
+                                </p>
+                            }
                             <div className='my-4 bg-gray-200 rounded-xl'>
                                 <div className='p-6 pb-7'>
                                     <div className='mb-2'>
