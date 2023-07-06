@@ -180,6 +180,38 @@ export default function Stream() {
         arxiv: 'Read on Arxiv'
     }
 
+    const getLabelString = (result: any) => {
+        if (!result.venue) {
+            if (result.type === 'paper') {
+                return 'Paper'
+            }
+        }
+        const string = platformToLabelString[result.venue.toLowerCase()]
+        if (!string) {
+            if (result.type === 'paper') {
+                let strToReturn = `Paper on ${result.venue}`
+                if (strToReturn.length > 38) {
+                    strToReturn = strToReturn.substring(0, 38) + '...'
+                }
+                return strToReturn
+            }
+        }
+    }
+
+    const getCTAString = (result: any) => {
+        if (!result.venue) {
+            if (result.type === 'paper') {
+                return 'Read paper'
+            }
+        }
+        const string = platformToCTAString[result.venue.toLowerCase()]
+        if (!string) {
+            if (result.type === 'paper') {
+                return `Read on ${result.venue}`
+            }
+        }
+    }
+
     return (
         <>
             <Navbar />
@@ -214,7 +246,7 @@ export default function Stream() {
                     )
                 }
                 {stream.results && stream.results.map((result: any, index: number) => {
-                    const labelString = platformToLabelString[result.venue.toLowerCase()]
+                    const labelString = getLabelString(result);
                     const createdAt = moment(result.createdAt);
                     const now = moment();
                     let date;
@@ -333,7 +365,7 @@ export default function Stream() {
                             <div className='my-4'>
                                 <Link href={result.url} className='text-blue-500 cursor-pointer'>
                                     <ArrowUpRightIcon width={18} strokeWidth={2} className='inline-block relative bottom-[2px] mr-2' />
-                                    {platformToCTAString[result.venue.toLowerCase()]}
+                                    {getCTAString(result)}
                                 </Link>
                             </div>
                             <div className='my-4 relative w-auto'>
