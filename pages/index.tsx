@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import router from 'next/router'
 import Skeleton from 'react-loading-skeleton'
+import dynamic from 'next/dynamic'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 
@@ -25,6 +26,10 @@ export default function Home() {
     setStreams(streamsRes)
   }
   const startForFree = () => router.push('/signup')
+  const CrispWithNoSSR = dynamic(
+    () => import('../components/crisp'),
+    { ssr: false }
+  )
 
   useEffect(() => {
     fetchStreams()
@@ -32,6 +37,7 @@ export default function Home() {
 
   return (
     <>
+      <CrispWithNoSSR />
       <main className="max-w-[34rem] m-auto mt-16 px-4 text-black">
         <h1 className='text-3xl font-bold mb-8'>
           Podcasts, papers, books and blogs around any research topic.
