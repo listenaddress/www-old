@@ -1,9 +1,10 @@
 import Image from 'next/image'
 import { parseContentForTable } from '@/lib/helpers'
 import Popover from '@/components/popover'
-import Navbar from '@/components/navbar'
+import Button from '@/components/button'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import router from 'next/router'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
@@ -23,6 +24,7 @@ export default function Home() {
     })
     setStreams(streamsRes)
   }
+  const startForFree = () => router.push('/signup')
 
   useEffect(() => {
     fetchStreams()
@@ -30,8 +32,18 @@ export default function Home() {
 
   return (
     <>
-      <Navbar />
-      <main className="max-w-lg m-auto mt-28 px-4 text-black">
+      <main className="max-w-[34rem] m-auto mt-16 px-4 text-black">
+        <h1 className='text-3xl font-bold mb-8'>
+          Podcasts, papers, books and blogs around any research topic.
+        </h1>
+        <div className='mb-16'>
+          <Button onClick={startForFree} variant='blue'>
+            Start for free
+          </Button>
+          <Button onClick={startForFree} secondary className='ml-4'>
+            Sign in
+          </Button>
+        </div>
         {
           !streams || streams.length === 0 && (
             <>
@@ -66,6 +78,9 @@ export default function Home() {
             </>
           )
         }
+        <div className='font-medium mb-4 text-gray-500'>
+          Pinned Streams
+        </div>
         {
           streams.map((stream: any, streamIndex: number) => {
             return (
@@ -73,13 +88,13 @@ export default function Home() {
                 <div
                   className="flex flex-col justify-center mb-8 p-6 px-[1.7rem] md:p-8 md:px-[2.3rem] border-2 rounded-xl border-[#EAEAEA] cursor-pointer"
                   key={streamIndex}>
-                  <strong className="text-sm font-bold">
+                  <strong className="font-bold">
                     {stream.name}
                   </strong>
-                  <p className="mt-2 text-sm">
+                  <p className="mt-2">
                     {stream.about}
                   </p>
-                  <p className={`mt-5 text-sm text-[#7B7B80]`}>
+                  <p className={`mt-5 text-[#7B7B80]`}>
                     Recently in this stream
                   </p>
                   {/* Show first three pieces of content as three avatars next to each other (using content.platformImage) */}
