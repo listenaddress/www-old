@@ -25,7 +25,7 @@ export default function Home() {
     })
     setStreams(streamsRes)
   }
-  const startForFree = () => router.push('/signup')
+  const signIn = () => router.push('/sign-in')
   const CrispWithNoSSR = dynamic(
     () => import('../components/crisp'),
     { ssr: false }
@@ -43,10 +43,10 @@ export default function Home() {
           Podcasts, papers, books and blogs around any research topic.
         </h1>
         <div className='mb-16'>
-          <Button onClick={startForFree} variant='blue'>
+          <Button onClick={signIn} variant='blue'>
             Start for free
           </Button>
-          <Button onClick={startForFree} secondary className='ml-4'>
+          <Button onClick={signIn} secondary className='ml-4'>
             Sign in
           </Button>
         </div>

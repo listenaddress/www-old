@@ -1,0 +1,64 @@
+import { Dispatch, SetStateAction } from 'react';
+// import { User } from '../types/User';
+
+const loadUser = async (
+    setUser: Dispatch<SetStateAction<any>>,
+    setLoadingUser: Dispatch<SetStateAction<boolean>>,
+    router: any,
+    pathname: string
+) => {
+    if (typeof window === 'undefined') {
+        setLoadingUser(false)
+        return
+    }
+    const cookie = document.cookie
+    if (!cookie || !cookie.includes('accessToken')) {
+        setLoadingUser(false)
+        return
+    }
+    const accessTokenFromCookie = cookie.split('accessToken=')[1].split(';')[0]
+    if (!accessTokenFromCookie) {
+        setLoadingUser(false)
+        return
+    }
+
+    try {
+        const currentUser = await fetch(process.env.NEXT_PUBLIC_API_URL + 'users/current', {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + accessTokenFromCookie,
+            },
+        });
+
+        if (!currentUser) {
+            setLoadingUser(false)
+            return
+        }
+
+        const currentUserJson = await currentUser.json()
+        if (!currentUserJson) {
+            setLoadingUser(false)
+            return
+        }
+
+        if (!currentUserJson.onboardingComplete && pathname !== '/onboarding') {
+            setUser(currentUserJson);
+            router.push('/onboarding')
+            return
+        }
+
+        // if (!currentUser.data) return
+        // if (!currentUser.data.onboardingComplete && pathname !== '/onboarding') {
+        //     setUser(currentUser.data);
+        //     router.push('/onboarding')
+        //     return
+        // }
+        console.log(currentUserJson)
+        setUser(currentUserJson);
+    } catch (error) {
+        console.log(error)
+    }
+    setLoadingUser(false)
+}
+
+export default loadUser;
