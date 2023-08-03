@@ -36,12 +36,13 @@ const loadUser = async (
         }
 
         const currentUserJson = await currentUser.json()
+        currentUserJson.accessToken = accessTokenFromCookie
         if (!currentUserJson) {
             setLoadingUser(false)
             return
         }
 
-        if (!currentUserJson.onboardingComplete && pathname !== '/onboarding') {
+        if (!currentUserJson.onboarding_step || currentUserJson.onboarding_step > 6 && pathname !== '/onboarding') {
             setUser(currentUserJson);
             router.push('/onboarding')
             return

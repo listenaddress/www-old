@@ -48,6 +48,9 @@ const Button: React.FC<ButtonProps> = ({
     if (variant === "blue") {
       return `bg-blue-100 text-${theme}-bg-primary`;
     }
+    if (variant === "disabled") {
+      return `bg-gray-300 text-gray-500`;
+    }
 
     switch (style) {
       case "secondary":

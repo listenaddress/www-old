@@ -35,7 +35,7 @@ const VerifyToken = () => {
             }
             document.cookie = 'accessToken=' + access_token + ';path=/'
             setLoading(false)
-            setUser({ email: user?.email, _id: "123" })
+            setUser({ email: user?.email, id: user?.id, name: user?.name, createdAt: user?.createdAt, last_login: user?.last_login })
             router.push('/onboarding')
         } catch (error) {
             setLoading(false)
