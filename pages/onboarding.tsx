@@ -212,7 +212,7 @@ export default function Onboarding() {
             }
             setUser({ ...user, name, onboardingStep: step + 1, onboardingCompletedAt: Date.now() })
             // @ts-ignore
-            router.push('/streams/' + userStreams[0].id)
+            router.push('/stream/' + userStreams[0].id)
         } else {
             const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + 'users/' + user.id, {
