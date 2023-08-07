@@ -13,7 +13,7 @@ interface DropdownProps {
 function Dropdown({
     items,
     left = '0',
-    top = '1.25',
+    top = '.5',
     setIsOpen
 }: DropdownProps) {
     const ref = useRef<HTMLDivElement>(null);

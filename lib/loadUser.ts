@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from 'react';
-// import { User } from '../types/User';
 
 const loadUser = async (
     setUser: Dispatch<SetStateAction<any>>,
