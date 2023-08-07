@@ -14,7 +14,7 @@ export default function SideBar() {
     const { user, setUser, loadingUser } = useContext(GlobalContext);
     // Get path
     const path = usePathname()
-    const pathsToHideSideBar = ['/', '/sign-in']
+    const pathsToHideSideBar = ['/', '/sign-in', '/onboarding']
 
     return (
         pathsToHideSideBar.includes(path) ? null : (
@@ -22,7 +22,7 @@ export default function SideBar() {
                 <nav className={`flex flex-col h-full justify-between`}>
                     {/* Top section */}
                     <div className={`flex justify-center items-center h-16 text-center`}>
-                        <div className={`w-8 h-8 rounded-full bg-black text-white flex justify-center items-center font-medium`}>
+                        <div className={`w-8 h-8 rounded-full bg-black text-white flex justify-center items-center font-medium text-lg`}>
                             S
                         </div>
                     </div>
@@ -47,7 +47,7 @@ export default function SideBar() {
                     {/* Bottom section */}
                     <div className={`flex justify-center items-center h-16`}>
                         {user?.name && (
-                            <div className={`w-8 h-8 rounded-full bg-gray-500 text-white flex justify-center items-center font-medium`}>
+                            <div className={`w-8 h-8 rounded-full bg-gray-500 text-white flex justify-center items-center font-medium text-lg`}>
                                 {user.name[0]}
                             </div>
                         )}
