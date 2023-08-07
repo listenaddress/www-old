@@ -32,7 +32,7 @@ function Dropdown({
         };
     }, [setIsOpen]);
 
-    const classNames = `absolute z-10 mt-2 w-max rounded-md bg-white border-${theme}-border-primary border-2`
+    const classNames = `absolute z-10 mt-2 w-max rounded-md bg-white border-gray-200 border-2`
     const handleLinkClick = (e: any, href: string) => {
         e.preventDefault();
         setIsOpen(false);
