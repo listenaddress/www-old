@@ -15,7 +15,7 @@ export default function MobileMenu() {
 
     return (
         pathsToHideSideBar.includes(path) ? null : (
-            <div className={`block fixed sm:hidden bottom-4 left-4 h-[3.9rem] w-[3.9rem] border-2 border-gray-300 bg-gray-100 z-50 text-center rounded-xl p-[.8rem]`}>
+            <div className={`block fixed sm:hidden bottom-4 right-4 h-[3.9rem] w-[3.9rem] border-2 border-gray-300 bg-gray-200 z-50 text-center rounded-xl p-[.8rem]`}>
                 <Bars3Icon className={`w-8 h-8`} />
             </div>
         )

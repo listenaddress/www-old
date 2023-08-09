@@ -18,13 +18,15 @@ export default function SideBar() {
 
     return (
         pathsToHideSideBar.includes(path) ? null : (
-            <div className={`hidden sm:block sm:fixed top-0 left-0 h-screen w-[65px] border-r-2 border-gray-200 bg-white z-50`}>
+            <div className={`hidden sm:block sm:fixed top-0 left-0 h-screen w-[65px] border-r-2 border-gray-100 bg-white z-50`}>
                 <nav className={`flex flex-col h-full justify-between`}>
                     {/* Top section */}
                     <div className={`flex justify-center items-center h-16 text-center`}>
-                        <div className={`w-8 h-8 rounded-full bg-black text-white flex justify-center items-center font-medium text-lg`}>
-                            S
-                        </div>
+                        <Link href={`/`}>
+                            <div className={`w-8 h-8 rounded-full bg-black text-white flex justify-center items-center font-medium text-lg`}>
+                                S
+                            </div>
+                        </Link>
                     </div>
                     {/* Middle section */}
                     <div className={`flex flex-col justify-center items-center flex-grow`}>

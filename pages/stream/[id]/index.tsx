@@ -101,7 +101,7 @@ export default function Stream() {
                         <Button size="sm" secondary onClick={() => { }}>Filter</Button>
                     </div>
                 </div>
-                <div className='mt-8 pb-3 border-b-2 text-gray-500 text-[13px]'>
+                <div className='mt-8 pb-2 border-b-2 border-gray-100 text-gray-500 text-[13px]'>
                     <div className='flex items-center'>
                         <div className='inline-block w-1/5 sm:w-[8%] lg:w-[22%] xl:w-[19%] pr-2]'>
                             From
@@ -128,7 +128,7 @@ export default function Stream() {
                                 <div className='relative hover:bg-gray-300 ml-[-1rem] pl-[1rem] mr-[-1rem] pr-[1rem] hover:mt-[-1px] hover:pt-[1px]' key={index} onMouseEnter={() => setHoveringIndex(index)} onMouseLeave={() => setHoveringIndex(-1)}>
                                     <Link href={item.url}>
                                         <div className=''>
-                                            <div key={index} className='flex items-start pb-5 pt-5 border-b-2 hover:border-transparent min-h-[70px]'>
+                                            <div key={index} className='flex items-start pb-5 pt-5 border-b-2 border-gray-100 hover:border-transparent min-h-[70px]'>
                                                 <div className='inline-block w-1/5 sm:w-[8%] lg:w-[22%] xl:w-[19%] pr-2'>
                                                     <div className='rounded-full w-7 h-7 absolute'>
                                                         {
@@ -159,7 +159,7 @@ export default function Stream() {
                                     </Link>
                                     {
                                         hoveringIndex === index && (
-                                            <div className='absolute right-0 top-[14px] bg-gray-300 rounded-lg'>
+                                            <div className='absolute right-2 top-[14px] bg-gray-300 rounded-lg'>
                                                 <div className='flex items-center h-full'>
                                                     <div onMouseEnter={() => setHoveringIndexMoreOptions(0)} onMouseLeave={() => setHoveringIndexMoreOptions(-1)} className='cursor-pointer'>
                                                         <LinkIcon className={`w-10 h-10 pl-3 pr-2 pt-1 pb-1 ${hoveringIndexMoreOptions === 0 ? 'stroke-[2.3px]' : ''}`} />
