@@ -8,6 +8,7 @@ import Skeleton from 'react-loading-skeleton';
 import Dropdown from '@/components/dropdown';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Button from '@/components/button';
+import Link from 'next/link';
 
 export default function Stream() {
     const [stream, setStream] = useState({ name: '', description: '', created_by: '', created_at: '', updated_at: '' })
@@ -33,6 +34,29 @@ export default function Stream() {
         href: '/stream/' + id + '/details',
         icon: InformationCircleIcon
     })
+
+    const formatAuthors = (authors: any[]) => {
+        let result = "";
+
+        authors.forEach((author, index) => {
+            if (index < 4) {
+                result += author.name;
+
+                if (index !== authors.length - 1 && index !== 3) {
+                    result += ', ';
+                }
+            }
+
+            if (index === 4 && authors.length > 5) {
+                result += ', ' + authors[authors.length - 1].name;
+                result += '... ';
+            } else if (index === 4 && authors.length === 5) {
+                result += ', ' + authors[authors.length - 1].name;
+            }
+        });
+
+        return result;
+    }
 
     useEffect(() => {
         if (!id) return
@@ -74,13 +98,19 @@ export default function Stream() {
                         <Button size="sm" secondary onClick={() => { }}>Filter</Button>
                     </div>
                 </div>
-                <div className='mt-8 pb-3 border-b-2 text-gray-500'>
+                <div className='mt-8 pb-3 border-b-2 text-gray-500 text-[13px]'>
                     <div className='flex items-center'>
-                        <div className='inline-block w-1/5'>
+                        <div className='inline-block w-1/5 sm:w-[8%] lg:w-[22%] xl:w-[19%] pr-2]'>
                             From
                         </div>
-                        <div className='inline-block w-4/5'>
+                        <div className='inline-block w-5/6 sm:w-[42%] lg:w-[40%] xl:w-[42%]'>
                             Title
+                        </div>
+                        <div className='hidden sm:inline-block sm:w-[35%] lg:w-[28%] xl:w-[32%]'>
+                            By
+                        </div>
+                        <div className='hidden sm:inline-block sm:w-[15%] lg:w-[15%] xl:w-[12%] text-right'>
+                            Time
                         </div>
                     </div>
                 </div>
@@ -90,20 +120,37 @@ export default function Stream() {
                             <Skeleton count={5} />
                         </div>
                     ) : (
-                        <div className=''>
+                        <div className='text-[13px]'>
                             {content.map((item: any, index: number) => (
-                                <div key={index} className='flex items-start pb-4 pt-4 border-b-2'>
-                                    <div className='inline-block w-1/5'>
-                                        <div className='rounded-full w-10 h-10'>
-                                            <img className='w-10 h-10 rounded-full' src={item.platformImage || '/platform-images/paper.png'} />
+                                <Link href={item.url} key={index}>
+                                    <div key={index} className='flex items-start pb-5 pt-5 border-b-2'>
+                                        <div className='inline-block w-1/5 sm:w-[8%] lg:w-[22%] xl:w-[19%] pr-2'>
+                                            <div className='rounded-full w-7 h-7 absolute'>
+                                                {
+                                                    item.ico ? (
+                                                        <img className='w-7 h-7 rounded-md' src={item.ico} />
+                                                    ) : (
+                                                        <img className='w-7 h-7 rounded-md' src={item.platformImage || '/platform-images/paper.png'} />
+                                                    )
+                                                }
+                                            </div>
+                                            <span className='hidden lg:inline-block bottom-[-4px] left-[40px] pr-[50px] relative'>
+                                                {item.venue}
+                                            </span>
+                                        </div>
+                                        <div className='inline-block w-5/6 sm:w-[42%] lg:w-[40%] xl:w-[42%] mt-[4px] pr-3'>
+                                            <div className=''>
+                                                {item.title}
+                                            </div>
+                                        </div>
+                                        <div className='hidden sm:inline-block sm:w-[35%] lg:w-[28%] xl:w-[32%] mt-[4px] pr-2'>
+                                            {formatAuthors(item.authors)}
+                                        </div>
+                                        <div className='hidden sm:inline-block sm:w-[15%] lg:w-[15%] xl:w-[12%] text-right'>
+                                            {item.time}
                                         </div>
                                     </div>
-                                    <div className='inline-block w-4/5 mt-[7px]'>
-                                        <div className=''>
-                                            {item.title}
-                                        </div>
-                                    </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     )

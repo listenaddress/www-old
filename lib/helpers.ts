@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const platformImageMapping = {
     'nature': '/platform-images/nature.png',
     'science': '/platform-images/science.png',
@@ -322,6 +324,9 @@ const parseContentForTable = (content: any[]) => {
                 item.url = item.urls[1]
             }
         }
+
+        // Make user friendly time, based on created_at
+        if (item.created_at) item.time = moment(item.created_at).fromNow()
     })
 
     return content
