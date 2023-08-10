@@ -10,6 +10,7 @@ import Dropdown from '@/components/dropdown';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Button from '@/components/button';
 import Link from 'next/link';
+import { Toaster, toast } from 'sonner'
 
 export default function Stream() {
     const [stream, setStream] = useState({ name: '', description: '', created_by: '', created_at: '', updated_at: '' })
@@ -61,6 +62,105 @@ export default function Stream() {
         return result;
     }
 
+    const like = async (contentId: number) => {
+        // @ts-ignore
+        const title = getContentInStateFromId(contentId)?.title;
+        let error = `Failed to like ${title}`;
+        toast.promise(
+            (async () => {
+                const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+                const response = await fetch(process.env.NEXT_PUBLIC_API_URL + 'actions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + accessTokenFromCookie
+                    },
+                    body: JSON.stringify({
+                        action_type: "like",
+                        content_id: contentId,
+                        stream_id: id
+                    })
+                });
+
+                if (response.status !== 201) {
+                    throw new Error('Failed to like the content');
+                }
+
+                const data = await response.json();
+
+                setContentFeedback(prevFeedback => {
+                    console.log(prevFeedback)
+                    console.log(contentId)
+                    console.log(data)
+                    return {
+                        ...prevFeedback,
+                        [contentId]: { action_type: 'like', id: data.id, content_id: contentId }
+                    }
+                })
+
+                return data;
+            })(),
+            {
+                loading: 'Liking...',
+                success: `You liked "${title}"`,
+                error: error
+            }
+        );
+    }
+
+    const getContentInStateFromId = (contentId: number) => {
+        // @ts-ignore
+        return content.find(content => content.id === contentId);
+    }
+
+    const dislike = async (contentId: number) => {
+        // @ts-ignore
+        let title = getContentInStateFromId(contentId)?.title;
+        let error = `Failed to dislike ${title}`;
+        toast.promise(
+            (async () => {
+                const accessTokenFromCookie = document.cookie.split('accessToken=')[1]?.split(';')[0]
+                const response = await fetch(process.env.NEXT_PUBLIC_API_URL + 'actions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + accessTokenFromCookie
+                    },
+                    body: JSON.stringify({
+                        action_type: "dislike",
+                        content_id: contentId,
+                        stream_id: id
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.status !== 201) {
+                    if (data.error) error = data.error;
+                    throw new Error('Failed to dislike the content');
+                }
+
+                setContentFeedback(prevFeedback => ({
+                    ...prevFeedback,
+                    [contentId]: { action_type: 'dislike', id: data.id, content_id: contentId }
+                }));
+
+                return data;
+
+            })(),
+            {
+                loading: 'Disliking...',
+                success: `You disliked "${title}"`,
+                error: error
+            }
+        );
+    }
+
+    // @ts-ignore
+    const isLiked = (contentId: number) => contentFeedback[contentId]?.action_type === 'like';
+    // @ts-ignore
+    const isDisliked = (contentId: number) => contentFeedback[contentId]?.action_type === 'dislike';
+
     useEffect(() => {
         if (!id) return
         const fetchStream = async () => {
@@ -74,18 +174,39 @@ export default function Stream() {
             const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + id + '/content')
             const contentRes = await data.json()
             const parsedContent = parseContentForTable(contentRes)
-            console.log(parsedContent)
             // @ts-ignore
             setContent(parsedContent)
         }
 
+        const fetchContentFeedback = async () => {
+            const accessTokenFromCookie = document.cookie.split('accessToken=')[1]?.split(';')[0]
+            if (!accessTokenFromCookie) return
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'actions?stream_id=' + id, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + document.cookie.split('accessToken=')[1].split(';')[0]
+                }
+            })
+            const contentFeedbackRes = await data.json()
+            console.log(contentFeedbackRes)
+            const contentFeedbackMap = {}
+            contentFeedbackRes.forEach((feedback: any) => {
+                // @ts-ignore
+                contentFeedbackMap[feedback.content_id] = feedback
+            })
+            console.log(contentFeedbackMap)
+            setContentFeedback(contentFeedbackMap)
+        }
+
         fetchStream()
         fetchStreamContent()
+        fetchContentFeedback()
     }, [id])
 
     return (
         <>
             <div className='m-4 mb-8 sm:ml-20'>
+                <Toaster />
                 <div className={`text-lg`}>
                     <div className={`items-center cursor-pointer inline-block mt-[3px]`}>
                         <div onClick={() => setDropdownOpen(!dropdownOpen)} className={`cursor-pointer`}>
@@ -113,7 +234,7 @@ export default function Stream() {
                             By
                         </div>
                         <div className='hidden sm:inline-block sm:w-[15%] lg:w-[15%] xl:w-[12%] text-right'>
-                            Time
+                            Published
                         </div>
                     </div>
                 </div>
@@ -162,20 +283,36 @@ export default function Stream() {
                                             <div className='absolute right-2 top-[14px] bg-gray-300 rounded-lg'>
                                                 <div className='flex items-center h-full'>
                                                     <div onMouseEnter={() => setHoveringIndexMoreOptions(0)} onMouseLeave={() => setHoveringIndexMoreOptions(-1)} className='cursor-pointer'>
-                                                        <LinkIcon className={`w-10 h-10 pl-3 pr-2 pt-1 pb-1 ${hoveringIndexMoreOptions === 0 ? 'stroke-[2.3px]' : ''}`} />
+                                                        <LinkIcon
+                                                            className={`w-10 h-10 pl-3 pr-2 pt-1 pb-1 ${hoveringIndexMoreOptions === 0 ? 'stroke-[2.3px]' : ''}`}
+                                                            onClick={() => {
+                                                                navigator.clipboard.writeText(item.url)
+                                                                toast.success('Copied url to clipboard.')
+                                                            }}
+                                                        />
                                                     </div>
-                                                    <div onMouseEnter={() => setHoveringIndexMoreOptions(1)} onMouseLeave={() => setHoveringIndexMoreOptions(-1)} className='cursor-pointer'>
+                                                    <div
+                                                        onMouseEnter={() => setHoveringIndexMoreOptions(1)}
+                                                        onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
+                                                        className='cursor-pointer'
+                                                        onClick={() => like(item.id)}
+                                                    >
                                                         {
-                                                            hoveringIndexMoreOptions !== 1 ? (
+                                                            hoveringIndexMoreOptions !== 1 && !isLiked(item.id) ? (
                                                                 <HandThumbUpIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
                                                             ) : (
                                                                 <HandThumbUpIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
                                                             )
                                                         }
                                                     </div>
-                                                    <div onMouseEnter={() => setHoveringIndexMoreOptions(2)} onMouseLeave={() => setHoveringIndexMoreOptions(-1)} className='cursor-pointer'>
+                                                    <div
+                                                        onMouseEnter={() => setHoveringIndexMoreOptions(2)}
+                                                        onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
+                                                        className='cursor-pointer'
+                                                        onClick={() => dislike(item.id)}
+                                                    >
                                                         {
-                                                            hoveringIndexMoreOptions !== 2 ? (
+                                                            hoveringIndexMoreOptions !== 2 && !isDisliked(item.id) ? (
                                                                 <HandThumbDownIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
                                                             ) : (
                                                                 <HandThumbDownIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />

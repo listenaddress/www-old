@@ -325,8 +325,15 @@ const parseContentForTable = (content: any[]) => {
             }
         }
 
-        // Make user friendly time, based on created_at
-        if (item.created_at) item.time = moment(item.created_at).fromNow()
+        if (item.created_at) {
+            const year = moment(item.created_at).format("YYYY")
+            const currentYear = moment().format("YYYY")
+            if (year === currentYear) {
+                item.time = moment(item.created_at).format("MMMM")
+            } else {
+                item.time = year
+            }
+        }
     })
 
     return content
