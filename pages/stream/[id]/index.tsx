@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect, useContext } from 'react'
 import { parseContentForTable } from '@/lib/helpers';
-import { ArrowUpRightIcon, ChevronDownIcon, PencilSquareIcon, InformationCircleIcon, HandThumbDownIcon, HandThumbUpIcon, LinkIcon } from '@heroicons/react/24/outline';
-import { HandThumbDownIcon as HandThumbDownIconSolid, HandThumbUpIcon as HandThumbUpIconSolid, LinkIcon as LinkIconSolid } from '@heroicons/react/24/solid';
+import { ArrowUpRightIcon, ChevronDownIcon, PencilSquareIcon, InformationCircleIcon, HandThumbDownIcon, HandThumbUpIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+import { HandThumbDownIcon as HandThumbDownIconSolid, HandThumbUpIcon as HandThumbUpIconSolid, LinkIcon as LinkIconSolid, DocumentDuplicateIcon as DocumentDuplicateIconSolid } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router'
 import { GlobalContext } from '@/context/store';
 import Skeleton from 'react-loading-skeleton';
@@ -134,11 +134,8 @@ export default function Stream() {
         );
     }
 
-    const getContentInStateFromId = (contentId: number) => {
-        // @ts-ignore
-        return content.find(content => content.id === contentId);
-    }
-
+    // @ts-ignore
+    const getContentInStateFromId = (contentId: number) => content.find(content => content.id === contentId);
     const dislike = async (contentId: number) => {
         // @ts-ignore
         let title = getContentInStateFromId(contentId)?.title;
@@ -348,14 +345,22 @@ export default function Stream() {
                                         hoveringIndex === index && (
                                             <div className='absolute right-2 top-[14px] bg-gray-300 rounded-lg'>
                                                 <div className='flex items-center h-full'>
-                                                    <div onMouseEnter={() => setHoveringIndexMoreOptions(0)} onMouseLeave={() => setHoveringIndexMoreOptions(-1)} className='cursor-pointer'>
-                                                        <LinkIcon
-                                                            className={`w-10 h-10 pl-3 pr-2 pt-1 pb-1 ${hoveringIndexMoreOptions === 0 ? 'stroke-[2.3px]' : ''}`}
-                                                            onClick={() => {
-                                                                navigator.clipboard.writeText(item.url)
-                                                                toast.success('Copied url to clipboard.')
-                                                            }}
-                                                        />
+                                                    <div
+                                                        onMouseEnter={() => setHoveringIndexMoreOptions(0)}
+                                                        onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
+                                                        className='cursor-pointer'
+                                                        onClick={() => {
+                                                            navigator.clipboard.writeText(item.url)
+                                                            toast.success('Copied url to clipboard.')
+                                                        }}
+                                                    >
+                                                        {
+                                                            hoveringIndexMoreOptions !== 0 ? (
+                                                                <DocumentDuplicateIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                            ) : (
+                                                                <DocumentDuplicateIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                            )
+                                                        }
                                                     </div>
                                                     <div
                                                         onMouseEnter={() => setHoveringIndexMoreOptions(1)}
