@@ -41,14 +41,10 @@ export default function Stream() {
 
     const formatAuthors = (authors: any[]) => {
         let result = "";
-
         authors.forEach((author, index) => {
             if (index < 4) {
                 result += author.name;
-
-                if (index !== authors.length - 1 && index !== 3) {
-                    result += ', ';
-                }
+                if (index !== authors.length - 1 && index !== 3) result += ', ';
             }
 
             if (index === 4 && authors.length > 5) {
@@ -58,13 +54,43 @@ export default function Stream() {
                 result += ', ' + authors[authors.length - 1].name;
             }
         });
-
         return result;
     }
 
     const like = async (contentId: number) => {
         // @ts-ignore
         const title = getContentInStateFromId(contentId)?.title;
+        if (isLiked(contentId)) {
+            toast.promise(
+                (async () => {
+                    const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+                    // @ts-ignore
+                    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + 'actions/' + contentFeedback[contentId].id, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + accessTokenFromCookie
+                        }
+                    });
+                    if (response.status !== 204) {
+                        throw new Error('Failed to unlike the content');
+                    }
+                    setContentFeedback(prevFeedback => {
+                        const newFeedback = { ...prevFeedback };
+                        // @ts-ignore
+                        delete newFeedback[contentId];
+                        return newFeedback;
+                    });
+                })(),
+                {
+                    loading: 'Unliking...',
+                    success: `You unliked "${title}"`,
+                    error: `Failed to unlike ${title}`
+                }
+            )
+            return;
+        }
+
         let error = `Failed to like ${title}`;
         toast.promise(
             (async () => {
@@ -116,6 +142,37 @@ export default function Stream() {
     const dislike = async (contentId: number) => {
         // @ts-ignore
         let title = getContentInStateFromId(contentId)?.title;
+        const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+        if (isDisliked(contentId)) {
+            toast.promise(
+                (async () => {
+                    // @ts-ignore
+                    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + 'actions/' + contentFeedback[contentId].id, {
+                        'method': 'DELETE',
+                        'headers': {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + accessTokenFromCookie
+                        }
+                    });
+                    if (response.status !== 204) {
+                        throw new Error('Failed to remove the dislike');
+                    }
+                    setContentFeedback(prevFeedback => {
+                        const newFeedback = { ...prevFeedback };
+                        // @ts-ignore
+                        delete newFeedback[contentId];
+                        return newFeedback;
+                    });
+                })(),
+                {
+                    loading: 'Removing dislike...',
+                    success: `You removed your dislike from "${title}"`,
+                    error: `Failed to remove the dislike from ${title}`
+                }
+            )
+            return;
+        }
+        // @ts-ignore
         let error = `Failed to dislike ${title}`;
         toast.promise(
             (async () => {
@@ -216,9 +273,11 @@ export default function Stream() {
                         </div>
                     </div>
                     <div className={`ml-auto inline-block float-right`}>
-                        <Button size="sm" secondary className='mr-4' onClick={() => router.push('/sign-in')}>
-                            Sign in
-                        </Button>
+                        {!user && (
+                            <Button size="sm" secondary className='mr-4' onClick={() => router.push('/sign-in')}>
+                                Sign in
+                            </Button>
+                        )}
                         <Button size="sm" secondary onClick={() => { }}>Filter</Button>
                     </div>
                 </div>
@@ -240,8 +299,15 @@ export default function Stream() {
                 </div>
                 {
                     content.length === 0 ? (
-                        <div className='mt-4'>
-                            <Skeleton count={5} />
+                        <div>
+                            <Skeleton count={1} style={{ height: '70px' }} />
+                            <Skeleton count={1} style={{ height: '100px' }} />
+                            <Skeleton count={2} style={{ height: '70px' }} />
+                            <Skeleton count={1} style={{ height: '85px' }} />
+                            <Skeleton count={2} style={{ height: '100px' }} />
+                            <Skeleton count={1} style={{ height: '70px' }} />
+                            <Skeleton count={1} style={{ height: '85px' }} />
+                            <Skeleton count={2} style={{ height: '70px' }} />
                         </div>
                     ) : (
                         <div className='text-[13px]'>
