@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { GlobalContext } from '@/context/store';
 import Skeleton from 'react-loading-skeleton';
 import Dropdown from '@/components/dropdown';
+import FilterDropdown from '@/components/filterDropdown';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Button from '@/components/button';
 import Link from 'next/link';
@@ -23,6 +24,7 @@ export default function Stream() {
     const { id } = router.query
     const { user } = useContext(GlobalContext);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
     const dropdownItems = []
     // @ts-ignore
     if (user?.id && stream?.created_by === user.id) {
@@ -275,10 +277,26 @@ export default function Stream() {
                                 Sign in
                             </Button>
                         )}
-                        <Button size="sm" secondary onClick={() => { }}>Filter</Button>
+                        <Button
+                            size="sm"
+                            secondary
+                            onClick={() => setFilterDropdownOpen(!filterDropdownOpen)}
+                        >
+                            Filter
+                        </Button>
+                        {
+                            filterDropdownOpen && (
+                                <FilterDropdown
+                                    right={'1rem'}
+                                    setIsOpen={() => setFilterDropdownOpen}
+                                    setContent={setContent}
+                                    streamId={id}
+                                />
+                            )
+                        }
                     </div>
                 </div>
-                <div className='mt-8 pb-2 border-b-2 border-gray-100 text-gray-500 text-[13px]'>
+                <div className={`mt-8 pb-2 border-b-2 border-gray-100 text-gray-500 text-[13px]`}>
                     <div className='flex items-center'>
                         <div className='inline-block w-1/5 sm:w-[8%] lg:w-[22%] xl:w-[19%] pr-2]'>
                             From
@@ -309,7 +327,15 @@ export default function Stream() {
                     ) : (
                         <div className='text-[13px]'>
                             {content.map((item: any, index: number) => (
-                                <div className='relative hover:bg-gray-300 ml-[-1rem] pl-[1rem] mr-[-1rem] pr-[1rem] hover:mt-[-1px] hover:pt-[1px]' key={index} onMouseEnter={() => setHoveringIndex(index)} onMouseLeave={() => setHoveringIndex(-1)}>
+                                <div
+                                    className='relative hover:bg-gray-300 ml-[-1rem] pl-[1rem] mr-[-1rem] pr-[1rem] hover:mt-[-1px] hover:pt-[1px]'
+                                    key={index}
+                                    onMouseEnter={() => {
+                                        setHoveringIndex(index)
+                                        setHoveringIndexMoreOptions(-1)
+                                    }}
+                                    onMouseLeave={() => setHoveringIndex(-1)}
+                                >
                                     <Link href={item.url}>
                                         <div className=''>
                                             <div key={index} className='flex items-start pb-5 pt-5 border-b-2 border-gray-100 hover:border-transparent min-h-[70px]'>
