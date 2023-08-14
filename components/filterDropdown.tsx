@@ -101,7 +101,7 @@ function FilterDropdown({
             switch (selectedType) {
                 case "Papers": type = "paper"; break;
                 case "Podcasts": type = "podcast"; break;
-                case "Websites/blogs": type = "url"; break;
+                case "Webpages": type = "url"; break;
             }
             const typeQuery = type ? `type=${type}` : '';
             let endpoint = `streams/${streamId}/content?${typeQuery}`;
@@ -136,12 +136,12 @@ function FilterDropdown({
                 </div>
                 <div className="flex items-center">
                     <MultiSelect
-                        items={["Papers", "Podcasts", "Websites/blogs"]}
+                        items={["Papers", "Podcasts", "Webpages"]}
                         selectedItem={selectedType}
                         setSelectedItem={setSelectedType}
                     />
                 </div>
-                <div className='mb-1 mt-4'>
+                <div className='mb-1 mt-3'>
                     <div className="text-gray-500 text-sm mb-[9px] font-medium">
                         Text
                     </div>
