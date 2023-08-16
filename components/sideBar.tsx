@@ -41,9 +41,11 @@ export default function SideBar() {
                             </div>
                         </div>
                         <div className={`flex justify-center items-center h-16 text-center`}>
-                            <div className={`w-6 h-6 rounded-full flex justify-center items-center font-medium text-[#838288]`}>
-                                <QuestionMarkCircleIcon className={`w-6 h-6`} />
-                            </div>
+                            <Link href="/faqs">
+                                <div className={`w-6 h-6 rounded-full flex justify-center items-center font-medium text-[#838288]`}>
+                                    <QuestionMarkCircleIcon className={`w-6 h-6`} />
+                                </div>
+                            </Link>
                         </div>
                     </div>
                     {/* Bottom section */}
