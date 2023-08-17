@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { useState } from 'react';
 import Button from '@/components/button';
 import { GlobalContext } from '@/context/store';
@@ -56,8 +55,6 @@ export default function Onboarding() {
         const inspirationUrls = likes.map((like: any) => like.content && like.content.url)
         setInspirations(inspirationUrls)
     }
-
-
 
     useEffect(() => {
         setStep(user?.onboarding_step || 1);

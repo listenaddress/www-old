@@ -224,8 +224,8 @@ const parseContentForTable = (content: any[]) => {
             item.venue = "FEBS"
             item.platformImage = platformImageMapping["febs"]
             item.url = `https://doi.org/${item.externalIds["DOI"]}`
-        } else if (item.externalIds["ArXiv"]) {
-            item.venue = "ArXiv"
+        } else if (item.externalIds["ArXiv"] || item.externalIds["arXiv"]) {
+            item.venue = "arXiv"
             item.platformImage = platformImageMapping["arxiv"]
             item.url = `https://arxiv.org/abs/${item.externalIds["ArXiv"]}`
         }
@@ -290,10 +290,7 @@ const parseContentForTable = (content: any[]) => {
             item.platformImage = platformImageMapping[String(item.venue).toLowerCase()]
         }
 
-        if (!item.platformImage) {
-            console.log(item.venue)
-            console.log(item.url)
-        }
+        if (!item.platformImage && item.ico) item.platformImage = item.ico
 
         if (!item.platformImage && item.type === "paper") {
             item.platformImage = platformImageMapping["paper"]
