@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from './button';
 import { useRouter } from 'next/router';
+import { TrashIcon } from '@heroicons/react/24/outline'
 
 function StreamForm({
     initialStreamName = '',
@@ -9,12 +10,18 @@ function StreamForm({
     // @ts-ignore
     onSubmit
 }) {
+    let initialInspirationContent: any[];
+    if (initialInspirations) {
+        initialInspirationContent = initialInspirations.map((inspiration) => inspiration.content);
+    }
     const router = useRouter();
     const [streamName, setStreamName] = useState(initialStreamName);
     const [instructions, setInstructions] = useState(initialInstructions);
     const [inspiration, setInspiration] = useState('');
-    const [inspirations, setInspirations] = useState(initialInspirations);
-    const [error, setError] = useState(null);
+    const [inspirations, setInspirations] = useState(initialInspirationContent);
+    const [deleting, setDeleting] = useState(false);
+    const [inspirationHover, setInspirationHover] = useState(-1);
+    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleAddClick = async () => {
@@ -41,6 +48,7 @@ function StreamForm({
             // @ts-ignore
             setInspirations([...inspirations, contentJson]);
             setInspiration('');
+            setError('')
         }
     };
 
@@ -56,6 +64,31 @@ function StreamForm({
         }
     };
 
+    const handleDelete = async (index: number) => {
+        const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+        const isInInitialInspirations = initialInspirations.find((initialInspiration) => initialInspiration.content.id === inspirations[index].id)
+        if (isInInitialInspirations) {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + 'actions/' + isInInitialInspirations.id, {
+                method: 'DELETE',
+                'headers': {
+                    'Authorization': 'Bearer ' + accessTokenFromCookie,
+                }
+            })
+            console.log(res)
+            if (res.status !== 204) {
+                setError('There was an error deleting the inspiration')
+                return
+            } else {
+                console.log('deleted')
+                setError('')
+            }
+        }
+        // Delete the inspiration from the inspirations array
+        const newInspirations = inspirations.filter((inspiration, i) => i !== index)
+        setInspirations(newInspirations)
+    }
+
+
     return (
         <div className='max-w-[34rem] m-auto px-4 text-black'>
             <h3 className='text-l mt-12 mb-3'>Name</h3>
@@ -63,6 +96,7 @@ function StreamForm({
                 type="text"
                 placeholder="E.g. 'Bioelectricity' or 'LLMs for Biomedical'"
                 className="w-full mb-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                value={streamName}
                 onChange={(e) => setStreamName(e.target.value)}
             />
             <h3 className='text-l mt-10 mb-1'>Instructions</h3>
@@ -72,9 +106,10 @@ function StreamForm({
             <textarea
                 className='w-full h-40 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                 placeholder='I’m interested in...'
+                value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
             ></textarea>
-            <h3 className='text-l mt-10 mb-1'>Examples</h3>
+            <h3 className='text-l mt-10 mb-1'>References</h3>
             <span className='text-sm text-gray-500'>
                 Any links, papers, podcasts, books, etc. that&apos;d be examples of what you&apos;re looking for?
             </span>
@@ -109,8 +144,23 @@ function StreamForm({
                                 {
                                     inspirations.map((inspiration, index) => {
                                         return (
-                                            <div key={index} className='mt-2'>
+                                            <div
+                                                key={index}
+                                                className='mt-2'
+                                                onMouseEnter={() => setInspirationHover(index)}
+                                                onMouseLeave={() => setInspirationHover(-1)}
+                                            >
                                                 {inspiration.title}
+                                                {
+                                                    inspirationHover === index && (
+                                                        <TrashIcon
+                                                            onClick={() => {
+                                                                handleDelete(index)
+                                                            }}
+                                                            className={`inline-block w-4 h-4 ml-2 cursor-pointer ${deleting ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                                                        />
+                                                    )
+                                                }
                                             </div>
                                         )
                                     })
