@@ -266,8 +266,14 @@ export default function Stream() {
                     <div className={`items-center cursor-pointer inline-block mt-[3px]`}>
                         <div onClick={() => setDropdownOpen(!dropdownOpen)} className={`cursor-pointer`}>
                             <span className='font-medium'>{stream?.name}</span>
-                            <ChevronDownIcon className={`inline-block w-5 h-5 ml-[.15rem]`} />
-                            <div className='relative inline-block'>{dropdownOpen && <Dropdown left={'-2.3'} items={dropdownItems} setIsOpen={() => setDropdownOpen} />}</div>
+                            {
+                                user && user.id === stream?.created_by && (
+                                    <>
+                                        <ChevronDownIcon className={`inline-block w-5 h-5 ml-[.15rem]`} />
+                                        <div className='relative inline-block'>{dropdownOpen && <Dropdown left={'-2.3'} items={dropdownItems} setIsOpen={() => setDropdownOpen} />}</div>
+                                    </>
+                                )
+                            }
                         </div>
                     </div>
                     <div className={`ml-auto inline-block float-right`}>
