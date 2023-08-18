@@ -1,4 +1,3 @@
-"use client";
 import { useState, useEffect, useContext } from 'react'
 import { parseContentForTable } from '@/lib/helpers';
 import { ArrowUpRightIcon, ChevronDownIcon, PencilSquareIcon, InformationCircleIcon, HandThumbDownIcon, HandThumbUpIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';

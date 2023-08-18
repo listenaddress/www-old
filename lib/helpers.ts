@@ -336,7 +336,19 @@ const parseContentForTable = (content: any[]) => {
     return content
 }
 
+const showingSideBar = (path: string, user: any) => {
+    const pathsToHideSideBar = ['/', '/sign-in', '/onboarding']
+    if (pathsToHideSideBar.includes(path)) {
+        if (path === '/' && user) {
+            return true
+        }
+        return false
+    }
+    return true
+}
+
 export {
     parseContentForTable,
-    platformImageMapping
+    platformImageMapping,
+    showingSideBar
 }

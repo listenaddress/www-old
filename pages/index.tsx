@@ -9,7 +9,6 @@ import dynamic from 'next/dynamic'
 import { GlobalContext } from '@/context/store';
 import 'react-loading-skeleton/dist/skeleton.css'
 
-
 export default function Home() {
   const { user, setUser, loadingUser } = useContext(GlobalContext);
   const [hovering, setHovering] = useState({
