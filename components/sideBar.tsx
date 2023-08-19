@@ -14,6 +14,7 @@ export default function SideBar() {
     const router = useRouter()
     const { user, setUser, loadingUser } = useContext(GlobalContext);
     const [hovering, setHovering] = useState('')
+    const [userDropdownOpen, setUserDropdownOpen] = useState(false)
     const path = usePathname()
     const pathsToHideSideBar = ['/', '/sign-in', '/onboarding']
 
@@ -70,17 +71,50 @@ export default function SideBar() {
                         </div>
                     </div>
                     {/* Bottom section */}
-                    <Link href={`/user/${user?.id}`}>
-                        <div className={`flex justify-center items-center h-16`}>
-                            {user?.name && (
-                                <div className={`w-8 h-8 rounded-full bg-gray-500 text-white flex justify-center items-center font-medium text-lg`}>
+                    <div className={`flex justify-center items-center h-16`}>
+                        {user?.name && (
+                            <div className='relative'>
+                                <div
+                                    className={`w-8 h-8 rounded-full bg-gray-500 text-white flex justify-center items-center font-medium text-lg cursor-pointer`}
+                                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                                >
                                     {user.name[0]}
                                 </div>
-                            )}
-                        </div>
-                    </Link>
-                </nav>
-            </div>
+                                {
+                                    userDropdownOpen && (
+                                        <>
+                                            <Dropdown
+                                                setIsOpen={() => setUserDropdownOpen}
+                                                left="2.4"
+                                                top="-3.8"
+                                                items={[
+                                                    {
+                                                        text: 'My streams',
+                                                        onClick: (e: any) => {
+                                                            router.push(`/user/${user.id}`)
+                                                            setUserDropdownOpen(false)
+                                                        }
+                                                    },
+                                                    {
+                                                        text: 'Sign out',
+                                                        onClick: (e: any) => {
+                                                            setUser(null)
+                                                            const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+                                                            document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                                                            router.push('/')
+                                                            setUserDropdownOpen(false)
+                                                        }
+                                                    }
+                                                ]}
+                                            />
+                                        </>
+                                    )
+                                }
+                            </div>
+                        )}
+                    </div>
+                </nav >
+            </div >
         )
     )
 }

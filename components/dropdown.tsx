@@ -38,7 +38,6 @@ function Dropdown({
         setIsOpen(false);
         router.push(href);
     };
-
     return (
         <div
             ref={ref}
@@ -48,13 +47,23 @@ function Dropdown({
                 top: `${top}rem`
             }}
         >
-            <div className="py-1 rounded-md bg-white shadow-xs">
+            <div className="py-2 rounded-md bg-white shadow-xs">
                 {items.map((item: any, index: number) => (
                     <div
                         key={index}
-                        onClick={(e) => handleLinkClick(e, item.href)}
-                        className={`block px-4 pr-8 py-2 text-sm font-medium hover:bg-[#F2F2F6] cursor-pointer`}>
-                        <item.icon strokeWidth={2} width={22} className="inline-block relative bottom-[2px] mr-1" />
+                        onClick={(e) => {
+                            if (item.onClick) {
+                                item.onClick(e);
+                                return;
+                            }
+                            handleLinkClick(e, item.href)
+                        }}
+                        className={`block px-5 py-2 text-sm font-medium hover:bg-[#F2F2F6] cursor-pointer`}>
+                        {
+                            item.icon && (
+                                <item.icon strokeWidth={2} width={22} className="inline-block relative bottom-[2px] mr-1" />
+                            )
+                        }
                         {item.text}
                     </div>
                 ))}
