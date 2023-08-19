@@ -104,7 +104,7 @@ function StreamForm({
                 What kind of science are you looking for? We’ll keep this in mind as we scan the Internet.
             </span>
             <textarea
-                className='w-full h-40 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                className='w-full h-28 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                 placeholder='I’m interested in...'
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
