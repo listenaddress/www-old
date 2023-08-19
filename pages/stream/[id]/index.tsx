@@ -34,11 +34,11 @@ export default function Stream() {
         })
     }
 
-    dropdownItems.push({
-        text: 'Stream details',
-        href: '/stream/' + id + '/details',
-        icon: InformationCircleIcon
-    })
+    // dropdownItems.push({
+    //     text: 'Stream details',
+    //     href: '/stream/' + id + '/details',
+    //     icon: InformationCircleIcon
+    // })
 
     const formatAuthors = (authors: any[]) => {
         let result = "";

@@ -155,7 +155,7 @@ export default function Home() {
                 )
               }
               <div className='font-medium mb-4 text-gray-500'>
-                Pinned Streams
+                Pinned streams
               </div>
               {
                 streams.map((stream: any, streamIndex: number) => {
