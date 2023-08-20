@@ -1,7 +1,4 @@
-import Button from './button'
-import { ThemeContext } from "@/context/theme"
-import React, { useEffect, useState, useContext } from "react"
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import React, { useState, useContext } from "react"
 import { QuestionMarkCircleIcon, MagnifyingGlassIcon, PlusIcon, ArrowLeftOnRectangleIcon, Bars4Icon } from '@heroicons/react/24/outline'
 import { GlobalContext } from '@/context/store'
 import { usePathname, useRouter } from 'next/navigation'
@@ -16,7 +13,6 @@ export default function SideBar() {
     const [hovering, setHovering] = useState('')
     const [userDropdownOpen, setUserDropdownOpen] = useState(false)
     const path = usePathname()
-    const pathsToHideSideBar = ['/', '/sign-in', '/onboarding']
 
     return (
         showingSideBar(path, user) && (
