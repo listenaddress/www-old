@@ -7,17 +7,22 @@ function StreamForm({
     initialStreamName = '',
     initialInstructions = '',
     initialInspirations = [],
+    initialAbout = '',
     // @ts-ignore
     onSubmit
 }) {
     let initialInspirationContent: any[];
     if (initialInspirations) {
+        // @ts-ignore
         initialInspirationContent = initialInspirations.map((inspiration) => inspiration.content);
     }
+
     const router = useRouter();
     const [streamName, setStreamName] = useState(initialStreamName);
     const [instructions, setInstructions] = useState(initialInstructions);
+    const [about, setAbout] = useState(initialAbout);
     const [inspiration, setInspiration] = useState('');
+    // @ts-ignore
     const [inspirations, setInspirations] = useState(initialInspirationContent);
     const [deleting, setDeleting] = useState(false);
     const [inspirationHover, setInspirationHover] = useState(-1);
@@ -54,7 +59,7 @@ function StreamForm({
 
     const handleSubmit = async () => {
         if (streamName && instructions && onSubmit) {
-            const res = await onSubmit(streamName, instructions, inspirations);
+            const res = await onSubmit(streamName, instructions, about, inspirations);
             if (!res || res.error) {
                 setError(res.error);
                 setLoading(false);
@@ -66,8 +71,10 @@ function StreamForm({
 
     const handleDelete = async (index: number) => {
         const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+        // @ts-ignore
         const isInInitialInspirations = initialInspirations.find((initialInspiration) => initialInspiration.content.id === inspirations[index].id)
         if (isInInitialInspirations) {
+            // @ts-ignore
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + 'actions/' + isInInitialInspirations.id, {
                 method: 'DELETE',
                 'headers': {
@@ -109,7 +116,17 @@ function StreamForm({
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
             ></textarea>
-            <h3 className='text-l mt-10 mb-1'>References</h3>
+            <h3 className='text-l mt-10 mb-1'>About <span className='text-gray-500'>(optional)</span></h3>
+            <span className='text-sm text-gray-500'>
+                If you share your stream, this will helps others understand what the stream is for.
+            </span>
+            <textarea
+                className='w-full h-28 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                placeholder='About this stream...'
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+            ></textarea>
+            <h3 className='text-l mt-10 mb-1'>References <span className='text-gray-500'>(optional)</span></h3>
             <span className='text-sm text-gray-500'>
                 Any links, papers, podcasts, books, etc. that&apos;d be examples of what you&apos;re looking for?
             </span>

@@ -58,7 +58,7 @@ function Dropdown({
                             }
                             handleLinkClick(e, item.href)
                         }}
-                        className={`block px-5 py-2 text-sm font-medium hover:bg-[#F2F2F6] cursor-pointer`}>
+                        className={`block px-5 py-2 pr-[22px] text-sm font-medium hover:bg-[#F2F2F6] cursor-pointer`}>
                         {
                             item.icon && (
                                 <item.icon strokeWidth={2} width={22} className="inline-block relative bottom-[2px] mr-2" />

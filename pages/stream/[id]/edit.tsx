@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 export default function EditStream() {
     const router = useRouter()
     const { id } = router.query
-    const [initialStream, setInitialStream] = useState({})
-    const onSubmit = async (name: string, instructions: string, inspirations: any[] = []) => {
+    const [initialStream, setInitialStream] = useState<any>(null)
+    const onSubmit = async (name: string, instructions: string, about: string, inspirations: any[] = []) => {
         try {
             const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
             const inspirationIds = inspirations.map(inspiration => inspiration.id)
@@ -19,6 +19,7 @@ export default function EditStream() {
                 body: JSON.stringify({
                     name,
                     instructions,
+                    about,
                     inspirations: inspirationIds
                 }),
             })
@@ -49,11 +50,8 @@ export default function EditStream() {
         fetchStream()
     }, [id])
 
-    let initialInspirations = []
-    if (initialStream && initialStream.inspirations) {
-        // Get content object from each inspiration and append to initialInspirations
-        initialInspirations = initialStream.inspirations.map((inspiration: any) => inspiration.content)
-    }
+    let initialInspirations: any[] = []
+    if (initialStream && initialStream.inspirations) initialInspirations = initialStream.inspirations.map((inspiration: any) => inspiration.content)
 
     return (
         <>
@@ -64,6 +62,7 @@ export default function EditStream() {
                         initialInstructions={initialStream.instructions}
                         initialStreamName={initialStream.name}
                         initialInspirations={initialStream.inspirations}
+                        initialAbout={initialStream.about}
                     />
                 )
             }
