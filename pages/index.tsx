@@ -41,7 +41,7 @@ export default function Home() {
       <CrispWithNoSSR />
       {
         user && (
-          <div className='max-w-[500px] mx-auto px-4 sm:px-6 lg:px-8 mt-10'>
+          <div className='max-w-[500px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-28'>
             <div className='font-medium mb-4 text-gray-500'>
               All public streams
             </div>

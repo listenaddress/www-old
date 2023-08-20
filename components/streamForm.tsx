@@ -100,7 +100,7 @@ function StreamForm({
 
 
     return (
-        <div className='max-w-[34rem] m-auto px-4 text-black'>
+        <div className='max-w-[34rem] m-auto mb-28 px-4 text-black'>
             <h3 className='text-l mt-12 mb-3'>Name</h3>
             <input
                 type="text"
@@ -215,7 +215,7 @@ function StreamForm({
                     size='md'
                     disabled={!streamName || !instructions}
                     variant='blue'
-                    className='mt-12 mb-20 cursor-pointer'
+                    className='mt-12 cursor-pointer'
                 >
                     {initialStreamName ? 'Update Stream' : 'Save Stream'}
                 </Button>

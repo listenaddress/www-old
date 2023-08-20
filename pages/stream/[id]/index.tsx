@@ -260,7 +260,7 @@ export default function Stream() {
 
     return (
         <>
-            <div className='m-4 mb-8 sm:ml-20'>
+            <div className='m-4 mb-28 sm:ml-20'>
                 <Toaster />
                 <div className={`text-lg`}>
                     <div className={`items-center cursor-pointer inline-block mt-[3px]`}>
