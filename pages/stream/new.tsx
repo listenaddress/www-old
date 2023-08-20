@@ -14,7 +14,8 @@ export default function NewStream() {
                 body: JSON.stringify({
                     name,
                     instructions,
-                    inspirations: inspirationIds
+                    inspirations: inspirationIds,
+                    access
                 }),
             })
             const resJson = await res.json()
@@ -28,7 +29,7 @@ export default function NewStream() {
     }
     return (
         <>
-            <StreamForm onSubmit={onSubmit} />
+            <StreamForm onSubmit={onSubmit} initialAccess="private" />
         </>
     )
 }
