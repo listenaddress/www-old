@@ -71,7 +71,7 @@ export default function Home() {
 
                             return (
                               <div
-                                className="relative inline-block mx-[-5px] border-2 rounded-full border-white"
+                                className="relative inline-block mx-[-5px] border-2 rounded-full border-white bg-white"
                                 key={contentIndex}
                                 onMouseEnter={onHover}
                                 onMouseLeave={() => setHovering({
@@ -183,7 +183,7 @@ export default function Home() {
 
                               return (
                                 <div
-                                  className="relative inline-block mx-[-5px] border-2 rounded-full border-white"
+                                  className="relative inline-block mx-[-5px] border-2 rounded-full border-white bg-white"
                                   key={contentIndex}
                                   onMouseEnter={onHover}
                                   onMouseLeave={() => setHovering({

@@ -2,7 +2,7 @@ import Button from './button'
 import { ThemeContext } from "@/context/theme"
 import React, { useEffect, useState, useContext } from "react"
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { QuestionMarkCircleIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { QuestionMarkCircleIcon, MagnifyingGlassIcon, PlusIcon, ArrowLeftOnRectangleIcon, Bars4Icon } from '@heroicons/react/24/outline'
 import { GlobalContext } from '@/context/store'
 import { usePathname, useRouter } from 'next/navigation'
 import Dropdown from './dropdown'
@@ -86,14 +86,15 @@ export default function SideBar() {
                                             <Dropdown
                                                 setIsOpen={() => setUserDropdownOpen}
                                                 left="2.4"
-                                                top="-3.8"
+                                                top="-4.53"
                                                 items={[
                                                     {
                                                         text: 'My streams',
                                                         onClick: (e: any) => {
                                                             router.push(`/user/${user.id}`)
                                                             setUserDropdownOpen(false)
-                                                        }
+                                                        },
+                                                        icon: Bars4Icon
                                                     },
                                                     {
                                                         text: 'Sign out',
@@ -103,7 +104,8 @@ export default function SideBar() {
                                                             document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                                                             router.push('/')
                                                             setUserDropdownOpen(false)
-                                                        }
+                                                        },
+                                                        icon: ArrowLeftOnRectangleIcon
                                                     }
                                                 ]}
                                             />

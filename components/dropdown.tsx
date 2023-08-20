@@ -61,7 +61,7 @@ function Dropdown({
                         className={`block px-5 py-2 text-sm font-medium hover:bg-[#F2F2F6] cursor-pointer`}>
                         {
                             item.icon && (
-                                <item.icon strokeWidth={2} width={22} className="inline-block relative bottom-[2px] mr-1" />
+                                <item.icon strokeWidth={2} width={22} className="inline-block relative bottom-[2px] mr-2" />
                             )
                         }
                         {item.text}
