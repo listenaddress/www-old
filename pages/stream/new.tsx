@@ -15,6 +15,7 @@ export default function NewStream() {
                     name,
                     instructions,
                     inspirations: inspirationIds,
+                    about,
                     access
                 }),
             })
