@@ -6,7 +6,7 @@ export default function EditStream() {
     const router = useRouter()
     const { id } = router.query
     const [initialStream, setInitialStream] = useState<any>(null)
-    const onSubmit = async (name: string, instructions: string, about: string, inspirations: any[] = []) => {
+    const onSubmit = async (name: string, instructions: string, about: string, inspirations: any[] = [], access: string) => {
         try {
             const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
             const inspirationIds = inspirations.map(inspiration => inspiration.id)
@@ -20,7 +20,8 @@ export default function EditStream() {
                     name,
                     instructions,
                     about,
-                    inspirations: inspirationIds
+                    inspirations: inspirationIds,
+                    access
                 }),
             })
             const resJson = await res.json()
@@ -63,6 +64,7 @@ export default function EditStream() {
                         initialStreamName={initialStream.name}
                         initialInspirations={initialStream.inspirations}
                         initialAbout={initialStream.about}
+                        initialAccess={initialStream.access}
                     />
                 )
             }

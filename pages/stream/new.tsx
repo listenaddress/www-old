@@ -1,7 +1,7 @@
 import StreamForm from "@/components/streamForm";
 
 export default function NewStream() {
-    const onSubmit = async (name: string, instructions: string, about: string, inspirations: any[] = []) => {
+    const onSubmit = async (name: string, instructions: string, about: string, inspirations: any[] = [], access: string) => {
         try {
             const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
             const inspirationIds = inspirations.map(inspiration => inspiration.id)

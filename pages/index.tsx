@@ -43,7 +43,7 @@ export default function Home() {
         user && (
           <div className='max-w-[500px] mx-auto px-4 sm:px-6 lg:px-8 mt-10'>
             <div className='font-medium mb-4 text-gray-500'>
-              Recent streams
+              All public streams
             </div>
             {
               streams.map((stream: any, streamIndex: number) => {

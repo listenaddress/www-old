@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import Button from './button';
 import { useRouter } from 'next/router';
 import { TrashIcon } from '@heroicons/react/24/outline'
+import CheckboxInput from './checkboxInput';
 
 function StreamForm({
     initialStreamName = '',
     initialInstructions = '',
     initialInspirations = [],
     initialAbout = '',
+    initialAccess = '',
     // @ts-ignore
     onSubmit
 }) {
@@ -22,6 +24,7 @@ function StreamForm({
     const [instructions, setInstructions] = useState(initialInstructions);
     const [about, setAbout] = useState(initialAbout);
     const [inspiration, setInspiration] = useState('');
+    const [access, setAccess] = useState(initialAccess);
     // @ts-ignore
     const [inspirations, setInspirations] = useState(initialInspirationContent);
     const [deleting, setDeleting] = useState(false);
@@ -59,7 +62,7 @@ function StreamForm({
 
     const handleSubmit = async () => {
         if (streamName && instructions && onSubmit) {
-            const res = await onSubmit(streamName, instructions, about, inspirations);
+            const res = await onSubmit(streamName, instructions, about, inspirations, access);
             if (!res || res.error) {
                 setError(res.error);
                 setLoading(false);
@@ -101,6 +104,8 @@ function StreamForm({
             <h3 className='text-l mt-12 mb-3'>Name</h3>
             <input
                 type="text"
+                id="name"
+                autoComplete="off"
                 placeholder="E.g. 'Bioelectricity' or 'LLMs for Biomedical'"
                 className="w-full mb-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={streamName}
@@ -114,6 +119,7 @@ function StreamForm({
                 className='w-full h-28 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                 placeholder='I’m interested in...'
                 value={instructions}
+                id="instructions"
                 onChange={(e) => setInstructions(e.target.value)}
             ></textarea>
             <h3 className='text-l mt-10 mb-1'>About <span className='text-gray-500'>(optional)</span></h3>
@@ -124,6 +130,7 @@ function StreamForm({
                 className='w-full h-28 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                 placeholder='About this stream...'
                 value={about}
+                id="about"
                 onChange={(e) => setAbout(e.target.value)}
             ></textarea>
             <h3 className='text-l mt-10 mb-1'>References <span className='text-gray-500'>(optional)</span></h3>
@@ -135,6 +142,7 @@ function StreamForm({
                 placeholder="https://www.youtube.com/watch?v=2Oe6HUgrRlQ"
                 className="w-full mb-4 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={inspiration}
+                id="inspiration"
                 onChange={(e) => setInspiration(e.target.value)}
             />
             <div>
@@ -187,15 +195,31 @@ function StreamForm({
                     )
                 }
             </div>
-            <Button
-                onClick={handleSubmit}
-                size='md'
-                disabled={!streamName || !instructions}
-                variant='blue'
-                className='mt-12 mb-20 cursor-pointer'
-            >
-                {initialStreamName ? 'Update Stream' : 'Save Stream'}
-            </Button>
+            <h3 className='text-l mt-10 mb-1'>Privacy</h3>
+            <span className='text-sm text-gray-500'>
+                Do you want this stream to be public or private?
+            </span>
+            <div className='mt-4'>
+                <CheckboxInput
+                    label='Public'
+                    value={access === 'public'}
+                    onChange={() => setAccess('public')}
+                />
+                <CheckboxInput
+                    label='Private'
+                    value={access === 'private'}
+                    onChange={() => setAccess('private')}
+                />
+                <Button
+                    onClick={handleSubmit}
+                    size='md'
+                    disabled={!streamName || !instructions}
+                    variant='blue'
+                    className='mt-12 mb-20 cursor-pointer'
+                >
+                    {initialStreamName ? 'Update Stream' : 'Save Stream'}
+                </Button>
+            </div>
         </div>
     );
 }
