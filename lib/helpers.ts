@@ -141,7 +141,6 @@ const parseContentForTable = (content: any[]) => {
 
         if (item.venue == "YouTube") {
             item.platformImage = platformImageMapping["youtube"]
-            return
         }
 
         if (!item.externalIds) {
