@@ -41,6 +41,12 @@ const loadUser = async (
             return
         }
 
+        if (currentUserJson['message'] && currentUserJson['message'] == 'User not found') {
+            document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            setLoadingUser(false)
+            return
+        }
+
         if (!currentUserJson.onboarding_step || currentUserJson.onboarding_step > 6 && pathname !== '/onboarding') {
             setUser(currentUserJson);
             router.push('/onboarding')
