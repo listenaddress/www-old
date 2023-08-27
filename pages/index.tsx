@@ -8,6 +8,7 @@ import Skeleton from 'react-loading-skeleton'
 import dynamic from 'next/dynamic'
 import { GlobalContext } from '@/context/store';
 import 'react-loading-skeleton/dist/skeleton.css'
+import { DocumentIcon, GlobeAltIcon, BookOpenIcon, RssIcon } from '@heroicons/react/24/outline'
 
 export default function Home() {
   const { user, setUser, loadingUser } = useContext(GlobalContext);
@@ -31,6 +32,28 @@ export default function Home() {
     () => import('../components/crisp'),
     { ssr: false }
   )
+
+  const getContentImage = (content: any) => {
+    if (content.platformImage) return content.platformImage
+  }
+
+  const getContentIcon = (content: any) => {
+    console.log(content)
+    if (content.type === 'paper') return <DocumentIcon className="h-[22px] text-gray-500" />
+    if (content.type === 'podcast') return <RssIcon className="h-[22px] text-gray-500" />
+    if (content.type === 'book') return <BookOpenIcon className="h-[22px] text-gray-500" />
+    if (content.type === 'blog_post') {
+      if (content.external_ids) {
+        // for (id in content.externalIds) {
+        for (let i = 0; i < content.external_ids.length; i++) {
+          if (content.external_ids[i].venue.toLowerCase() === 'rss') {
+            return <RssIcon className="h-[22px] text-gray-500" />
+          }
+        }
+      }
+    }
+    return <GlobeAltIcon className="h-[22px] text-gray-500" />
+  }
 
   useEffect(() => {
     fetchStreams()
@@ -84,14 +107,30 @@ export default function Home() {
                                     text={content.title}
                                   />
                                 }
-                                <img
-                                  src={content.platformImage}
-                                  style={{
-                                    width: '32px',
-                                    height: '32px',
-                                    borderRadius: '50%'
-                                  }}
-                                />
+                                {
+                                  content.platformImage ? (
+                                    <img
+                                      src={content.platformImage || ''}
+                                      style={{
+                                        width: '32px',
+                                        height: '32px',
+                                        borderRadius: '50%',
+                                      }}
+                                    />
+                                  ) : (
+                                    <div
+                                      className='flex justify-center items-center'
+                                      style={{
+                                        width: '32px',
+                                        height: '32px',
+                                        borderRadius: '50%',
+                                        backgroundColor: '#EAEAEA',
+                                      }}
+                                    >
+                                      {getContentIcon(content)}
+                                    </div>
+                                  )
+                                }
                               </div>
                             )
                           })
@@ -114,7 +153,7 @@ export default function Home() {
               </h1>
               <div className='mb-16'>
                 <Button onClick={signIn} variant='blue'>
-                  Start for free
+                  Get started
                 </Button>
                 <Button onClick={signIn} secondary className='ml-4'>
                   Sign in
@@ -196,14 +235,31 @@ export default function Home() {
                                       text={content.title}
                                     />
                                   }
-                                  <img
-                                    src={content.platformImage}
-                                    style={{
-                                      width: '32px',
-                                      height: '32px',
-                                      borderRadius: '50%',
-                                    }}
-                                  />
+                                  {
+                                    content.platformImage ? (
+                                      <img
+                                        src={content.platformImage || ''}
+                                        style={{
+                                          width: '32px',
+                                          height: '32px',
+                                          borderRadius: '50%',
+                                        }}
+                                      />
+                                    ) : (
+                                      <div
+                                        className='flex justify-center items-center'
+                                        style={{
+                                          width: '32px',
+                                          height: '32px',
+                                          borderRadius: '50%',
+                                          backgroundColor: '#EAEAEA',
+                                        }}
+                                      >
+                                        {getContentIcon(content)}
+                                      </div>
+                                    )
+                                  }
+
                                 </div>
                               )
                             })

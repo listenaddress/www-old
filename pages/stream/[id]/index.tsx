@@ -375,79 +375,79 @@ export default function Stream() {
                                     </Link>
                                     {
                                         hoveringIndex === index && (
-                                            <div className='absolute right-2 top-[14px] bg-gray-300 rounded-lg'>                                                
+                                            <div className='absolute right-2 top-[14px] bg-gray-300 rounded-lg'>
                                                 <div className='flex items-center h-full'>
                                                     {
                                                         adminOptionsOpen && (
-                                                        <Dropdown
-                                                            left='-12.3'
-                                                            top='-2.5'
-                                                            setIsOpen={() => setAdminOptionsOpen}
-                                                            items={[
-                                                                {
-                                                                    text: 'Delete all from author',
-                                                                    onClick: () => {
-                                                                        const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
-                                                                        if (!item || !item.external_ids || item.external_ids.length < 1) {
-                                                                            toast.error('No external ids found for this content.')
+                                                            <Dropdown
+                                                                left='-12.3'
+                                                                top='-2.5'
+                                                                setIsOpen={() => setAdminOptionsOpen}
+                                                                items={[
+                                                                    {
+                                                                        text: 'Delete all from author',
+                                                                        onClick: () => {
+                                                                            const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+                                                                            if (!item || !item.external_ids || item.external_ids.length < 1) {
+                                                                                toast.error('No external ids found for this content.')
+                                                                            }
+                                                                            fetch(process.env.NEXT_PUBLIC_API_URL + 'content/author/by_name', {
+                                                                                method: 'DELETE',
+                                                                                headers: {
+                                                                                    'Content-Type': 'application/json',
+                                                                                    'Authorization': 'Bearer ' + accessTokenFromCookie
+                                                                                },
+                                                                                body: JSON.stringify({
+                                                                                    name: item.authors[0].name
+                                                                                })
+                                                                            })
+                                                                                .then(response => {
+                                                                                    if (response.status !== 204) {
+                                                                                        throw new Error('Network response was not ok');
+                                                                                    }
+                                                                                })
+                                                                                .then(data => {
+                                                                                    toast.success('Deleted all content from author.')
+                                                                                })
+                                                                                .catch(error => {
+                                                                                    console.error('There has been a problem with your fetch operation:', error);
+                                                                                    toast.error('Failed to delete all content from author.')
+                                                                                });
                                                                         }
-                                                                        fetch(process.env.NEXT_PUBLIC_API_URL + 'content/author/by_name', {
-                                                                            method: 'DELETE',
-                                                                            headers: {
-                                                                                'Content-Type': 'application/json',
-                                                                                'Authorization': 'Bearer ' + accessTokenFromCookie
-                                                                            },
-                                                                            body: JSON.stringify({
-                                                                                name: item.authors[0].name
+                                                                    },
+                                                                    {
+                                                                        text: 'Delete all from venue',
+                                                                        onClick: () => {
+                                                                            const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+                                                                            fetch(process.env.NEXT_PUBLIC_API_URL + 'content/venue', {
+                                                                                method: 'DELETE',
+                                                                                headers: {
+                                                                                    'Content-Type': 'application/json',
+                                                                                    'Authorization': 'Bearer ' + accessTokenFromCookie
+                                                                                },
+                                                                                body: JSON.stringify({
+                                                                                    venue: item.venue
+                                                                                })
                                                                             })
-                                                                        })
-                                                                        .then(response => {
-                                                                            if (response.status !== 204) {
-                                                                                throw new Error('Network response was not ok');
-                                                                            }
-                                                                        })
-                                                                        .then(data => {
-                                                                            toast.success('Deleted all content from author.')
-                                                                        })
-                                                                        .catch(error => {
-                                                                            console.error('There has been a problem with your fetch operation:', error);
-                                                                            toast.error('Failed to delete all content from author.')
-                                                                        });
+                                                                                .then(response => {
+                                                                                    if (!response.ok) {
+                                                                                        throw new Error('Network response was not ok');
+                                                                                    }
+                                                                                    return response.json();
+                                                                                })
+                                                                                .then(data => {
+                                                                                    console.log(data);
+                                                                                    toast.success('Deleted all content from venue.')
+                                                                                })
+                                                                                .catch(error => {
+                                                                                    toast.error('Failed to delete all content from venue.')
+                                                                                    console.error('There has been a problem with your fetch operation:', error);
+                                                                                });
+                                                                        }
                                                                     }
-                                                                },
-                                                                {
-                                                                    text: 'Delete all from venue',
-                                                                    onClick: () => {
-                                                                        const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
-                                                                        fetch(process.env.NEXT_PUBLIC_API_URL + 'content/venue', {
-                                                                            method: 'DELETE',
-                                                                            headers: {
-                                                                                'Content-Type': 'application/json',
-                                                                                'Authorization': 'Bearer ' + accessTokenFromCookie
-                                                                            },
-                                                                            body: JSON.stringify({
-                                                                                venue: item.venue
-                                                                            })
-                                                                        })
-                                                                        .then(response => {
-                                                                            if (!response.ok) {
-                                                                                throw new Error('Network response was not ok');
-                                                                            }
-                                                                            return response.json();
-                                                                        })
-                                                                        .then(data => {
-                                                                            console.log(data);
-                                                                            toast.success('Deleted all content from venue.')
-                                                                        })
-                                                                        .catch(error => {
-                                                                            toast.error('Failed to delete all content from venue.')
-                                                                            console.error('There has been a problem with your fetch operation:', error);
-                                                                        });
-                                                                    }
-                                                                }
-                                                            ]}
-                                                        />
-                                                    )}
+                                                                ]}
+                                                            />
+                                                        )}
 
                                                     {
                                                         <div

@@ -3,6 +3,7 @@ import Link from 'next/link'; // Assuming you are using Next.js
 import { GlobalContext } from '@/context/store';
 import Popover from '@/components/popover';
 import { parseContentForTable } from '@/lib/helpers';
+import { DocumentIcon, GlobeAltIcon, BookOpenIcon, RssIcon } from '@heroicons/react/24/outline'
 
 
 export default function User() {
@@ -25,6 +26,24 @@ export default function User() {
         }
         setStreams(dataJson)
     }
+
+    const getContentIcon = (content: any) => {
+        console.log(content)
+        if (content.type === 'paper') return <DocumentIcon className="h-[22px] text-gray-500" />
+        if (content.type === 'podcast') return <RssIcon className="h-[22px] text-gray-500" />
+        if (content.type === 'book') return <BookOpenIcon className="h-[22px] text-gray-500" />
+        if (content.type === 'blog_post') {
+            if (content.external_ids) {
+                for (let i = 0; i < content.external_ids.length; i++) {
+                    if (content.external_ids[i].venue.toLowerCase() === 'rss') {
+                        return <RssIcon className="h-[22px] text-gray-500" />
+                    }
+                }
+            }
+        }
+        return <GlobeAltIcon className="h-[22px] text-gray-500" />
+    }
+
     useEffect(() => {
         fetchStreams()
     }, [])
@@ -73,14 +92,30 @@ export default function User() {
                                                                 text={content.title}
                                                             />
                                                         }
-                                                        <img
-                                                            src={content.platformImage}
-                                                            style={{
-                                                                width: '32px',
-                                                                height: '32px',
-                                                                borderRadius: '50%'
-                                                            }}
-                                                        />
+                                                        {
+                                                            content.platformImage ? (
+                                                                <img
+                                                                    src={content.platformImage || ''}
+                                                                    style={{
+                                                                        width: '32px',
+                                                                        height: '32px',
+                                                                        borderRadius: '50%',
+                                                                    }}
+                                                                />
+                                                            ) : (
+                                                                <div
+                                                                    className='flex justify-center items-center'
+                                                                    style={{
+                                                                        width: '32px',
+                                                                        height: '32px',
+                                                                        borderRadius: '50%',
+                                                                        backgroundColor: '#EAEAEA',
+                                                                    }}
+                                                                >
+                                                                    {getContentIcon(content)}
+                                                                </div>
+                                                            )
+                                                        }
                                                     </div>
                                                 )
                                             })
