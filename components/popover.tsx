@@ -9,7 +9,7 @@ interface PopoverProps {
 
 function Popover({
     text,
-    left = "-100",
+    left = String(-10 * text.length / 4),
     bottom = "36"
 }: PopoverProps) {
     const ref = useRef<HTMLDivElement>(null);
