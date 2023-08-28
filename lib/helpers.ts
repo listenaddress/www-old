@@ -139,6 +139,7 @@ const parseContentForTable = (content: any[]) => {
             item.authorsDisplayed = item.authors
         }
 
+        if (!item.venue) item.venue = ""
         if (item.venue == "YouTube") {
             item.platformImage = platformImageMapping["youtube"]
         }

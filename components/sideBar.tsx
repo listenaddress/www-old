@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react"
-import { QuestionMarkCircleIcon, MagnifyingGlassIcon, PlusIcon, ArrowLeftOnRectangleIcon, Bars4Icon } from '@heroicons/react/24/outline'
+import { QuestionMarkCircleIcon, MagnifyingGlassIcon, PlusIcon, ArrowLeftOnRectangleIcon, Bars4Icon, CogIcon } from '@heroicons/react/24/outline'
 import { GlobalContext } from '@/context/store'
 import { usePathname, useRouter } from 'next/navigation'
 import Dropdown from './dropdown'
@@ -65,6 +65,26 @@ export default function SideBar() {
                                 </div>
                             </Link>
                         </div>
+                        {
+                            user?.is_admin && (
+                                <div className={`flex justify-center items-center h-16 text-center`}>
+                                    <Link href="/admin">
+                                        <div
+                                            className={`w-6 h-6 rounded-full flex justify-center items-center font-medium text-[#838288] relative`}
+                                            onMouseEnter={() => setHovering('admin')}
+                                            onMouseLeave={() => setHovering('')}
+                                        >
+                                            {
+                                                hovering === 'admin' && (
+                                                    <Popover text={`Admin`} left="36" bottom="-10" />
+                                                )
+                                            }
+                                            <CogIcon className={`w-6 h-6`} />
+                                        </div>
+                                    </Link>
+                                </div>
+                            )
+                        }
                     </div>
                     {/* Bottom section */}
                     <div className={`flex justify-center items-center h-16`}>
