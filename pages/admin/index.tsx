@@ -10,7 +10,7 @@ export default function Admin() {
   const [taskShowing, setTaskShowing] = useState('');
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [venue, setVenue] = useState(''); // If venue is not found in Google Books, we can add it manually [optional
+  const [venue, setVenue] = useState('');
   const [canonicalUrl, setCanonicalUrl] = useState('');
   const { user } = useContext(GlobalContext);
   const router = useRouter();
@@ -78,6 +78,7 @@ export default function Admin() {
 
   return (
     <div className='m-4 mb-28 sm:ml-20'>
+      <Toaster />
       <div className={`text-lg`}>
         <div className={`items-center cursor-pointer inline-block mt-[3px]`}>
           <span className='font-medium'>Admin</span>
