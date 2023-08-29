@@ -64,7 +64,7 @@ export default function Home() {
       <CrispWithNoSSR />
       {
         user && (
-          <div className='max-w-[500px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-28'>
+          <div className='max-w-[560px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-28'>
             <div className='font-medium mb-4 text-gray-500'>
               All public streams
             </div>
@@ -147,11 +147,11 @@ export default function Home() {
       {
         !loadingUser && !user && (
           <>
-            <main className="max-w-[34rem] m-auto mt-16 px-4 text-black">
-              <h1 className='text-3xl font-bold mb-8'>
+            <main className="max-w-[560px] m-auto mt-12 md:mt-20 md:mb-24 px-4 text-black">
+              <h1 className='text-2xl md:text-3xl font-bold mb-6 md:mb-8'>
                 Podcasts, papers, books and blogs around any research topic.
               </h1>
-              <div className='mb-16'>
+              <div className='mb-12 md:mb-20'>
                 <Button onClick={signIn} variant='blue'>
                   Get started
                 </Button>

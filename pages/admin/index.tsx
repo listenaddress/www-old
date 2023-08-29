@@ -60,6 +60,8 @@ export default function Admin() {
         body: JSON.stringify(data),
       });
       toast.success(`Saved ${book.title}`);
+      setVenue('');
+      setCanonicalUrl('');
     } catch (error) {
       toast.error('Error saving book');
     }
@@ -101,7 +103,7 @@ export default function Admin() {
             )
           }
         </div>
-        <div className={`mt-4`}>
+        <div className={`mt-6`}>
           {
             taskShowing === 'addBookFromGoogleBooks' && (
               <div>
@@ -136,7 +138,7 @@ export default function Admin() {
         </div>
       </div>
       <div>
-        {searchResults.map((book, index) => (
+        {searchResults.map((book: any, index) => (
           <div key={index} className={`mt-4`}>
             <div className={`text-lg font-medium`}>
               {book.title}
@@ -145,11 +147,8 @@ export default function Admin() {
               {book.authors && book.authors.join(', ')}
             </div>
             <div className={`text-xs`}>
-              {/* Cut the description to first 500 characteres */}
-              {book.description?.slice(0, 500) + (book.description?.length > 500 ? '...' : '')}
-            </div>
-            <div className={`text-xs`}>
-              {book.venue}
+              {/* Italics */}
+              <span className={`italic`}>{book.venue}</span>
               {!book.venue && (
                 <div className={`mt-2`}>
                   <input
@@ -160,7 +159,10 @@ export default function Admin() {
                   />
                 </div>
               )}
-
+            </div>
+            <div className={`text-xs`}>
+              {/* Cut the description to first 500 characteres */}
+              {book.description?.slice(0, 500) + (book.description?.length > 500 ? '...' : '')}
             </div>
             <div className={`text-xs`}>
               {book.publishedDate}
