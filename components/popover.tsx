@@ -9,7 +9,7 @@ interface PopoverProps {
 
 function Popover({
     text,
-    left = String(-10 * text.length / 4),
+    left = String(-10 * (text.length > 70 ? 73 : text.length) / 4),
     bottom = "36"
 }: PopoverProps) {
     const ref = useRef<HTMLDivElement>(null);
