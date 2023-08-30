@@ -347,8 +347,20 @@ const showingSideBar = (path: string, user: any) => {
     return true
 }
 
+const extractSpotifyShowId = (url: string): string | null => {
+    if (url.includes("open.spotify.com/show")) {
+        let id = url.split('show/')[1];
+        id = id.split('?')[0];
+        return id;
+    } else {
+        console.log(`Unrecognized URL format: ${url}`);
+        return null;
+    }
+}
+
 export {
     parseContentForTable,
     platformImageMapping,
-    showingSideBar
+    showingSideBar,
+    extractSpotifyShowId
 }

@@ -1,19 +1,50 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { GlobalContext } from '@/context/store';
 import Button from '@/components/button';
 import Dropdown from '@/components/dropdown';
 import { Toaster, toast } from 'sonner'
+import { extractSpotifyShowId } from '@/lib/helpers';
 
 export default function Admin() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [taskShowing, setTaskShowing] = useState('');
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [podcastUrl, setPodcastUrl] = useState('');
+  const [pinnedSpotifyPodcasts, setPinnedSpotifyPodcasts] = useState([]);
+  const [pinnedItunesPodcasts, setPinnedItunesPodcasts] = useState([]);
+  const [pinnedYoutubeChannels, setPinnedYoutubeChannels] = useState([]);
+  const [pinnedRssFeeds, setPinnedRssFeeds] = useState([]);
+
   const [venue, setVenue] = useState('');
   const [canonicalUrl, setCanonicalUrl] = useState('');
   const { user } = useContext(GlobalContext);
   const router = useRouter();
+
+  const fetchPins = async () => {
+    const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}pins`, {
+      headers: {
+        'Authorization': `Bearer ${accessTokenFromCookie}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    const resJson = await res.json()
+    const spotifyPodcasts = resJson.filter((item: any) => item.type === 'spotify_podcast')
+    const itunesPodcasts = resJson.filter((item: any) => item.type === 'itunes_podcast')
+    const youtubeChannels = resJson.filter((item: any) => item.type === 'youtube_channel')
+    const rssFeeds = resJson.filter((item: any) => item.type === 'rss_feed')
+    setPinnedSpotifyPodcasts(spotifyPodcasts)
+    setPinnedItunesPodcasts(itunesPodcasts)
+    setPinnedYoutubeChannels(youtubeChannels)
+    setPinnedRssFeeds(rssFeeds)
+  }
+
+  useEffect(() => {
+    fetchPins()
+  }, []);
+
 
   const handleSearchGoogleBooks = (e: any) => {
     e.preventDefault();
@@ -67,6 +98,34 @@ export default function Admin() {
     }
   }
 
+  const handlePinPodcast = async () => {
+    const podcastId = podcastUrl.includes('spotify.com') ? extractSpotifyShowId(podcastUrl) : podcastUrl;
+
+    const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}pins`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessTokenFromCookie}`
+        },
+        body: JSON.stringify({
+          external_id: podcastId,
+          type: 'spotify_podcast',
+        }),
+      });
+
+      if (res.ok) {
+        toast.success('Podcast pinned successfully');
+        setPodcastUrl('');
+      } else {
+        toast.error('Error pinning podcast');
+      }
+    } catch (error) {
+      toast.error('Error pinning podcast');
+    }
+  };
+
   const dropdownItems = [
     {
       text: 'Add book from Google Books',
@@ -76,6 +135,26 @@ export default function Admin() {
       text: 'Add book manually',
       onClick: () => setTaskShowing('addBookManually')
     },
+    {
+      text: 'Pin Spotify Podcast',
+      onClick: () => setTaskShowing('pinSpotifyPodcast')
+    },
+    {
+      text: 'Pin iTunes Podcast',
+      onClick: () => setTaskShowing('pinItunesPodcast')
+    },
+    {
+      text: 'Pin YouTube Channel',
+      onClick: () => setTaskShowing('pinYoutubeChannel')
+    },
+    {
+      text: 'Pin RSS Feed',
+      onClick: () => setTaskShowing('pinRssFeed')
+    },
+    {
+      text: 'Pin Semantic Scholar Author',
+      onClick: () => setTaskShowing('pinSemanticScholarAuthor')
+    }
   ];
 
   return (
@@ -132,6 +211,37 @@ export default function Admin() {
                     </Button>
                   </div>
                 </div>
+              </div>
+            )
+          }
+          {
+            taskShowing === 'pinSpotifyPodcast' && (
+              <div className={"mt-4"}>
+                <input
+                  className={"border border-gray-300 rounded-md p-2 w-full"}
+                  placeholder="Spotify Podcast URL or ID"
+                  value={podcastUrl}
+                  onChange={e => setPodcastUrl(e.target.value)}
+                />
+                <div className={"mt-2"}>
+                  <Button
+                    size="sm"
+                    secondary
+                    onClick={handlePinPodcast}
+                  >
+                    Pin Spotify Podcast
+                  </Button>
+                </div>
+                {pinnedSpotifyPodcasts.length}
+                {
+                  pinnedSpotifyPodcasts.map((podcast: any, index: number) => (
+                    <div key={index} className={"mt-2"}>
+                      <div className={"text-xs"}>
+                        {index} - {podcast.external_id}
+                      </div>
+                    </div>
+                  ))
+                }
               </div>
             )
           }
