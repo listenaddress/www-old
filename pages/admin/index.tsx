@@ -4,7 +4,7 @@ import { GlobalContext } from '@/context/store';
 import Button from '@/components/button';
 import Dropdown from '@/components/dropdown';
 import { Toaster, toast } from 'sonner'
-import { extractSpotifyShowId, extractItunesPodcastId } from '@/lib/helpers';
+import { extractSpotifyShowId, extractItunesPodcastId, extractYoutubeChannelIdOrName } from '@/lib/helpers';
 
 export default function Admin() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -12,6 +12,7 @@ export default function Admin() {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [podcastUrl, setPodcastUrl] = useState('');
+  const [channelUrl, setChannelUrl] = useState('');
   const [pinnedSpotifyPodcasts, setPinnedSpotifyPodcasts] = useState([]);
   const [pinnedItunesPodcasts, setPinnedItunesPodcasts] = useState([]);
   const [pinnedYoutubeChannels, setPinnedYoutubeChannels] = useState([]);
@@ -125,6 +126,41 @@ export default function Admin() {
       toast.error('Error pinning podcast');
     }
   };
+
+  const handlePinYoutubeChannel = async () => {
+    const idOrName: any = extractYoutubeChannelIdOrName(channelUrl);
+    if (!idOrName || (!idOrName.id && !idOrName.name)) return toast.error('Invalid YouTube channel URL')
+    let body: any = {
+      type: 'youtube_channel',
+    }
+    if (idOrName.id) body = { ...body, external_id: idOrName.id }
+    if (idOrName.name) body = { ...body, name: idOrName.name }
+    const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}pins`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessTokenFromCookie}`
+        },
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+
+      if (res.ok) {
+        toast.success('YouTube channel pinned successfully');
+        setChannelUrl('');
+      } else {
+        const resJson = await res.json()
+        if (resJson.error) {
+          toast.error(resJson.error)
+        } else {
+          toast.error('Error pinning YouTube channel');
+        }
+      }
+    } catch (error) {
+      toast.error('Error pinning YouTube channel');
+    }
+  }
 
   const handlePinItunesPodcast = async () => {
     const podcastId = podcastUrl.includes('podcasts.apple.com') ? extractItunesPodcastId(podcastUrl) : podcastUrl;
@@ -298,6 +334,37 @@ export default function Admin() {
                     <div key={index} className={"mt-2"}>
                       <div className={"text-xs"}>
                         {index} - {podcast.external_id}
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+            )
+          }
+          {
+            taskShowing === 'pinYoutubeChannel' && (
+              <div className={"mt-4"}>
+                <input
+                  className={"border border-gray-300 rounded-md p-2 w-full"}
+                  placeholder="YouTube Channel URL"
+                  value={channelUrl}
+                  onChange={e => setChannelUrl(e.target.value)}
+                />
+                <div className={"mt-2"}>
+                  <Button
+                    size="sm"
+                    secondary
+                    onClick={handlePinYoutubeChannel}
+                  >
+                    Pin YouTube Channel
+                  </Button>
+                </div>
+                {pinnedYoutubeChannels.length}
+                {
+                  pinnedYoutubeChannels.map((channel: any, index: number) => (
+                    <div key={index} className={"mt-2"}>
+                      <div className={"text-xs"}>
+                        {index} - {channel.external_id}
                       </div>
                     </div>
                   ))

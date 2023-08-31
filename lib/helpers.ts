@@ -369,11 +369,37 @@ const extractItunesPodcastId = (url: string): string | null => {
         return null;
     }
 }
+ 
+const extractYoutubeChannelIdOrName = (url: string): {id: string | null, name: string | null} => {
+    let id = null;
+    let name = null;
+
+    if (url.includes("youtube.com/channel")) {
+        id = url.split('youtube.com/channel/')[1];
+        if (id.includes('/')) {
+            id = id.split('/')[0];
+        }
+        if (id.includes('?')) {
+            id = id.split('?')[0];
+        }
+    } else if (url.includes("youtube.com/c/") || url.includes("youtube.com/@")) {
+        name = url.split('youtube.com/')[1];
+        if (name.includes('/')) {
+            name = name.split('/')[1];
+        }
+        if (name.includes('?')) {
+            name = name.split('?')[0];
+        }
+    }
+
+    return {id, name};
+}
 
 export {
     parseContentForTable,
     platformImageMapping,
     showingSideBar,
     extractSpotifyShowId,
-    extractItunesPodcastId
+    extractItunesPodcastId,
+    extractYoutubeChannelIdOrName
 }
