@@ -13,9 +13,12 @@ export default function Admin() {
   const [searchResults, setSearchResults] = useState([]);
   const [podcastUrl, setPodcastUrl] = useState('');
   const [channelUrl, setChannelUrl] = useState('');
+  const [ssAuthorUrl, setSSAuthorUrl] = useState('');
+  const [ssAuthorPaperUrl, setSSAuthorPaperUrl] = useState('');
   const [pinnedSpotifyPodcasts, setPinnedSpotifyPodcasts] = useState([]);
   const [pinnedItunesPodcasts, setPinnedItunesPodcasts] = useState([]);
   const [pinnedYoutubeChannels, setPinnedYoutubeChannels] = useState([]);
+  const [pinnedSemanticScholarAuthors, setPinnedSemanticScholarAuthors] = useState([]);
   const [pinnedRssFeeds, setPinnedRssFeeds] = useState([]);
 
   const [venue, setVenue] = useState('');
@@ -35,11 +38,13 @@ export default function Admin() {
     const spotifyPodcasts = resJson.filter((item: any) => item.type === 'spotify_podcast')
     const itunesPodcasts = resJson.filter((item: any) => item.type === 'itunes_podcast')
     const youtubeChannels = resJson.filter((item: any) => item.type === 'youtube_channel')
+    const semanticScholarAuthors = resJson.filter((item: any) => item.type === 'ss_author')
     const rssFeeds = resJson.filter((item: any) => item.type === 'rss_feed')
     setPinnedSpotifyPodcasts(spotifyPodcasts)
     setPinnedItunesPodcasts(itunesPodcasts)
     setPinnedYoutubeChannels(youtubeChannels)
     setPinnedRssFeeds(rssFeeds)
+    setPinnedSemanticScholarAuthors(semanticScholarAuthors)
   }
 
   useEffect(() => {
@@ -190,6 +195,65 @@ export default function Admin() {
     }
   }
 
+  const handleSSAuthorPin = async () => {
+    let authorId = ''
+    const idFromUrl = ssAuthorUrl.split('/author/')[1]
+    if (idFromUrl) {
+      authorId = idFromUrl.split('/')[1]
+    } else {
+      authorId = ssAuthorUrl
+    }
+
+    const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}pins`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessTokenFromCookie}`
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          external_id: authorId,
+          type: 'ss_author',
+        }),
+      });
+
+      if (res.ok) {
+        toast.success('Semantic Scholar author pinned successfully');
+        setSSAuthorUrl('');
+      } else {
+        toast.error('Error pinning Semantic Scholar author');
+      }
+    } catch (error) {
+      toast.error('Error pinning Semantic Scholar author');
+    }
+  }
+
+  const handleSSAuthorPinByPaper = async () => {
+    const paperSlugAndIdOrId = ssAuthorPaperUrl.split('/paper/')[1]
+    const paperId = paperSlugAndIdOrId.includes('/') ? paperSlugAndIdOrId.split('/')[1] : paperSlugAndIdOrId
+
+    const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}pins/authors_from_paper`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessTokenFromCookie}`
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        paper_id: paperId,
+      }),
+    });
+
+    if (res.ok) {
+      toast.success('Semantic Scholar authors pinned successfully');
+      setSSAuthorPaperUrl('');
+    } else {
+      toast.error('Error pinning Semantic Scholar author');
+    }
+  }
 
   const dropdownItems = [
     {
@@ -369,6 +433,70 @@ export default function Admin() {
                     </div>
                   ))
                 }
+              </div>
+            )
+          }
+          {
+            taskShowing === 'pinSemanticScholarAuthor' && (
+              <div className={"mt-4"}>
+                <input
+                  className={"border border-gray-300 rounded-md p-2 w-full"}
+                  placeholder="Semantic Scholar Author URL"
+                  value={ssAuthorUrl}
+                  onChange={e => setSSAuthorUrl(e.target.value)}
+                />
+                <div className={"mt-2"}>
+                  <Button
+                    size="sm"
+                    secondary
+                    onClick={handleSSAuthorPin}
+                  >
+                    Pin Semantic Scholar Author
+                  </Button>
+                </div>
+                <div className={"mt-4"}>
+                  <input
+                    className={"border border-gray-300 rounded-md p-2 w-full"}
+                    placeholder="Semantic Scholar Paper URL"
+                    value={ssAuthorPaperUrl}
+                    onChange={e => setSSAuthorPaperUrl(e.target.value)}
+                  />
+                  <div className={"mt-2"}>
+                    <Button
+                      size="sm"
+                      secondary
+                      onClick={handleSSAuthorPinByPaper}
+                    >
+                      Pin Semantic Scholar Author by Paper
+                    </Button>
+                  </div>
+                </div>
+
+
+                {pinnedSemanticScholarAuthors.length}
+                {
+                  pinnedSemanticScholarAuthors.map((author: any, index: number) => (
+                    <div key={index} className={"mt-2"}>
+                      <div className={"text-xs"}>
+                        {index} - {author.external_id}
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+            )
+          }
+          {
+            taskShowing === 'pinRssFeed' && (
+              <div className='mt-4 text-red-500'>
+                Todo
+              </div>
+            )
+          }
+          {
+            taskShowing === 'addBookManually' && (
+              <div className={"mt-4 text-red-500"}>
+                Todo
               </div>
             )
           }
