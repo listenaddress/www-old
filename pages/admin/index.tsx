@@ -4,7 +4,7 @@ import { GlobalContext } from '@/context/store';
 import Button from '@/components/button';
 import Dropdown from '@/components/dropdown';
 import { Toaster, toast } from 'sonner'
-import { extractSpotifyShowId } from '@/lib/helpers';
+import { extractSpotifyShowId, extractItunesPodcastId } from '@/lib/helpers';
 
 export default function Admin() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -126,6 +126,35 @@ export default function Admin() {
     }
   };
 
+  const handlePinItunesPodcast = async () => {
+    const podcastId = podcastUrl.includes('podcasts.apple.com') ? extractItunesPodcastId(podcastUrl) : podcastUrl;
+
+    const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}pins`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessTokenFromCookie}`
+        },
+        body: JSON.stringify({
+          external_id: podcastId,
+          type: 'itunes_podcast',
+        }),
+      });
+
+      if (res.ok) {
+        toast.success('Podcast pinned successfully');
+        setPodcastUrl('');
+      } else {
+        toast.error('Error pinning podcast');
+      }
+    } catch (error) {
+      toast.error('Error pinning podcast');
+    }
+  }
+
+
   const dropdownItems = [
     {
       text: 'Add book from Google Books',
@@ -235,6 +264,37 @@ export default function Admin() {
                 {pinnedSpotifyPodcasts.length}
                 {
                   pinnedSpotifyPodcasts.map((podcast: any, index: number) => (
+                    <div key={index} className={"mt-2"}>
+                      <div className={"text-xs"}>
+                        {index} - {podcast.external_id}
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+            )
+          }
+          {
+            taskShowing === 'pinItunesPodcast' && (
+              <div className={"mt-4"}>
+                <input
+                  className={"border border-gray-300 rounded-md p-2 w-full"}
+                  placeholder="iTunes Podcast URL or ID"
+                  value={podcastUrl}
+                  onChange={e => setPodcastUrl(e.target.value)}
+                />
+                <div className={"mt-2"}>
+                  <Button
+                    size="sm"
+                    secondary
+                    onClick={handlePinItunesPodcast}
+                  >
+                    Pin iTunes Podcast
+                  </Button>
+                </div>
+                {pinnedItunesPodcasts.length}
+                {
+                  pinnedItunesPodcasts.map((podcast: any, index: number) => (
                     <div key={index} className={"mt-2"}>
                       <div className={"text-xs"}>
                         {index} - {podcast.external_id}

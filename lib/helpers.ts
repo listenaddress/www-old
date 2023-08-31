@@ -356,11 +356,24 @@ const extractSpotifyShowId = (url: string): string | null => {
         console.log(`Unrecognized URL format: ${url}`);
         return null;
     }
+} 
+
+const extractItunesPodcastId = (url: string): string | null => {
+    if (url.includes("podcasts.apple.com")) {
+        let id = url.split('podcast/')[1];
+        id = id.split('/id')[1];
+        id = id.split('?')[0];
+        return id;
+    } else {
+        console.log(`Unrecognized URL format: ${url}`);
+        return null;
+    }
 }
 
 export {
     parseContentForTable,
     platformImageMapping,
     showingSideBar,
-    extractSpotifyShowId
+    extractSpotifyShowId,
+    extractItunesPodcastId
 }
