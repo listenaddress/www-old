@@ -77,7 +77,7 @@ function FilterDropdown({
         const fetchData = async () => {
             let types = [];
             console.log(filterForPodcasts, filterForPapers, filterForWebsites)
-            if (filterForPodcasts) types.push('podcast');
+            if (filterForPodcasts) types.push('podcast_episode');
             if (filterForPapers) types.push('paper');
             if (filterForWebsites) types.push('url');
 
