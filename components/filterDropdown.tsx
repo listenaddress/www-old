@@ -100,7 +100,7 @@ function FilterDropdown({
             let type = '';
             switch (selectedType) {
                 case "Papers": type = "paper"; break;
-                case "Podcasts": type = "podcast"; break;
+                case "Podcasts": type = "podcast_episode"; break;
                 case "Blogs": type = "blog_post"; break;
                 case "Videos": type = "video"; break;
             }
