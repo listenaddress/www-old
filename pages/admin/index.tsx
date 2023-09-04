@@ -99,8 +99,9 @@ export default function Admin() {
       toast.success(`Saved ${book.title}`);
       setVenue('');
       setCanonicalUrl('');
-    } catch (error) {
-      toast.error('Error saving book');
+    } catch (error: any) {
+      if (error && error.error) toast.error(error.error);
+      else toast.error('Error saving book');
     }
   }
 
