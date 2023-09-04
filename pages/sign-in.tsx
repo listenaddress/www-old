@@ -97,7 +97,7 @@ export default function SignIn() {
                 )}
                 {subscribed && (
                     <>
-                        <h1 className="text-2xl font-bold">Thanks for signing up! Check your email to get started</h1>
+                        <h1 className="text-2xl font-bold">Hello! Check your email to sign in.</h1>
                         {
                             verifyLink && (
                                 <Link href={verifyLink} className="text-blue-500 mt-2 inline-flex items-center">
