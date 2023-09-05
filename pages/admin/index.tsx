@@ -78,6 +78,8 @@ export default function Admin() {
   const handleSaveBook = async (book: any) => {
     let bookVenue = book.venue;
     if (venue) bookVenue = venue;
+    const additional_urls = [];
+    if (canonicalUrl) additional_urls.push(book.url);
     const data = {
       title: book.title,
       authors: book.authors.map((author: any) => ({ name: author })),
@@ -86,7 +88,8 @@ export default function Admin() {
       venue: bookVenue,
       created_at: book.publishedDate,
       url: canonicalUrl ? canonicalUrl : book.url,
-      type: 'book'
+      type: 'book',
+      additional_urls: additional_urls
     };
     try {
       const res = fetch(`${process.env.NEXT_PUBLIC_API_URL}content/from_data`, {
