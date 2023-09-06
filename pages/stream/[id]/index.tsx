@@ -444,6 +444,34 @@ export default function Stream() {
                                                                                     console.error('There has been a problem with your fetch operation:', error);
                                                                                 });
                                                                         }
+                                                                    },
+                                                                    {
+                                                                        text: 'Delete this content',
+                                                                        onClick: () => {
+                                                                            const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+                                                                            fetch(process.env.NEXT_PUBLIC_API_URL + 'content/' + item.id, {
+                                                                                method: 'DELETE',
+                                                                                headers: {
+                                                                                    'Content-Type': 'application/json',
+                                                                                    'Authorization': 'Bearer ' + accessTokenFromCookie
+                                                                                }
+                                                                            })
+                                                                                .then(response => {
+                                                                                    console.log(response.status)
+                                                                                    if (response.status !== 204) {
+                                                                                        console.log(response)
+                                                                                        throw new Error('Network response was not ok');
+                                                                                    }
+                                                                                })
+                                                                                .then(data => {
+                                                                                    console.log(data);
+                                                                                    toast.success('Deleted content.')
+                                                                                })
+                                                                                .catch(error => {
+                                                                                    toast.error('Failed to delete content.')
+                                                                                    console.error('There has been a problem with your fetch operation:', error);
+                                                                                });
+                                                                        }
                                                                     }
                                                                 ]}
                                                             />
