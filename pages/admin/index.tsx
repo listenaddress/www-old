@@ -517,7 +517,7 @@ export default function Admin() {
             )
           }
           {
-            'pinPaperAuthors' && (
+            taskShowing === 'pinPaperAuthors' && (
               <div className={"mt-4"}>
                 <input
                   className={"border border-gray-300 rounded-md p-2 w-full"}
