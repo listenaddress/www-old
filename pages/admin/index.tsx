@@ -15,6 +15,7 @@ export default function Admin() {
   const [channelUrl, setChannelUrl] = useState('');
   const [ssAuthorUrl, setSSAuthorUrl] = useState('');
   const [ssAuthorPaperUrl, setSSAuthorPaperUrl] = useState('');
+  const [paperUrl, setPaperUrl] = useState(''); // TODO: Add paper url input
   const [pinnedSpotifyPodcasts, setPinnedSpotifyPodcasts] = useState([]);
   const [pinnedItunesPodcasts, setPinnedItunesPodcasts] = useState([]);
   const [pinnedYoutubeChannels, setPinnedYoutubeChannels] = useState([]);
@@ -259,6 +260,27 @@ export default function Admin() {
     }
   }
 
+  const handlePaperAuthorsPin = async () => {
+    const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}pins/authors_from_paper_url`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessTokenFromCookie}`
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        url: paperUrl,
+      })
+    })
+
+    if (res.status === 201) {
+      toast.success('Paper authors pinned successfully');
+      setPaperUrl('');
+    } else {
+      toast.error('Error pinning paper authors');
+    }
+  }
+
   const dropdownItems = [
     {
       text: 'Add book from Google Books',
@@ -283,6 +305,10 @@ export default function Admin() {
     {
       text: 'Pin RSS Feed',
       onClick: () => setTaskShowing('pinRssFeed')
+    },
+    {
+      text: 'Pin Paper Authors',
+      onClick: () => setTaskShowing('pinPaperAuthors')
     },
     {
       text: 'Pin Semantic Scholar Author',
@@ -477,6 +503,37 @@ export default function Admin() {
                 </div>
 
 
+                {pinnedSemanticScholarAuthors.length}
+                {
+                  pinnedSemanticScholarAuthors.map((author: any, index: number) => (
+                    <div key={index} className={"mt-2"}>
+                      <div className={"text-xs"}>
+                        {index} - {author.external_id}
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+            )
+          }
+          {
+            'pinPaperAuthors' && (
+              <div className={"mt-4"}>
+                <input
+                  className={"border border-gray-300 rounded-md p-2 w-full"}
+                  placeholder="Paper URL"
+                  value={paperUrl}
+                  onChange={e => setPaperUrl(e.target.value)}
+                />
+                <div className={"mt-2"}>
+                  <Button
+                    size="sm"
+                    secondary
+                    onClick={handlePaperAuthorsPin}
+                  >
+                    Pin Paper Authors
+                  </Button>
+                </div>
                 {pinnedSemanticScholarAuthors.length}
                 {
                   pinnedSemanticScholarAuthors.map((author: any, index: number) => (
