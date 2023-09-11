@@ -194,7 +194,7 @@ export default function Home() {
                 )
               }
               <div className='font-medium mb-4 text-gray-500'>
-                Pinned streams
+                Recent streams
               </div>
               {
                 streams.map((stream: any, streamIndex: number) => {
