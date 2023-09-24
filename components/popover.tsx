@@ -8,7 +8,7 @@ interface PopoverProps {
 }
 
 function Popover({
-    text,
+    text = "No text provided",
     left = String(-10 * (text.length > 70 ? 73 : text.length) / 4),
     bottom = "36"
 }: PopoverProps) {

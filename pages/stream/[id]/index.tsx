@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import { parseContentForTable } from '@/lib/helpers';
-import { ArrowUpRightIcon, ChevronDownIcon, PencilSquareIcon, InformationCircleIcon, HandThumbDownIcon, HandThumbUpIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+import { ArrowUpRightIcon, ChevronDownIcon, PencilSquareIcon, InformationCircleIcon, HandThumbDownIcon, HandThumbUpIcon, DocumentDuplicateIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { HandThumbDownIcon as HandThumbDownIconSolid, HandThumbUpIcon as HandThumbUpIconSolid, LinkIcon as LinkIconSolid, DocumentDuplicateIcon as DocumentDuplicateIconSolid, CogIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router'
 import { GlobalContext } from '@/context/store';
@@ -11,6 +11,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import Button from '@/components/button';
 import Link from 'next/link';
 import { Toaster, toast } from 'sonner'
+import Popover from '@/components/popover'
 
 export default function Stream() {
     const [stream, setStream] = useState({ name: '', description: '', created_by: '', created_at: '', updated_at: '' })
@@ -476,16 +477,35 @@ export default function Stream() {
                                                                 ]}
                                                             />
                                                         )}
-
                                                     {
-                                                        <div
-                                                            onMouseEnter={() => setHoveringIndexMoreOptions(3)}
-                                                            onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
-                                                            className='cursor-pointer'
-                                                            onClick={() => setAdminOptionsOpen(!adminOptionsOpen)}
-                                                        >
-                                                            <CogIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
-                                                        </div>
+                                                        user && user.is_admin && (
+                                                            <div
+                                                                onMouseEnter={() => setHoveringIndexMoreOptions(4)}
+                                                                onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
+                                                                className='cursor-pointer'
+                                                            >
+                                                                <QuestionMarkCircleIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                {
+                                                                    hoveringIndexMoreOptions === 4 && (
+                                                                        <Popover
+                                                                            text={item.recommendation_based_on || "No recommendation reason found"}
+                                                                        />
+                                                                    )
+                                                                }
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {
+                                                        user && user.is_admin && (
+                                                            <div
+                                                                onMouseEnter={() => setHoveringIndexMoreOptions(3)}
+                                                                onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
+                                                                className='cursor-pointer'
+                                                                onClick={() => setAdminOptionsOpen(!adminOptionsOpen)}
+                                                            >
+                                                                <CogIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                            </div>
+                                                        )
                                                     }
                                                     <div
                                                         onMouseEnter={() => setHoveringIndexMoreOptions(0)}
