@@ -6,6 +6,7 @@ import Dropdown from './dropdown'
 import Link from 'next/link'
 import Popover from './popover'
 import { showingSideBar } from '@/lib/helpers'
+import seedrandom from 'seedrandom'
 
 export default function SideBar() {
     const router = useRouter()
@@ -13,6 +14,26 @@ export default function SideBar() {
     const [hovering, setHovering] = useState('')
     const [userDropdownOpen, setUserDropdownOpen] = useState(false)
     const path = usePathname()
+
+    function stringToSeed(str: string) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash |= 0; // Convert to 32bit integer
+        }
+        return hash;
+    }
+
+    function generateGradient(email: string) {
+        const seed = stringToSeed(email);
+        const randomFromSeed = seedrandom(String(seed));
+        const color1 = '#6ADA36';
+        const color2 = '#E1F12C';
+        const directions = ['to right', 'to left', 'to top', 'to bottom', 'to top right', 'to top left', 'to bottom right', 'to bottom left'];
+        const direction = directions[Math.floor(randomFromSeed() * directions.length)];
+        return `linear-gradient(${direction}, ${color1}, ${color2})`;
+    }
 
     return (
         showingSideBar(path, user) && (
@@ -91,11 +112,10 @@ export default function SideBar() {
                         {user?.name && (
                             <div className='relative'>
                                 <div
-                                    className={`w-8 h-8 rounded-full bg-gray-500 text-white flex justify-center items-center font-medium text-lg cursor-pointer`}
+                                    className={`w-8 h-8 rounded-full text-white flex justify-center items-center font-medium text-lg cursor-pointer`}
+                                    style={{ background: generateGradient("hiiiiiiiiiiiiiiiiiiiiiiiii!shhh?") }}
                                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                                >
-                                    {user.name[0]}
-                                </div>
+                                ></div>
                                 {
                                     userDropdownOpen && (
                                         <>
