@@ -17,6 +17,7 @@ export default function Stream() {
     const [stream, setStream] = useState({ name: '', description: '', created_by: '', created_at: '', updated_at: '' })
     const [content, setContent] = useState([])
     const [hoveringIndex, setHoveringIndex] = useState(-1)
+    const [error, setError] = useState('')
     const [hoveringIndexMoreOptions, setHoveringIndexMoreOptions] = useState(-1)
     const [adminOptionsOpen, setAdminOptionsOpen] = useState(false)
     const [moreOptionsHover, setMoreOptionsHover] = useState(-1)
@@ -221,18 +222,50 @@ export default function Stream() {
     useEffect(() => {
         if (!id) return
         const fetchStream = async () => {
-            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + id)
+            let accessTokenFromCookie = ''
+            if (document.cookie.split('accessToken=')[1]) {
+                accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+            }
+            let data: any;
+            if (accessTokenFromCookie !== '') {
+                data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + id, {
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + accessTokenFromCookie
+                    }
+                })
+            } else data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + id)
             const streamRes = await data.json()
-            console.log(streamRes)
-            setStream(streamRes)
+            if (streamRes.error && streamRes.error === 'Not authorized') {
+                setError("This is a private stream. 🔒")
+            } else {
+                setStream(streamRes)
+            }
         }
 
         const fetchStreamContent = async () => {
-            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + id + '/content')
+            let accessTokenFromCookie = ''
+            if (document.cookie.split('accessToken=')[1]) {
+                accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+            }
+
+            let data: any;
+            if (accessTokenFromCookie !== '') {
+                data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + id + '/content', {
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + accessTokenFromCookie
+                    }
+                })
+            } else data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + id + '/content')
             const contentRes = await data.json()
-            const parsedContent = parseContentForTable(contentRes)
-            // @ts-ignore
-            setContent(parsedContent)
+            if (contentRes.error && contentRes.error === 'Not authorized') {
+                setError("This is a private stream. 🔒")
+            } else {
+                const parsedContent = parseContentForTable(contentRes)
+                // @ts-ignore
+                setContent(parsedContent)
+            }
         }
 
         const fetchContentFeedback = async () => {
@@ -264,63 +297,90 @@ export default function Stream() {
         <>
             <div className='m-4 mb-28 sm:ml-20'>
                 <Toaster />
-                <div className={`text-lg`}>
-                    <div className={`items-center cursor-pointer inline-block mt-[3px]`}>
-                        <div onClick={() => setDropdownOpen(!dropdownOpen)} className={`cursor-pointer`}>
-                            <span className='font-medium'>{stream?.name}</span>
-                            {
-                                user && user.id === stream?.created_by && (
-                                    <>
-                                        <ChevronDownIcon className={`inline-block w-5 h-5 ml-[.15rem]`} />
-                                        <div className='relative inline-block'>{dropdownOpen && <Dropdown left={'-2.3'} items={dropdownItems} setIsOpen={() => setDropdownOpen} />}</div>
-                                    </>
-                                )
-                            }
-                        </div>
-                    </div>
-                    <div className={`ml-auto inline-block float-right`}>
-                        {!user && (
-                            <Button size="sm" secondary className='mr-4' onClick={() => router.push('/sign-in')}>
+                {
+                    error && (
+                        <div className='md:ml-20'>
+                            <div className='mt-28 text-4xl font-bold mb-6'>{error}</div>
+                            <Button
+                                size="lg"
+                                className='mr-6'
+                                onClick={() => router.push('/sign-in')}
+                            >
                                 Sign in
                             </Button>
-                        )}
-                        <Button
-                            size="sm"
-                            secondary
-                            onClick={() => setFilterDropdownOpen(!filterDropdownOpen)}
-                        >
-                            Filter
-                        </Button>
-                        {
-                            filterDropdownOpen && (
-                                <FilterDropdown
-                                    right={'1rem'}
-                                    setIsOpen={() => setFilterDropdownOpen}
-                                    setContent={setContent}
-                                    streamId={id}
-                                />
-                            )
-                        }
-                    </div>
-                </div>
-                <div className={`mt-8 pb-2 border-b-2 border-gray-100 text-gray-500 text-[13px]`}>
-                    <div className='flex items-center'>
-                        <div className='inline-block w-1/5 sm:w-[8%] lg:w-[22%] xl:w-[19%] pr-2]'>
-                            From
+                            <Button
+                                size="lg"
+                                onClick={() => router.push('/')}
+                                secondary
+                            >
+                                Go home
+                            </Button>
                         </div>
-                        <div className='inline-block w-5/6 sm:w-[42%] lg:w-[40%] xl:w-[42%]'>
-                            Title
-                        </div>
-                        <div className='hidden sm:inline-block sm:w-[35%] lg:w-[28%] xl:w-[32%]'>
-                            By
-                        </div>
-                        <div className='hidden sm:inline-block sm:w-[15%] lg:w-[15%] xl:w-[12%] text-right'>
-                            Published
-                        </div>
-                    </div>
-                </div>
+                    )
+                }
                 {
-                    content.length === 0 ? (
+                    !error && (
+                        <>
+                            <div className={`text-lg`}>
+                                <div className={`items-center cursor-pointer inline-block mt-[3px]`}>
+                                    <div onClick={() => setDropdownOpen(!dropdownOpen)} className={`cursor-pointer`}>
+                                        <span className='font-medium'>{stream?.name}</span>
+                                        {
+                                            user && user.id === stream?.created_by && (
+                                                <>
+                                                    <ChevronDownIcon className={`inline-block w-5 h-5 ml-[.15rem]`} />
+                                                    <div className='relative inline-block'>{dropdownOpen && <Dropdown left={'-2.3'} items={dropdownItems} setIsOpen={() => setDropdownOpen} />}</div>
+                                                </>
+                                            )
+                                        }
+                                    </div>
+                                </div>
+                                <div className={`ml-auto inline-block float-right`}>
+                                    {!user && (
+                                        <Button size="sm" secondary className='mr-4' onClick={() => router.push('/sign-in')}>
+                                            Sign in
+                                        </Button>
+                                    )}
+                                    <Button
+                                        size="sm"
+                                        secondary
+                                        onClick={() => setFilterDropdownOpen(!filterDropdownOpen)}
+                                    >
+                                        Filter
+                                    </Button>
+                                    {
+                                        filterDropdownOpen && (
+                                            <FilterDropdown
+                                                right={'1rem'}
+                                                setIsOpen={() => setFilterDropdownOpen}
+                                                setContent={setContent}
+                                                streamId={id}
+                                            />
+                                        )
+                                    }
+                                </div>
+                            </div>
+                            <div className={`mt-8 pb-2 border-b-2 border-gray-100 text-gray-500 text-[13px]`}>
+                                <div className='flex items-center'>
+                                    <div className='inline-block w-1/5 sm:w-[8%] lg:w-[22%] xl:w-[19%] pr-2]'>
+                                        From
+                                    </div>
+                                    <div className='inline-block w-5/6 sm:w-[42%] lg:w-[40%] xl:w-[42%]'>
+                                        Title
+                                    </div>
+                                    <div className='hidden sm:inline-block sm:w-[35%] lg:w-[28%] xl:w-[32%]'>
+                                        By
+                                    </div>
+                                    <div className='hidden sm:inline-block sm:w-[15%] lg:w-[15%] xl:w-[12%] text-right'>
+                                        Published
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )
+                }
+                {
+                    content.length === 0 && !error ? (
                         <div>
                             <Skeleton count={1} style={{ height: '70px' }} />
                             <Skeleton count={1} style={{ height: '100px' }} />
