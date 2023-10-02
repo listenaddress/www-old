@@ -37,6 +37,7 @@ interface FilterDropdownProps {
     top?: string;
     right?: string;
     setIsOpen: any;
+    setNoResultsFound: any;
     setContent: any;
     streamId: any;
 }
@@ -46,6 +47,7 @@ function FilterDropdown({
     top = '.5',
     right = 'auto',
     setIsOpen,
+    setNoResultsFound,
     setContent,
     streamId
 }: FilterDropdownProps) {
@@ -86,6 +88,10 @@ function FilterDropdown({
 
             const response = await fetch(process.env.NEXT_PUBLIC_API_URL + endpoint);
             const data = await response.json();
+            if (data.length === 0) {
+                setContent([]);
+                setNoResultsFound(true);
+            }
             setContent(parseContentForTable(data));
         };
         fetchData();
@@ -109,6 +115,10 @@ function FilterDropdown({
             if (debouncedSearch) endpoint += `&search=${debouncedSearch}`;
             const response = await fetch(process.env.NEXT_PUBLIC_API_URL + endpoint);
             const data = await response.json();
+            if (data.length === 0) {
+                setContent([]);
+                setNoResultsFound(true);
+            }
             setContent(parseContentForTable(data));
         };
         fetchData();

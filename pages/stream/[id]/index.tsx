@@ -16,6 +16,7 @@ import Popover from '@/components/popover'
 export default function Stream() {
     const [stream, setStream] = useState({ name: '', description: '', created_by: '', created_at: '', updated_at: '' })
     const [content, setContent] = useState([])
+    const [noResultsFound, setNoResultsFound] = useState(false)
     const [hoveringIndex, setHoveringIndex] = useState(-1)
     const [error, setError] = useState('')
     const [hoveringIndexMoreOptions, setHoveringIndexMoreOptions] = useState(-1)
@@ -298,7 +299,7 @@ export default function Stream() {
             <div className='m-4 mb-28 sm:ml-20'>
                 <Toaster />
                 {
-                    error && (
+                    error && error.includes('private') && (
                         <div className='md:ml-20'>
                             <div className='mt-28 text-4xl font-bold mb-6'>{error}</div>
                             <Button
@@ -354,6 +355,7 @@ export default function Stream() {
                                                 right={'1rem'}
                                                 setIsOpen={() => setFilterDropdownOpen}
                                                 setContent={setContent}
+                                                setNoResultsFound={setNoResultsFound}
                                                 streamId={id}
                                             />
                                         )
@@ -380,7 +382,12 @@ export default function Stream() {
                     )
                 }
                 {
-                    content.length === 0 && !error ? (
+                    noResultsFound && content.length === 0 && (
+                        <div className='mt-28 text-4xl font-bold mb-6'>No results found.</div>
+                    )
+                }
+                {
+                    content.length === 0 && !error && !noResultsFound ? (
                         <div>
                             <Skeleton count={1} style={{ height: '70px' }} />
                             <Skeleton count={1} style={{ height: '100px' }} />
