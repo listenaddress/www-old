@@ -371,6 +371,9 @@ const extractItunesPodcastId = (url: string): string | null => {
 }
  
 const extractYoutubeChannelIdOrName = (url: string): {id: string | null, name: string | null} => {
+    if (!url.includes("/")) {
+        return {id: url, name: null};
+    }
     let id = null;
     let name = null;
 

@@ -202,11 +202,16 @@ export default function Admin() {
 
   const handleSSAuthorPin = async () => {
     let authorId = ''
-    const idFromUrl = ssAuthorUrl.split('/author/')[1]
-    if (idFromUrl) {
-      authorId = idFromUrl.split('/')[1]
-    } else {
+    // If there's no slash, it's just the id
+    if (!ssAuthorUrl.includes('/')) {
       authorId = ssAuthorUrl
+    } else {
+      const idFromUrl = ssAuthorUrl.split('/author/')[1]
+      if (idFromUrl) {
+        authorId = idFromUrl.split('/')[1]
+      } else {
+        authorId = ssAuthorUrl
+      }
     }
 
     const accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
@@ -471,7 +476,7 @@ export default function Admin() {
               <div className={"mt-4"}>
                 <input
                   className={"border border-gray-300 rounded-md p-2 w-full"}
-                  placeholder="Semantic Scholar Author URL"
+                  placeholder="Semantic Scholar Author URL or ID"
                   value={ssAuthorUrl}
                   onChange={e => setSSAuthorUrl(e.target.value)}
                 />
