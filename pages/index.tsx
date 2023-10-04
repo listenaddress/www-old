@@ -277,6 +277,7 @@ export default function Home() {
                   <p className="mb-3" key="index1">Everyday, we scan the web for you, collecting things you may need.</p>
                   <p className="mb-3" key="index2">Anytime you want, you can pop in to get something new to read, listen to, or watch.</p>
 
+                  <p className="mb-3" key="index4">This website is made to provide you with the clues you need—whether you're exploring new areas of science, solving a health issue, or writing your next paper.</p>
                 </div>
                 <div className='font-medium mb-4 text-gray-500 mt-40'>Links</div>
               </div>
