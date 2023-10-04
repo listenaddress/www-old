@@ -40,17 +40,14 @@ const Button: React.FC<ButtonProps> = ({
       case "lg":
         return "px-6 py-2 text-md sm:px-16 sm:py-3 sm:text-lg font-medium rounded-xl";
       default:
-        return "px-6 py-2 text-md font-medium rounded-lg";
+        return "px-[1.5rem] py-[1rem] text-md font-medium rounded-[14px]";
     }
   }
 
   const getStyleClasses = (style: string, theme: string) => {
-    if (variant === "blue") {
-      return `bg-blue-100 text-${theme}-bg-primary`;
-    }
-    if (variant === "disabled") {
-      return `bg-gray-300 text-gray-500`;
-    }
+    if (variant === "blue") return `bg-blue-100 text-${theme}-bg-primary`;
+    if (variant === "disabled") return `bg-gray-300 text-gray-500`;
+    if (variant === "grey") return `bg-gray-300`;
 
     switch (style) {
       case "secondary":

@@ -4,6 +4,7 @@ import Button from '@/components/button'
 import { useState, useEffect, useContext } from 'react'
 import Link from 'next/link'
 import router from 'next/router'
+import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
 import dynamic from 'next/dynamic'
 import { GlobalContext } from '@/context/store';
@@ -73,7 +74,7 @@ export default function Home() {
                 return (
                   <Link href={`/stream/${stream.id}`} key={streamIndex}>
                     <div
-                      className="flex flex-col justify-center mb-8 p-6 px-[1.7rem] md:p-8 md:px-[2.3rem] border-2 rounded-xl border-[#EAEAEA] cursor-pointer"
+                      className='flex flex-col justify-center mb-8 p-6 px-[1.7rem] md:p-8 md:px-[2.3rem] border-2 rounded-xl border-[#EAEAEA] cursor-pointer hover:bg-[#F7F7F7]'
                       key={streamIndex}>
                       <strong className="font-bold">
                         {stream.name}
@@ -147,15 +148,16 @@ export default function Home() {
       {
         !loadingUser && !user && (
           <>
-            <main className="max-w-[530px] m-auto mt-12 md:mt-20 md:mb-24 px-4 text-black">
-              <h1 className='text-2xl md:text-3xl font-bold mb-6 md:mb-8'>
-                Podcasts, papers, books and blogs around any research topic.
+            <main className="max-w-[640px] m-auto px-4 text-black">
+              <div className="font-medium mt-14 mb-24">Streams</div>
+              <h1 className='md:text-[45px] md:leading-[1.12] font-bold mb-6 md:mb-8'>
+                Podcasts, papers, books and blogs, curated just for you.
               </h1>
-              <div className='mb-12 md:mb-20'>
-                <Button onClick={signIn} variant='blue'>
+              <div className=''>
+                <Button onClick={signIn}>
                   Get started
                 </Button>
-                <Button onClick={signIn} secondary className='ml-4'>
+                <Button onClick={signIn} variant="grey" className='ml-4'>
                   Sign in
                 </Button>
               </div>
@@ -193,27 +195,21 @@ export default function Home() {
                   </>
                 )
               }
-              <div className='font-medium mb-4 text-gray-500'>
-                Recent streams
+              <div className='font-medium mb-4 text-gray-500 mt-44'>
+                Pinned streams
               </div>
               {
                 streams.map((stream: any, streamIndex: number) => {
                   return (
                     <Link href={`/stream/${stream.id}`} key={streamIndex}>
                       <div
-                        className="flex flex-col justify-center mb-8 p-6 px-[1.7rem] md:p-8 md:px-[2.3rem] border-2 rounded-xl border-[#EAEAEA] cursor-pointer"
+                        className={`pt-7 pb-7 border-t-2 border-[#EAEAEA] cursor-pointer flex justify-between items-center hover:bg-[#F7F7F7] ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
                         key={streamIndex}>
-                        <strong className="font-bold">
+                        <strong className="font-medium">
                           {stream.name}
                         </strong>
-                        <p className="mt-2">
-                          {stream.about}
-                        </p>
-                        <p className={`mt-5 text-[#7B7B80]`}>
-                          Recently in this stream
-                        </p>
                         {/* Show first three pieces of content as three avatars next to each other (using content.platformImage) */}
-                        <div className='flex mt-2'>
+                        <div className='pr-[3px] mt-[-2px] h-[32px]'>
                           {
                             stream.content.map((content: any, contentIndex: number) => {
                               const onHover = () => {
@@ -270,6 +266,55 @@ export default function Home() {
                   )
                 })
               }
+              <div className='mt-8'>
+                <Button
+                  onClick={signIn}
+                >
+                  + Make your own stream
+                </Button>
+              </div>
+              <div>
+                <div className='font-medium mb-4 text-gray-500 mt-44'>
+                  Look for clues
+                </div>
+                <div className='font-medium mb-4'>
+                  <p className="mb-3">Everyday, we scan the web for you, collecting things you may need.</p>
+                  <p className="mb-3">Anytime you want, you can pop in to get something new to read, listen to, or watch.</p>
+                  <p className="mb-3">Sometimes you find a direct answer to a question. Sometimes you find new questions. And other times you find material you're able to build on in your current work.</p>
+                  <p className="mb-3">This website is made to provide you with the clues you need—whether you're exploring new areas of science, solving a health issue, or writing your next paper.</p>
+                  <p className="">We're just starting to test out the waters. <Link href="/sign-in" className='underline'>Join us.</Link></p>
+                  {/* <Image
+                    src='/stream-geese.jpeg'
+                    className='my-7'
+                    alt='testing-stream'
+                    width={320}
+                    height={320}
+                  /> */}
+                </div>
+                <div className='font-medium mb-4 text-gray-500 mt-40'>Links</div>
+                <div className='font-medium mb-52'>
+                  <Link href='/sign-in'>
+                    <div className='cursor-pointer mb-3'>
+                      Get started
+                    </div>
+                  </Link>
+                  <Link href='/sign-in'>
+                    <div className='cursor-pointer mb-3'>
+                      Sign in
+                    </div>
+                  </Link>
+                  <Link href='/faqs'>
+                    <div className='cursor-pointer mb-3'>
+                      FAQs
+                    </div>
+                  </Link>
+                  <Link href='mailto:thomas@streams.app'>
+                    <div className='cursor-pointer mb-3'>
+                      Support
+                    </div>
+                  </Link>
+                </div>
+              </div>
             </main>
           </>
         )
