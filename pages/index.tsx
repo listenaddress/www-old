@@ -266,6 +266,17 @@ export default function Home() {
                   )
                 })
               }
+              <div className='mt-8'>
+
+              </div>
+              <div>
+                <div className='font-medium mb-4 text-gray-500 mt-44'>
+                  Look for clues
+                </div>
+                <div className='font-medium mb-4'>
+                </div>
+                <div className='font-medium mb-4 text-gray-500 mt-40'>Links</div>
+              </div>
             </main>
           </>
         )
