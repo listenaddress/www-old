@@ -275,6 +275,7 @@ export default function Home() {
                 </div>
                 <div className='font-medium mb-4'>
                   <p className="mb-3" key="index1">Everyday, we scan the web for you, collecting things you may need.</p>
+                  <p className="mb-3" key="index2">Anytime you want, you can pop in to get something new to read, listen to, or watch.</p>
 
                 </div>
                 <div className='font-medium mb-4 text-gray-500 mt-40'>Links</div>
