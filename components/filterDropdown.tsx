@@ -95,7 +95,7 @@ function FilterDropdown({
             setContent(parseContentForTable(data));
         };
         fetchData();
-    }, [filterForPodcasts, filterForPapers, filterForWebsites, streamId, setContent]);
+    }, [filterForPodcasts, filterForPapers, filterForWebsites, streamId, setContent, hasFiltered, setNoResultsFound]);
 
     const [debouncedSearch] = useDebounce(search, 250);
 
