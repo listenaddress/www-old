@@ -122,7 +122,7 @@ function FilterDropdown({
             setContent(parseContentForTable(data));
         };
         fetchData();
-    }, [debouncedSearch, selectedType, streamId, setContent]);
+    }, [debouncedSearch, selectedType, streamId, setContent, setNoResultsFound, hasFiltered]);
 
     const classNames = `absolute z-10 mt-2 p-5 pb-3 pt-3 w-max rounded-md bg-white border-gray-200 border-2`
     const handleLinkClick = (e: any, href: string) => {
