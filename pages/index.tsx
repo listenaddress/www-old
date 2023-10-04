@@ -267,11 +267,7 @@ export default function Home() {
                 })
               }
               <div className='mt-8'>
-                <Button
-                  onClick={signIn}
-                >
-                  + Make your own stream
-                </Button>
+
               </div>
               <div>
                 <div className='font-medium mb-4 text-gray-500 mt-44'>
@@ -283,7 +279,6 @@ export default function Home() {
                   <p className="mb-3">Sometimes you find a direct answer to a question. Sometimes you find new questions. And other times you find material you're able to build on in your current work.</p>
                   <p className="mb-3">This website is made to provide you with the clues you need—whether you're exploring new areas of science, solving a health issue, or writing your next paper.</p>
                   <p className="">We're just starting to test out the waters.</p>
-
                 </div>
                 <div className='font-medium mb-4 text-gray-500 mt-40'>Links</div>
               </div>
