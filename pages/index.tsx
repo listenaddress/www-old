@@ -63,7 +63,214 @@ export default function Home() {
   return (
     <>
       <CrispWithNoSSR />
+      {
+        user && (
+          <div className='max-w-[530px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-28'>
+            <div className='font-medium mb-4 text-gray-500'>
+              All public streams
+            </div>
+            {
+              streams.map((stream: any, streamIndex: number) => {
+                return (
+                  <Link href={`/stream/${stream.id}`} key={streamIndex}>
+                    <div
+                      className='flex flex-col justify-center mb-8 p-6 px-[1.7rem] md:p-8 md:px-[2.3rem] border-2 rounded-xl border-[#EAEAEA] cursor-pointer hover:bg-[#F7F7F7]'
+                      key={streamIndex}>
+                      <strong className="font-bold">
+                        {stream.name}
+                      </strong>
+                      <p className="mt-2">
+                        {stream.about}
+                      </p>
+                      <p className={`mt-5 text-[#7B7B80]`}>
+                        Recently in this stream
+                      </p>
+                      {/* Show first three pieces of content as three avatars next to each other (using content.platformImage) */}
+                      <div className='flex mt-2'>
+                        {
+                          stream.content.map((content: any, contentIndex: number) => {
+                            const onHover = () => {
+                              setHovering({ streamIndex, contentIndex })
+                            }
 
+                            return (
+                              <div
+                                className="relative inline-block mx-[-5px] border-2 rounded-full border-white bg-white"
+                                key={contentIndex}
+                                onMouseEnter={onHover}
+                                onMouseLeave={() => setHovering({
+                                  streamIndex: -1,
+                                  contentIndex: -1,
+                                })}>
+                                {
+                                  hovering.streamIndex === streamIndex && hovering.contentIndex === contentIndex &&
+                                  <Popover
+                                    text={content.title}
+                                  />
+                                }
+                                {
+                                  content.platformImage ? (
+                                    <img
+                                      src={content.platformImage || ''}
+                                      style={{
+                                        width: '32px',
+                                        height: '32px',
+                                        borderRadius: '50%',
+                                      }}
+                                    />
+                                  ) : (
+                                    <div
+                                      className='flex justify-center items-center'
+                                      style={{
+                                        width: '32px',
+                                        height: '32px',
+                                        borderRadius: '50%',
+                                        backgroundColor: '#EAEAEA',
+                                      }}
+                                    >
+                                      {getContentIcon(content)}
+                                    </div>
+                                  )
+                                }
+                              </div>
+                            )
+                          })
+                        }
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })
+            }
+          </div>
+        )
+      }
+      {
+        !loadingUser && !user && (
+          <>
+            <main className="max-w-[640px] m-auto px-4 text-black">
+              <div className="font-medium mt-14 mb-24">Streams</div>
+              <h1 className='md:text-[45px] md:leading-[1.12] font-bold mb-6 md:mb-8'>
+                Podcasts, papers, books and blogs, curated just for you.
+              </h1>
+              <div className=''>
+                <Button onClick={signIn}>
+                  Get started
+                </Button>
+                <Button onClick={signIn} variant="grey" className='ml-4'>
+                  Sign in
+                </Button>
+              </div>
+              {
+                !streams || streams.length === 0 && (
+                  <>
+                    <Skeleton
+                      height={220}
+                      className='mb-4'
+                      style={{
+                        borderRadius: '.75rem',
+                      }}
+                    />
+                    <Skeleton
+                      height={240}
+                      className='mb-4'
+                      style={{
+                        borderRadius: '.75rem',
+                      }}
+                    />
+                    <Skeleton
+                      height={220}
+                      className='mb-4'
+                      style={{
+                        borderRadius: '.75rem',
+                      }}
+                    />
+                    <Skeleton
+                      height={240}
+                      className='mb-4'
+                      style={{
+                        borderRadius: '.75rem',
+                      }}
+                    />
+                  </>
+                )
+              }
+              <div className='font-medium mb-4 text-gray-500 mt-44'>
+                Pinned streams
+              </div>
+              {
+                streams.map((stream: any, streamIndex: number) => {
+                  return (
+                    <Link href={`/stream/${stream.id}`} key={streamIndex}>
+                      <div
+                        className={`pt-7 pb-7 border-t-2 border-[#EAEAEA] cursor-pointer flex justify-between items-center hover:bg-[#F7F7F7] ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
+                        key={streamIndex}>
+                        <strong className="font-medium">
+                          {stream.name}
+                        </strong>
+                        {/* Show first three pieces of content as three avatars next to each other (using content.platformImage) */}
+                        <div className='pr-[3px] mt-[-2px] h-[32px]'>
+                          {
+                            stream.content.map((content: any, contentIndex: number) => {
+                              const onHover = () => {
+                                setHovering({ streamIndex, contentIndex })
+                              }
+
+                              return (
+                                <div
+                                  className="relative inline-block mx-[-5px] border-2 rounded-full border-white bg-white"
+                                  key={contentIndex}
+                                  onMouseEnter={onHover}
+                                  onMouseLeave={() => setHovering({
+                                    streamIndex: -1,
+                                    contentIndex: -1,
+                                  })}>
+                                  {
+                                    hovering.streamIndex === streamIndex && hovering.contentIndex === contentIndex &&
+                                    <Popover
+                                      text={content.title}
+                                    />
+                                  }
+                                  {
+                                    content.platformImage ? (
+                                      <img
+                                        src={content.platformImage || ''}
+                                        style={{
+                                          width: '32px',
+                                          height: '32px',
+                                          borderRadius: '50%',
+                                        }}
+                                      />
+                                    ) : (
+                                      <div
+                                        className='flex justify-center items-center'
+                                        style={{
+                                          width: '32px',
+                                          height: '32px',
+                                          borderRadius: '50%',
+                                          backgroundColor: '#EAEAEA',
+                                        }}
+                                      >
+                                        {getContentIcon(content)}
+                                      </div>
+                                    )
+                                  }
+
+                                </div>
+                              )
+                            })
+                          }
+                        </div>
+                      </div>
+                    </Link>
+                  )
+                })
+              }
+
+            </main>
+          </>
+        )
+      }
     </>
   )
 }
