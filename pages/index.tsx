@@ -266,22 +266,6 @@ export default function Home() {
                   )
                 })
               }
-              <div className='mt-8'>
-
-              </div>
-              <div>
-                <div className='font-medium mb-4 text-gray-500 mt-44'>
-                  Look for clues
-                </div>
-                <div className='font-medium mb-4'>
-                  <p className="mb-3">Everyday, we scan the web for you, collecting things you may need.</p>
-                  <p className="mb-3">Anytime you want, you can pop in to get something new to read, listen to, or watch.</p>
-                  <p className="mb-3">Sometimes you find a direct answer to a question. Sometimes you find new questions. And other times you find material you're able to build on in your current work.</p>
-                  <p className="mb-3">This website is made to provide you with the clues you need—whether you're exploring new areas of science, solving a health issue, or writing your next paper.</p>
-
-                </div>
-                <div className='font-medium mb-4 text-gray-500 mt-40'>Links</div>
-              </div>
             </main>
           </>
         )
