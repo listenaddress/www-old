@@ -14,10 +14,10 @@ module.exports = {
             primary: '#fff',
           },
           button: {
-            primary: '#2B292B',
+            primary: '#171718',
           },
           text: {
-            primary: '#2B292B',
+            primary: '#171718',
           },
           border: {
             primary: '#F2F2F6',
@@ -25,7 +25,7 @@ module.exports = {
         },
         dark: {
           bg: {
-            primary: '#2B292B',
+            primary: '#171718',
           },
           button: {
             primary: '#F5F5F7',
