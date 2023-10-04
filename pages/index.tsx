@@ -4,7 +4,7 @@ import Button from '@/components/button'
 import { useState, useEffect, useContext } from 'react'
 import Link from 'next/link'
 import router from 'next/router'
-import Image from 'next/image'
+// import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
 import dynamic from 'next/dynamic'
 import { GlobalContext } from '@/context/store';
@@ -283,13 +283,13 @@ export default function Home() {
                   <p className="mb-3">Sometimes you find a direct answer to a question. Sometimes you find new questions. And other times you find material you're able to build on in your current work.</p>
                   <p className="mb-3">This website is made to provide you with the clues you need—whether you're exploring new areas of science, solving a health issue, or writing your next paper.</p>
                   <p className="">We're just starting to test out the waters. <Link href="/sign-in" className='underline'>Join us.</Link></p>
-                  <Image
+                  {/* <Image
                     src='/stream-geese.jpeg'
                     className='my-7'
                     alt='testing-stream'
                     width={320}
                     height={320}
-                  />
+                  /> */}
                 </div>
                 <div className='font-medium mb-4 text-gray-500 mt-40'>Links</div>
                 <div className='font-medium mb-52'>
