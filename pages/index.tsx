@@ -169,19 +169,19 @@ export default function Home() {
                   <>
                     <Skeleton
                       height={100}
-                      className='mb-1'
+                      borderRadius={'3px'}
                     />
                     <Skeleton
                       height={100}
-                      className='mb-1'
+                      borderRadius={'3px'}
                     />
                     <Skeleton
                       height={100}
-                      className='mb-1'
+                      borderRadius={'3px'}
                     />
                     <Skeleton
                       height={100}
-                      className='mb-1'
+                      borderRadius={'3px'}
                     />
                   </>
                 )
