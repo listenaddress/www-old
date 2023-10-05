@@ -204,12 +204,11 @@ export default function Home() {
                     <Link href={`/stream/${stream.id}`} key={streamIndex}>
                       <div
                         className={`pt-7 pb-7 border-t-2 border-[#EAEAEA] cursor-pointer flex justify-between items-center hover:bg-[#F7F7F7] ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
-                        key={streamIndex}>
-                        <strong className="font-medium">
+                      >
+                        <strong className="font-medium flex-grow pr-3">
                           {stream.name}
                         </strong>
-                        {/* Show first three pieces of content as three avatars next to each other (using content.platformImage) */}
-                        <div className='pr-[3px] mt-[-2px] h-[32px]'>
+                        <div className='mt-[-2px] flex-none flex w-[82px]'>
                           {
                             stream.content.map((content: any, contentIndex: number) => {
                               const onHover = () => {
@@ -218,6 +217,8 @@ export default function Home() {
 
                               return (
                                 <div
+                                  // position: relative;
+                                  // left: -5px;
                                   className="relative inline-block mx-[-5px] border-2 rounded-full border-white bg-white"
                                   key={contentIndex}
                                   onMouseEnter={onHover}
