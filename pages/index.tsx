@@ -203,7 +203,7 @@ export default function Home() {
                   return (
                     <Link href={`/stream/${stream.id}`} key={streamIndex}>
                       <div
-                        className={`pt-7 pb-7 border-t-2 border-[#EAEAEA] cursor-pointer flex justify-between items-center hover:bg-[#F7F7F7] ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
+                        className={`pt-7 pb-7 border-t-2 border-[#EAEAEA] cursor-pointer flex justify-between items-center ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
                       >
                         <strong className="font-medium flex-grow pr-3">
                           {stream.name}
@@ -229,6 +229,7 @@ export default function Home() {
                                   {
                                     hovering.streamIndex === streamIndex && hovering.contentIndex === contentIndex &&
                                     <Popover
+                                      left={String(-10 * (content.title.length > 70 ? 73 : content.title.length) / 2)}
                                       text={content.title}
                                     />
                                   }
