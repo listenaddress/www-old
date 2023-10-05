@@ -183,6 +183,10 @@ export default function Home() {
                       height={92}
                       borderRadius={'3px'}
                     />
+                    <Skeleton
+                      height={92}
+                      borderRadius={'3px'}
+                    />
                   </>
                 )
               }
