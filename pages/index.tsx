@@ -168,23 +168,23 @@ export default function Home() {
                 !streams || streams.length === 0 && (
                   <>
                     <Skeleton
-                      height={92}
+                      height={90}
                       borderRadius={'3px'}
                     />
                     <Skeleton
-                      height={92}
+                      height={90}
                       borderRadius={'3px'}
                     />
                     <Skeleton
-                      height={92}
+                      height={90}
                       borderRadius={'3px'}
                     />
                     <Skeleton
-                      height={92}
+                      height={90}
                       borderRadius={'3px'}
                     />
                     <Skeleton
-                      height={92}
+                      height={90}
                       borderRadius={'3px'}
                     />
                   </>
