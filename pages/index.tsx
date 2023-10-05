@@ -4,7 +4,7 @@ import Button from '@/components/button'
 import { useState, useEffect, useContext } from 'react'
 import Link from 'next/link'
 import router from 'next/router'
-// import Image from 'next/image'
+import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
 import dynamic from 'next/dynamic'
 import { GlobalContext } from '@/context/store';
@@ -268,7 +268,7 @@ export default function Home() {
                 </Button>
               </div>
               <div>
-                <div className='font-medium mb-4 text-gray-500 mt-44'>
+                <div className='font-medium mb-4 text-gray-500 mt-52'>
                   Look for clues
                 </div>
                 <div className='font-medium mb-4'>
@@ -277,16 +277,16 @@ export default function Home() {
                   <p className="mb-3">Sometimes you find a direct answer to a question. Sometimes you find new questions. And other times you find material you&apos;re able to build on in your current work.</p>
                   <p className="mb-3">This website is made to provide you with the clues you need—whether you&apos;re exploring new areas of science, solving a health issue, or writing your next paper.</p>
                   <p className="">We&apos;re just starting to test out the waters. <Link href="/sign-in" className='underline'>Join us.</Link></p>
-                  {/* <Image
-                    src='/stream-geese.jpeg'
+                  <Image
+                    src='/stream-geese.png'
                     className='my-7'
                     alt='testing-stream'
                     width={320}
                     height={320}
-                  /> */}
+                  />
                 </div>
-                <div className='font-medium mb-4 text-gray-500 mt-40'>Links</div>
-                <div className='font-medium mb-52'>
+                <div className='font-medium mb-4 text-gray-500 mt-48'>Links</div>
+                <div className='font-medium mb-56'>
                   <Link href='/sign-in'>
                     <div className='cursor-pointer mb-3'>
                       Get started
