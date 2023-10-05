@@ -203,7 +203,7 @@ export default function Home() {
                   return (
                     <Link href={`/stream/${stream.id}`} key={streamIndex}>
                       <div
-                        className={`pt-7 pb-7 border-t-2 border-[#EAEAEA] cursor-pointer flex justify-between items-center ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
+                        className={`pt-7 pb-7 border-t-2 border-gray-200 cursor-pointer flex justify-between items-center ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
                       >
                         <strong className="font-medium flex-grow pr-3">
                           {stream.name}
