@@ -402,7 +402,7 @@ export default function Stream() {
                         <div className='text-[13px]'>
                             {content.map((item: any, index: number) => (
                                 <div
-                                    className='relative hover:bg-gray-300 ml-[-1rem] pl-[1rem] mr-[-1rem] pr-[1rem] hover:mt-[-1px] hover:pt-[1px]'
+                                    className='relative hover:bg-gray-200 ml-[-1rem] pl-[1rem] mr-[-1rem] pr-[1rem] hover:mt-[-1px] hover:pt-[1px]'
                                     key={index}
                                     onMouseEnter={() => {
                                         setHoveringIndex(index)
@@ -436,14 +436,14 @@ export default function Stream() {
                                                     {formatAuthors(item.authors)}
                                                 </div>
                                                 <div className='hidden sm:inline-block sm:w-[15%] lg:w-[15%] xl:w-[12%] text-right'>
-                                                    {item.time}
+                                                    {hoveringIndex !== index && item.time}
                                                 </div>
                                             </div>
                                         </div>
                                     </Link>
                                     {
                                         hoveringIndex === index && (
-                                            <div className='absolute right-2 top-[14px] bg-gray-300 rounded-lg'>
+                                            <div className='absolute right-2 top-[14px] rounded-lg'>
                                                 <div className='flex items-center h-full'>
                                                     {
                                                         adminOptionsOpen && (

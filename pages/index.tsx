@@ -149,9 +149,9 @@ export default function Home() {
         !loadingUser && !user && (
           <>
             <main className="max-w-[640px] m-auto px-4 text-black">
-              <div className="font-medium mt-14 mb-24">Streams</div>
-              <h1 className='md:text-[45px] md:leading-[1.12] font-bold mb-6 md:mb-8'>
-                Podcasts, papers, books and blogs, curated just for you.
+              <div className="font-medium mt-14">Streams</div>
+              <h1 className='md:text-[45px] md:leading-[1.12] font-bold md:mb-8 mt-32'>
+                Papers, podcasts, books and blogs, curated just for you.
               </h1>
               <div className=''>
                 <Button onClick={signIn}>
@@ -161,30 +161,30 @@ export default function Home() {
                   Sign in
                 </Button>
               </div>
-              <div className='font-medium mb-4 text-gray-500 mt-44'>
-                Pinned streams
+              <div className='font-medium mb-4 text-gray-500 mt-48'>
+                Recent streams
               </div>
               {
                 !streams || streams.length === 0 && (
                   <>
                     <Skeleton
-                      height={90}
+                      height={88}
                       borderRadius={'3px'}
                     />
                     <Skeleton
-                      height={90}
+                      height={88}
                       borderRadius={'3px'}
                     />
                     <Skeleton
-                      height={90}
+                      height={88}
                       borderRadius={'3px'}
                     />
                     <Skeleton
-                      height={90}
+                      height={88}
                       borderRadius={'3px'}
                     />
                     <Skeleton
-                      height={90}
+                      height={88}
                       borderRadius={'3px'}
                     />
                   </>
@@ -195,7 +195,7 @@ export default function Home() {
                   return (
                     <Link href={`/stream/${stream.id}`} key={streamIndex}>
                       <div
-                        className={`pt-7 pb-7 border-t-2 border-gray-200 cursor-pointer flex justify-between items-center ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
+                        className={`pt-7 pb-7 border-t-2 border-gray-200 cursor-pointer flex justify-between items-center hover:bg-gray-200 ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
                       >
                         <strong className="font-medium flex-grow pr-3">
                           {stream.name}
