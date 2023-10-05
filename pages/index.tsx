@@ -195,12 +195,12 @@ export default function Home() {
                   return (
                     <Link href={`/stream/${stream.id}`} key={streamIndex}>
                       <div
-                        className={`pt-7 pb-7 border-t-2 border-gray-200 cursor-pointer flex justify-between items-center hover:bg-gray-200 ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
+                        className={`mx-[-10px] pt-6 pb-6 border-t-2 border-gray-200 cursor-pointer flex justify-between items-center hover:bg-gray-200 ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
                       >
-                        <strong className="font-medium flex-grow pr-3">
+                        <strong className="font-medium flex-grow px-[9.5px]">
                           {stream.name}
                         </strong>
-                        <div className='mt-[-2px] flex-none flex w-[82px]'>
+                        <div className='mt-[-2px] mr-[9px] flex-none flex w-[82px]'>
                           {
                             stream.content.map((content: any, contentIndex: number) => {
                               const onHover = () => {
