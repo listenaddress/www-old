@@ -161,43 +161,31 @@ export default function Home() {
                   Sign in
                 </Button>
               </div>
+              <div className='font-medium mb-4 text-gray-500 mt-44'>
+                Pinned streams
+              </div>
               {
                 !streams || streams.length === 0 && (
                   <>
                     <Skeleton
-                      height={220}
-                      className='mb-4'
-                      style={{
-                        borderRadius: '.75rem',
-                      }}
+                      height={100}
+                      className='mb-1'
                     />
                     <Skeleton
-                      height={240}
-                      className='mb-4'
-                      style={{
-                        borderRadius: '.75rem',
-                      }}
+                      height={100}
+                      className='mb-1'
                     />
                     <Skeleton
-                      height={220}
-                      className='mb-4'
-                      style={{
-                        borderRadius: '.75rem',
-                      }}
+                      height={100}
+                      className='mb-1'
                     />
                     <Skeleton
-                      height={240}
-                      className='mb-4'
-                      style={{
-                        borderRadius: '.75rem',
-                      }}
+                      height={100}
+                      className='mb-1'
                     />
                   </>
                 )
               }
-              <div className='font-medium mb-4 text-gray-500 mt-44'>
-                Pinned streams
-              </div>
               {
                 streams.map((stream: any, streamIndex: number) => {
                   return (
