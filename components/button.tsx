@@ -40,7 +40,7 @@ const Button: React.FC<ButtonProps> = ({
       case "lg":
         return "px-6 py-2 text-md sm:px-16 sm:py-3 sm:text-lg font-medium rounded-xl";
       default:
-        return "px-[1.5rem] py-[1rem] text-md font-medium rounded-[14px]";
+        return "px-[1.3rem] py-[.7rem] font-medium rounded-[12px]";
     }
   }
 

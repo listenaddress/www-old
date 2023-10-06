@@ -58,18 +58,18 @@ export default function SignIn() {
 
     return (
         <>
-            <div className="max-w-lg px-4 m-auto mt-28 mb-24 text-sm">
+            <div className="max-w-lg px-4 m-auto mt-32 mb-24">
                 {!subscribed && (
                     <>
                         <h1 className="text-2xl font-bold">Sign into Streams</h1>
-                        <div className="mt-6 text-sm">
+                        <div className="mt-6">
                             Email address
                         </div>
                         <div className="mt-2">
                             <input
                                 type="email"
                                 placeholder="hello@streams.app"
-                                className="w-full mb-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full mb-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 onKeyDown={(e) => {
@@ -80,13 +80,11 @@ export default function SignIn() {
                             />
                             <Button
                                 onClick={signIn}
-                                size='md'
-                                variant='blue'
                                 className="mt-2"
                             >
                                 Sign in
                             </Button>
-                            <p className="text-xs text-gray-500 mt-2">
+                            <p className="text-sm text-gray-500 mt-2">
                                 First time here? Login above to create an account.
                             </p>
                             {error && (

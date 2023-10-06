@@ -151,7 +151,7 @@ export default function Home() {
             <main className="max-w-[640px] m-auto px-4 text-black text-[17px]">
               <div className="font-medium mt-10 md:mt-14">Streams</div>
               <h1 className='text-[30px] mb-4 md:mb-6 md:text-[45px] leading-[1.18] md:leading-[1.12] font-bold md:mb-8 mt-24 md:mt-32'>
-                Papers, podcasts, books and blogs, curated just for you.
+                Podcasts, papers, books and blogs, curated just for you.
               </h1>
               <div className=''>
                 <Button onClick={signIn}>
@@ -161,7 +161,7 @@ export default function Home() {
                   Sign in
                 </Button>
               </div>
-              <div className='font-medium mb-4 text-gray-500 mt-36 md:mt-48'>
+              <div className='font-medium mb-4 text-gray-500 mt-36 md:mt-52'>
                 Recent streams
               </div>
               {

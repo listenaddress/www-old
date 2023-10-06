@@ -71,7 +71,7 @@ export default function Onboarding() {
         if (step === 4 && !instructions) return 'disabled';
         if (loading) return 'disabled';
 
-        return 'blue';
+        return 'default';
     }
 
     const getButtonText = () => {
@@ -319,7 +319,7 @@ export default function Onboarding() {
                                 <input
                                     type="text"
                                     placeholder="Your name here"
-                                    className="w-[400px] mb-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-[400px] mb-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                 />
@@ -341,18 +341,18 @@ export default function Onboarding() {
                 }
                 {
                     step === 3 && (
-                        <>
+                        <div>
                             <h3 className='text-2xl mt-20 mb-4'>
                                 What&rsquo;s the name of your stream?
                             </h3>
                             <input
                                 type="text"
                                 placeholder="E.g. 'Bioelectricity' or 'LLMs for Biomedical'"
-                                className="w-full mb-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-[450px] mb-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                                 value={streamName}
                                 onChange={(e) => setStreamName(e.target.value)}
                             />
-                        </>
+                        </div>
                     )
                 }
                 {
@@ -365,7 +365,7 @@ export default function Onboarding() {
                                 What kind of science are you looking for? We’ll keep this in mind as we scan the Internet.
                             </span>
                             <textarea
-                                className='w-full h-40 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                                className='w-full h-36 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent'
                                 placeholder='I’m interested in...'
                                 onChange={(e) => setInstructions(e.target.value)}
                             ></textarea>
@@ -384,7 +384,7 @@ export default function Onboarding() {
                             <input
                                 type="text"
                                 placeholder="https://www.youtube.com/watch?v=2Oe6HUgrRlQ"
-                                className="w-full mb-4 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full mb-4 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                                 value={inspiration}
                                 onChange={(e) => setInspiration(e.target.value)}
                             />
@@ -392,7 +392,7 @@ export default function Onboarding() {
                                 <Button
                                     onClick={handleAddClick}
                                     size='md'
-                                    variant={inspiration && !loading ? 'blue' : 'disabled'}
+                                    variant={inspiration && !loading ? 'default' : 'disabled'}
                                     className='mt-4'
                                     disabled={!inspiration || loading}
                                 >
