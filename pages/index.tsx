@@ -148,9 +148,9 @@ export default function Home() {
       {
         !loadingUser && !user && (
           <>
-            <main className="max-w-[640px] m-auto px-4 text-black">
+            <main className="max-w-[640px] m-auto px-4 text-black text-[17px]">
               <div className="font-medium mt-14">Streams</div>
-              <h1 className='md:text-[45px] md:leading-[1.12] font-bold md:mb-8 mt-32'>
+              <h1 className='text-[30px] mb-6 md:text-[45px] md:leading-[1.12] font-bold md:mb-8 mt-32'>
                 Papers, podcasts, books and blogs, curated just for you.
               </h1>
               <div className=''>
@@ -267,26 +267,20 @@ export default function Home() {
                   + Make your own stream
                 </Button>
               </div>
-              <div>
+              <div className='text-[17px]'>
                 <div className='font-medium mb-4 text-gray-500 mt-52'>
                   Look for clues
                 </div>
-                <div className='font-medium mb-4'>
-                  <p className="mb-3">Everyday, we scan the web for you, collecting things you may need.</p>
-                  <p className="mb-3">Anytime you want, you can pop in to get something new to read, listen to, or watch.</p>
-                  <p className="mb-3">Sometimes you find a direct answer to a question. Sometimes you find new questions. And other times you find material you&apos;re able to build on in your current work.</p>
-                  <p className="mb-3">This website is made to provide you with the clues you need—whether you&apos;re exploring new areas of science, solving a health issue, or writing your next paper.</p>
-                  <p className="">We&apos;re just starting to test out the waters. <Link href="/sign-in" className='underline'>Join us.</Link></p>
-                  <Image
-                    src='/stream-geese.png'
-                    className='my-7'
-                    alt='testing-stream'
-                    width={320}
-                    height={320}
-                  />
+                {/* Make these */}
+                <div className='mb-4'>
+                  <p className="mb-4">Everyday, we scan the web for you, collecting podcasts, papers, blogs, etc etc.</p>
+                  <p className="mb-4">Anytime you want, you can pop in to get something new to read, listen to, or watch.</p>
+                  <p className="mb-4">Sometimes you find a direct answer to a question. Sometimes you find new questions. And other times you find material you&apos;re able to build on in your current work.</p>
+                  <p className="mb-4">This website is made to provide you with the clues you need—whether you&apos;re learning something new, solving a health issue, or writing your next paper.</p>
+                  <p className="">We just opened up our sign up. <Link href="/sign-in" className='underline'>Start now.</Link></p>
                 </div>
-                <div className='font-medium mb-4 text-gray-500 mt-48'>Links</div>
-                <div className='font-medium mb-56'>
+                <div className='font-medium mb-4 text-gray-500 mt-44'>Links</div>
+                <div className='font-medium mb-52'>
                   <Link href='/sign-in'>
                     <div className='cursor-pointer mb-3'>
                       Get started
@@ -304,7 +298,7 @@ export default function Home() {
                   </Link>
                   <Link href='mailto:thomas@streams.app'>
                     <div className='cursor-pointer mb-3'>
-                      Support
+                      Email us
                     </div>
                   </Link>
                 </div>
