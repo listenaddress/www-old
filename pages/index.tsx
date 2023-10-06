@@ -273,7 +273,7 @@ export default function Home() {
                 </div>
                 {/* Make these */}
                 <div className='mb-4 font-medium'>
-                  <p className="mb-4">Everyday, we scan the web for you, collecting podcasts, papers, blogs, etc etc.</p>
+                  <p className="mb-4">Everyday, we scan the web for you, collecting podcasts, papers, blogs, etc.</p>
                   <p className="mb-4">Anytime you want, you can pop in to get something new to read, listen to, or watch.</p>
                   <p className="mb-4">Sometimes you find a direct answer to a question. Sometimes you find new questions. And other times you find material you&apos;re able to build on in your current work.</p>
                   <p className="mb-4">This website is made to provide you with the clues you need—whether you&apos;re learning something new, optimizing your health, or writing your next paper.</p>
