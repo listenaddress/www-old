@@ -276,7 +276,7 @@ export default function Home() {
                   <p className="mb-4">Everyday, we scan the web for you, collecting podcasts, papers, blogs, etc etc.</p>
                   <p className="mb-4">Anytime you want, you can pop in to get something new to read, listen to, or watch.</p>
                   <p className="mb-4">Sometimes you find a direct answer to a question. Sometimes you find new questions. And other times you find material you&apos;re able to build on in your current work.</p>
-                  <p className="mb-4">This website is made to provide you with the clues you need—whether you&apos;re learning something new, solving a health issue, or writing your next paper.</p>
+                  <p className="mb-4">This website is made to provide you with the clues you need—whether you&apos;re learning something new, optimizing your health, or writing your next paper.</p>
                   <p className="">We just opened up our sign up. <Link href="/sign-in" className='underline'>Start now.</Link></p>
                 </div>
                 <div className='font-medium mb-4 text-gray-500 mt-44'>Links</div>
