@@ -52,7 +52,7 @@ export default function User() {
         user && (
             <div className='max-w-[500px] mx-auto px-4 sm:px-6 lg:px-8 mt-10'>
                 <div className='font-medium mb-4 text-gray-500'>
-                    Your streams
+                    Your streams {streams.length} {streams.length === 5 && '(your last 5, we\'ll show older ones soon)'}
                 </div>
                 {
                     streams && streams.length > 0 && streams.map((stream: any, streamIndex: number) => {
