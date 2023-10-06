@@ -591,34 +591,40 @@ export default function Stream() {
                                                             )
                                                         }
                                                     </div>
-                                                    <div
-                                                        onMouseEnter={() => setHoveringIndexMoreOptions(1)}
-                                                        onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
-                                                        className='cursor-pointer'
-                                                        onClick={() => like(item.id)}
-                                                    >
-                                                        {
-                                                            hoveringIndexMoreOptions !== 1 && !isLiked(item.id) ? (
-                                                                <HandThumbUpIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
-                                                            ) : (
-                                                                <HandThumbUpIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
-                                                            )
-                                                        }
-                                                    </div>
-                                                    <div
-                                                        onMouseEnter={() => setHoveringIndexMoreOptions(2)}
-                                                        onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
-                                                        className='cursor-pointer'
-                                                        onClick={() => dislike(item.id)}
-                                                    >
-                                                        {
-                                                            hoveringIndexMoreOptions !== 2 && !isDisliked(item.id) ? (
-                                                                <HandThumbDownIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
-                                                            ) : (
-                                                                <HandThumbDownIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
-                                                            )
-                                                        }
-                                                    </div>
+                                                    {
+                                                        user && (
+                                                            <>
+                                                                <div
+                                                                    onMouseEnter={() => setHoveringIndexMoreOptions(1)}
+                                                                    onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
+                                                                    className='cursor-pointer'
+                                                                    onClick={() => like(item.id)}
+                                                                >
+                                                                    {
+                                                                        hoveringIndexMoreOptions !== 1 && !isLiked(item.id) ? (
+                                                                            <HandThumbUpIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                        ) : (
+                                                                            <HandThumbUpIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                                <div
+                                                                    onMouseEnter={() => setHoveringIndexMoreOptions(2)}
+                                                                    onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
+                                                                    className='cursor-pointer'
+                                                                    onClick={() => dislike(item.id)}
+                                                                >
+                                                                    {
+                                                                        hoveringIndexMoreOptions !== 2 && !isDisliked(item.id) ? (
+                                                                            <HandThumbDownIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                        ) : (
+                                                                            <HandThumbDownIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                            </>
+                                                        )
+                                                    }
                                                 </div>
                                             </div>
                                         )
