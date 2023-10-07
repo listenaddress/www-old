@@ -399,7 +399,7 @@ export default function Stream() {
                             <Skeleton count={2} style={{ height: '70px' }} />
                         </div>
                     ) : (
-                        <div className='text-[13px]'>
+                        <div className='text-[14px]'>
                             {content.map((item: any, index: number) => (
                                 <div
                                     className='relative hover:bg-gray-200 ml-[-1rem] pl-[1rem] mr-[-1rem] pr-[1rem] hover:mt-[-1px] hover:pt-[1px]'
