@@ -61,13 +61,13 @@ export default function SideBar() {
                                             <Popover text={`Create a new stream`} left="36" bottom="-10" />
                                         )
                                     }
-                                    <PlusIcon className={`w-6 h-6`} />
+                                    <PlusIcon className={`text-gray-600 w-6 h-6`} />
                                 </div>
                             </Link>
                         </div>
                         {/* <div className={`flex justify-center items-center h-16 text-center`}>
                             <div className={`w-6 h-6 rounded-full flex justify-center items-center font-medium text-[#838288]`}>
-                                <MagnifyingGlassIcon className={`w-6 h-6`} />
+                                <MagnifyingGlassIcon className={`text-gray-600 w-6 h-6`} />
                             </div>
                         </div> */}
                         <div className={`flex justify-center items-center h-16 text-center`}>
@@ -82,7 +82,7 @@ export default function SideBar() {
                                             <Popover text={`FAQs`} left="36" bottom="-10" />
                                         )
                                     }
-                                    <QuestionMarkCircleIcon className={`w-6 h-6`} />
+                                    <QuestionMarkCircleIcon className={`text-gray-600 w-6 h-6`} />
                                 </div>
                             </Link>
                         </div>
@@ -100,7 +100,7 @@ export default function SideBar() {
                                                     <Popover text={`Admin`} left="36" bottom="-10" />
                                                 )
                                             }
-                                            <CogIcon className={`w-6 h-6`} />
+                                            <CogIcon className={`text-gray-600 w-6 h-6`} />
                                         </div>
                                     </Link>
                                 </div>
