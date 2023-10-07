@@ -269,7 +269,7 @@ export default function Home() {
               </div>
               <div className='text-[17px]'>
                 <div className='font-medium mb-4 text-gray-500 mt-52'>
-                  Look for clues
+                  Looking for clues
                 </div>
                 {/* Make these */}
                 <div className='mb-4 font-medium'>
