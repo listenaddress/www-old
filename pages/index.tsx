@@ -65,28 +65,21 @@ export default function Home() {
       <CrispWithNoSSR />
       {
         user && (
-          <div className='max-w-[530px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-28'>
-            <div className='font-medium mb-4 text-gray-500'>
-              All public streams
+          <div className='max-w-[530px] mx-auto px-4 sm:px-6 lg:px-8 mt-28 mb-28'>
+            <div className='font-medium mb-8 text-gray-500'>
+              Recent public streams
             </div>
             {
               streams.map((stream: any, streamIndex: number) => {
                 return (
                   <Link href={`/stream/${stream.id}`} key={streamIndex}>
                     <div
-                      className='flex flex-col justify-center mb-8 p-6 px-[1.7rem] md:p-8 md:px-[2.3rem] border-2 rounded-xl border-[#EAEAEA] cursor-pointer hover:bg-[#F7F7F7]'
-                      key={streamIndex}>
-                      <strong className="font-bold">
+                      className={`mx-[-10px] pt-5 pb-5 border-t-2 border-gray-200 cursor-pointer flex justify-between items-center hover:bg-gray-200 ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
+                    >
+                      <strong className="font-medium flex-grow px-[9.5px]">
                         {stream.name}
                       </strong>
-                      <p className="mt-2">
-                        {stream.about}
-                      </p>
-                      <p className={`mt-5 text-[#7B7B80]`}>
-                        Recently in this stream
-                      </p>
-                      {/* Show first three pieces of content as three avatars next to each other (using content.platformImage) */}
-                      <div className='flex mt-2'>
+                      <div className='mt-[-2px] mr-[9px] flex-none flex w-[82px]'>
                         {
                           stream.content.map((content: any, contentIndex: number) => {
                             const onHover = () => {
@@ -273,7 +266,7 @@ export default function Home() {
                 </div>
                 {/* Make these */}
                 <div className='mb-4 font-medium'>
-                  <p className="mb-4">Everyday, we scan the web for you, collecting podcasts, papers, blogs, etc.</p>
+                  <p className="mb-4">Everyday we scan the web for you, collecting podcasts, papers, blogs, etc.</p>
                   <p className="mb-4">Anytime you want, you can pop in to get something new to read, listen to, or watch.</p>
                   <p className="mb-4">Sometimes you find a direct answer to a question. Sometimes you find new questions. And other times you find material you&apos;re able to build on in your current work.</p>
                   <p className="mb-4">This website is made to provide you with the clues you need—whether you&apos;re learning something new, optimizing your health, or writing your next paper.</p>

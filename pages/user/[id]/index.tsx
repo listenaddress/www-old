@@ -50,8 +50,8 @@ export default function User() {
 
     return (
         user && (
-            <div className='max-w-[500px] mx-auto px-4 sm:px-6 lg:px-8 mt-10'>
-                <div className='font-medium mb-4 text-gray-500'>
+            <div className='max-w-[530px] mx-auto px-4 sm:px-6 lg:px-8 mt-28 mb-28'>
+                <div className='font-medium mb-8 text-gray-500'>
                     Your streams {streams.length === 5 && '(your last 5, we\'ll show older ones soon)'}
                 </div>
                 {
@@ -59,18 +59,12 @@ export default function User() {
                         return (
                             <Link href={`/stream/${stream.id}`} key={streamIndex}>
                                 <div
-                                    className="flex flex-col justify-center mb-8 p-6 px-[1.7rem] md:p-8 md:px-[2.3rem] border-2 rounded-xl border-[#EAEAEA] cursor-pointer"
-                                    key={streamIndex}>
-                                    <strong className="font-bold">
+                                    className={`mx-[-10px] pt-5 pb-5 border-t-2 border-gray-200 cursor-pointer flex justify-between items-center hover:bg-gray-200 ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
+                                >
+                                    <strong className="font-medium flex-grow px-[9.5px]">
                                         {stream.name}
                                     </strong>
-                                    <p className="mt-2">
-                                        {stream.about}
-                                    </p>
-                                    <p className={`mt-5 text-[#7B7B80]`}>
-                                        Recently in this stream
-                                    </p>
-                                    <div className='flex mt-2'>
+                                    <div className='mt-[-2px] mr-[9px] flex-none flex w-[82px]'>
                                         {
                                             stream.content.map((content: any, contentIndex: number) => {
                                                 const onHover = () => {
