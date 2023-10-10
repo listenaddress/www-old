@@ -22,4 +22,3 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
 };
 
 export default CheckboxInput;
-
