@@ -107,7 +107,7 @@ function StreamForm({
                 id="name"
                 autoComplete="off"
                 placeholder="E.g. 'Bioelectricity' or 'LLMs for Biomedical'"
-                className="w-full mb-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full mb-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                 value={streamName}
                 onChange={(e) => setStreamName(e.target.value)}
             />
@@ -116,23 +116,23 @@ function StreamForm({
                 What kind of science are you looking for? We’ll keep this in mind as we scan the Internet.
             </span>
             <textarea
-                className='w-full h-28 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                className='w-full h-28 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent'
                 placeholder='I’m interested in...'
                 value={instructions}
                 id="instructions"
                 onChange={(e) => setInstructions(e.target.value)}
             ></textarea>
-            <h3 className='text-l mt-10 mb-1'>About <span className='text-gray-500'>(optional)</span></h3>
+            {/* <h3 className='text-l mt-10 mb-1'>About <span className='text-gray-500'>(optional)</span></h3>
             <span className='text-sm text-gray-500'>
                 If you share your stream, this will helps others understand what the stream is for.
             </span>
             <textarea
-                className='w-full h-28 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                className='w-full h-28 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent'
                 placeholder='About this stream...'
                 value={about}
                 id="about"
                 onChange={(e) => setAbout(e.target.value)}
-            ></textarea>
+            ></textarea> */}
             <h3 className='text-l mt-10 mb-1'>References <span className='text-gray-500'>(optional)</span></h3>
             <span className='text-sm text-gray-500'>
                 Any links, papers, podcasts, books, etc. that&apos;d be examples of what you&apos;re looking for?
@@ -140,7 +140,7 @@ function StreamForm({
             <input
                 type="text"
                 placeholder="https://www.youtube.com/watch?v=2Oe6HUgrRlQ"
-                className="w-full mb-4 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full mb-4 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
                 value={inspiration}
                 id="inspiration"
                 onChange={(e) => setInspiration(e.target.value)}
@@ -149,7 +149,7 @@ function StreamForm({
                 <Button
                     onClick={handleAddClick}
                     size='md'
-                    variant={inspiration && !loading ? 'blue' : 'disabled'}
+                    variant={inspiration && !loading ? 'default' : 'disabled'}
                     className='mt-4'
                     disabled={!inspiration || loading}
                 >
@@ -214,7 +214,6 @@ function StreamForm({
                     onClick={handleSubmit}
                     size='md'
                     disabled={!streamName || !instructions}
-                    variant='blue'
                     className='mt-12 cursor-pointer'
                 >
                     {initialStreamName ? 'Update Stream' : 'Save Stream'}
