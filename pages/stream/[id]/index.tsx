@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { parseContentForTable, getTime, extractDomainFromUrl } from '@/lib/helpers';
-import { ArrowUpRightIcon, ChevronDownIcon, PencilSquareIcon, InformationCircleIcon, HandThumbDownIcon, HandThumbUpIcon, DocumentDuplicateIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
-import { HandThumbDownIcon as HandThumbDownIconSolid, HandThumbUpIcon as HandThumbUpIconSolid, LinkIcon as LinkIconSolid, DocumentDuplicateIcon as DocumentDuplicateIconSolid, CogIcon } from '@heroicons/react/24/solid';
+import { ArrowUpRightIcon, ChevronDownIcon, PencilSquareIcon, InformationCircleIcon, HandThumbDownIcon, HandThumbUpIcon, DocumentDuplicateIcon, QuestionMarkCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { HandThumbDownIcon as HandThumbDownIconSolid, HandThumbUpIcon as HandThumbUpIconSolid, LinkIcon as LinkIconSolid, DocumentDuplicateIcon as DocumentDuplicateIconSolid, CogIcon, TrashIcon as TrashIconSolid } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router'
 import { GlobalContext } from '@/context/store';
 import Skeleton from 'react-loading-skeleton';
@@ -108,7 +108,7 @@ export default function Stream() {
         fetchStreamContent()
     }, [id])
 
-    const callEndpoint = async () => {
+    const addEntry = async () => {
         let accessTokenFromCookie = ''
         if (document.cookie.split('accessToken=')[1]) {
             accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
@@ -116,14 +116,15 @@ export default function Stream() {
 
         let data: any;
         if (accessTokenFromCookie !== '') {
-            data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + id + '/content', {
+            data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'entry', {
                 'headers': {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + accessTokenFromCookie
                 },
                 'method': 'POST',
                 'body': JSON.stringify({
-                    'url': textInput
+                    'url': textInput,
+                    'stream_id': id
                 })
             })
         } else {
@@ -139,6 +140,32 @@ export default function Stream() {
             setEntries([...newEntries, ...entries])
             setTextInput('')
         }
+    }
+
+    const deleteEntry = async (entryId: string) => {
+        let accessTokenFromCookie = ''
+        if (document.cookie.split('accessToken=')[1]) {
+            accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+        }
+
+        let data: any;
+        if (accessTokenFromCookie !== '') {
+            data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'entry/' + entryId, {
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + accessTokenFromCookie
+                },
+                'method': 'DELETE'
+            })
+        } else {
+            setError("You are not authorized. 🔒")
+            return
+        }
+
+        if (data.status === 204) {
+            const newEntries = entries.filter((entry) => entry.id !== entryId)
+            setEntries(newEntries)
+        } setError("There was an issue deleting entry.")
     }
 
     return (
@@ -197,57 +224,96 @@ export default function Stream() {
                             onChange={(e) => setTextInput(e.target.value)}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
-                                    callEndpoint();
+                                    addEntry();
                                 }
                             }}
                         />
                     )}
-                    {/* <div className='mt-4'>
-                        <button
-                            onClick={() => callEndpoint()}
-                            className='px-4 py-2 rounded-md bg-gray-900 text-white'
-                        >
-                            Add
-                        </button>
-                    </div> */}
                 </div>
                 {
                     entries.length > 0 && (
                         <div className='mt-3'>
                             {
-                                entries.map((entry, index) => (
-                                    <div key={index} className='flex items-center h-[40px] mx-[-.75rem] py-9 px-[1.09rem] hover:bg-gray-300 rounded-md'>
+                                entries.map((item, index) => (
+                                    <div className='relative' key={index}>
                                         <div
-                                            // style={{ width: '40px', height: '40px' }}
-                                            className='w-[40px] h-[40px] rounded-md flex justify-center items-center'
+                                            className={`flex items-center h-[40px] mx-[-.75rem] py-9 px-[1.09rem] rounded-md ${hoveringIndex === index ? 'bg-gray-200' : ''}`}
+                                            onMouseEnter={() => {
+                                                setHoveringIndex(index)
+                                                setHoveringIndexMoreOptions(-1)
+                                            }}
+                                            onMouseLeave={() => setHoveringIndex(-1)}
                                         >
-                                            <img
-                                                src={entry.content.platformImage}
-                                                className='rounded-md h-[42px] m-auto'
-                                            />
-                                        </div>
-                                        <div
-                                            style={{ maxWidth: 'calc(100% - 40px)' }}
-                                            key="1"
-                                            className='pt-[2px] pl-3'
-                                        >
-                                            <div className='text-gray-900 font-medium overflow-ellipsis overflow-hidden whitespace-nowrap' style={{ lineHeight: '1.2', maxHeight: '20px' }} key="2">
-                                                {entry.content.title}
+                                            <div className='w-[40px] h-[40px] rounded-md flex justify-center items-center'>
+                                                <img
+                                                    src={item.content.platformImage}
+                                                    className='rounded-md h-[42px] m-auto'
+                                                />
                                             </div>
-                                            <div className='text-gray-500 mt-1 text-sm overflow-ellipsis overflow-hidden whitespace-nowrap' style={{ maxHeight: '20px' }} key="3">
-                                                {entry.content.authors && entry.content.authors.length > 0 && formatAuthors(entry.content.authors) + ' • '}
-                                                {
-                                                    entry.content.time && entry.content.time
-                                                }
-                                                {
-                                                    !entry.content.time && (
-                                                        <>
-                                                            {/* Added {getTime(entry.created_at)} */}
-                                                            {extractDomainFromUrl(entry.content.url)}
-                                                        </>
-                                                    )
-                                                }
+                                            <div
+                                                style={{ maxWidth: 'calc(100% - 40px)' }}
+                                                key="1"
+                                                className='pt-[2px] pl-3'
+                                            >
+                                                <div className='text-gray-900 font-medium overflow-ellipsis overflow-hidden whitespace-nowrap' style={{ lineHeight: '1.2', maxHeight: '20px' }} key="2">
+                                                    {item.content.title}
+                                                </div>
+                                                <div className='text-gray-500 mt-1 text-sm overflow-ellipsis overflow-hidden whitespace-nowrap' style={{ maxHeight: '20px' }} key="3">
+                                                    {item.content.authors && item.content.authors.length > 0 && formatAuthors(item.content.authors) + ' • '}
+                                                    {
+                                                        item.content.time && item.content.time
+                                                    }
+                                                    {
+                                                        !item.content.time && (
+                                                            <>
+                                                                {/* Added {getTime(item.created_at)} */}
+                                                                {extractDomainFromUrl(item.content.url)}
+                                                            </>
+                                                        )
+                                                    }
+                                                </div>
                                             </div>
+                                            {
+                                                hoveringIndex === index && (
+                                                    <div className='absolute right-2 top-[14px] rounded-lg bg-gray-200'>
+                                                        <div className='flex items-center h-full'>
+                                                            <div
+                                                                onMouseEnter={() => setHoveringIndexMoreOptions(0)}
+                                                                onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
+                                                                className='cursor-pointer'
+                                                                onClick={() => {
+                                                                    navigator.clipboard.writeText(item.url)
+                                                                    toast.success('Copied url to clipboard.')
+                                                                }}
+                                                            >
+                                                                {
+                                                                    hoveringIndexMoreOptions !== 0 ? (
+                                                                        <DocumentDuplicateIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                    ) : (
+                                                                        <DocumentDuplicateIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                    )
+                                                                }
+                                                            </div>
+                                                            <div
+                                                                onMouseEnter={() => setHoveringIndexMoreOptions(1)}
+                                                                onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
+                                                                className='cursor-pointer'
+                                                                onClick={() => {
+                                                                    deleteEntry(item.id)
+                                                                }}
+                                                            >
+                                                                {
+                                                                    hoveringIndexMoreOptions !== 1 ? (
+                                                                        <TrashIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                    ) : (
+                                                                        <TrashIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                    )
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
                                         </div>
                                     </div>
                                 ))
