@@ -4,7 +4,7 @@ const platformImageMapping = {
     'nature': '/platform-images/nature.png',
     'science': '/platform-images/science.png',
     'cell': '/platform-images/cell.png',
-    'arxiv': '/platform-images/arxiv.png',
+    'arxiv': '/platform-images/arxiv.svg',
     'plos': '/platform-images/plos.png',
     'springer': '/platform-images/springer.png',
     'spotify': '/platform-images/spotify.png',
@@ -32,7 +32,7 @@ const platformImageMapping = {
     'ieee': '/platform-images/ieee.png',
     'algorithms': '/platform-images/algorithms.png',
     'enns': '/platform-images/enns.png',
-    'acl': '/platform-images/acl.png',
+    'acl': 'https://aclanthology.org/images/acl-logo.svg',
     'acs': '/platform-images/acs.png',
     'naacl-hlt': '/platform-images/acl.png',
     'annual meeting of the association for computational linguistics': '/platform-images/acl.png',
@@ -129,11 +129,37 @@ const platformImageMapping = {
     "harvard business press": "/platform-images/harvard.png"
 }
 
+const getTime = (time: string) => {
+    const today = moment().startOf('day');
+    const yesterday = moment().subtract(1, 'days').startOf('day');
+    const lastYear = moment().subtract(1, 'years').startOf('year');
+
+    if (moment(time).isSame(today, 'd')) {
+        return "today";
+    } else if (moment(time).isSame(yesterday, 'd')) {
+        return "yesterday";
+    } else if (moment(time).isAfter(lastYear)) {
+        return moment(time).format("MMM D");
+    } else {
+        return moment(time).format("YYYY MMM D");
+    }
+}
+
 const parseContentForTable = (content: any[]) => {
-    content.map((item) => {
+    content.map((entry) => {
+        const item = entry.content
         // if (platformImageMapping[item.venue.toLowerCase() as keyof typeof platformImageMapping]) {
         //     item.platformImage = platformImageMapping[item.venue.toLowerCase()];
         // }
+
+        if (!item.title) {
+            const urlParts = item.url.replace('www.', '').split('/');
+            item.title = urlParts[urlParts.length - 1];
+        }
+
+        if (item.created_at) {
+            item.time = getTime(item.created_at)
+        }
 
         if (item.authors && item.authors.length > 0) {
             item.authorsDisplayed = item.authors
@@ -146,7 +172,12 @@ const parseContentForTable = (content: any[]) => {
 
         if (!item.externalIds) {
             item.externalIds = {}
-            console.log('item')
+        }
+
+        if (item.url.includes("arxiv.org")) {
+            item.venue = "arXiv"
+            item.platformImage = platformImageMapping["arxiv"]
+            return
         }
         if (item.externalIds["DOI"] && item.externalIds["DOI"].includes("fcell")) {
             item.venue = "Frontiers"
@@ -281,7 +312,6 @@ const parseContentForTable = (content: any[]) => {
             item.platformImage = platformImageMapping["springer"]
             item.venue = "Neural Computing and Applications"
         } else if (item.venue === "MIT Press") {
-            console.log(item.venue)
             item.platformImage = platformImageMapping["mit press"]
         }
 
@@ -319,16 +349,6 @@ const parseContentForTable = (content: any[]) => {
                 item.url = item.urls[0]
             } else if (item.urls && item.urls.length > 1) {
                 item.url = item.urls[1]
-            }
-        }
-
-        if (item.created_at) {
-            const year = moment(item.created_at).format("YYYY")
-            const currentYear = moment().format("YYYY")
-            if (year === currentYear) {
-                item.time = moment(item.created_at).format("MMMM")
-            } else {
-                item.time = year
             }
         }
     })
@@ -398,11 +418,22 @@ const extractYoutubeChannelIdOrName = (url: string): {id: string | null, name: s
     return {id, name};
 }
 
+const extractDomainFromUrl = (url: string): string | null => {
+    let domain;
+    if (url.indexOf("://") > -1) domain = url.split('/')[2];
+    else domain = url.split('/')[0];
+    if (domain.includes('www.')) domain = domain.split('www.')[1];
+    return domain || null;
+}
+
+
 export {
     parseContentForTable,
     platformImageMapping,
     showingSideBar,
     extractSpotifyShowId,
     extractItunesPodcastId,
-    extractYoutubeChannelIdOrName
+    extractYoutubeChannelIdOrName,
+    getTime,
+    extractDomainFromUrl
 }

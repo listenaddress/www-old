@@ -32,7 +32,7 @@ function Dropdown({
         };
     }, [setIsOpen]);
 
-    const classNames = `absolute z-10 mt-2 w-max rounded-md bg-white border-gray-200 border-2`
+    const classNames = `absolute z-10 mt-2 w-max rounded-md bg-gray-100 border-gray-200 border-2`
     const handleLinkClick = (e: any, href: string) => {
         e.preventDefault();
         setIsOpen(false);
@@ -47,7 +47,7 @@ function Dropdown({
                 top: `${top}rem`
             }}
         >
-            <div className="py-2 rounded-md bg-white shadow-xs">
+            <div className="py-2 rounded-md shadow-xs">
                 {items.map((item: any, index: number) => (
                     <div
                         key={index}

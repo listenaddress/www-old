@@ -141,20 +141,14 @@ export default function Home() {
       {
         !loadingUser && !user && (
           <>
-            <main className="max-w-[640px] m-auto px-4 text-black text-[17px]">
-              <div className="font-medium mt-10 md:mt-14">Streams</div>
-              <h1 className='text-[30px] mb-4 md:mb-6 md:text-[45px] leading-[1.18] md:leading-[1.12] font-bold md:mb-8 mt-24 md:mt-32'>
-                Podcasts, papers, books and blogs, curated just for you.
-              </h1>
-              <div className=''>
+            <main className="max-w-[640px] m-auto text-black text-[17px]">
+              <div className='mt-10'>
                 <Button onClick={signIn}>
-                  Get started
-                </Button>
-                <Button onClick={signIn} variant="grey" className='ml-4'>
                   Sign in
                 </Button>
               </div>
-              <div className='font-medium mb-4 text-gray-500 mt-36 md:mt-52'>
+              {/* Add border bottom */}
+              <div className='font-medium mb-3 text-gray-500 mt-32 pb-2'>
                 Recent streams
               </div>
               {
@@ -188,7 +182,7 @@ export default function Home() {
                   return (
                     <Link href={`/stream/${stream.id}`} key={streamIndex}>
                       <div
-                        className={`mx-[-10px] pt-6 pb-6 border-t-2 border-gray-200 cursor-pointer flex justify-between items-center hover:bg-gray-200 ${streamIndex === streams.length - 1 ? 'border-b-2' : ''}`}
+                        className={`mx-[-9px] pt-3 pb-3 cursor-pointer flex justify-between items-center hover:bg-gray-200 rounded-md`}
                       >
                         <strong className="font-medium flex-grow px-[9.5px]">
                           {stream.name}
@@ -204,7 +198,7 @@ export default function Home() {
                                 <div
                                   // position: relative;
                                   // left: -5px;
-                                  className="relative inline-block mx-[-5px] border-2 rounded-full border-white bg-white"
+                                  className="relative inline-block mx-[-5px] border-2 rounded-full border-[#FCFCFC] bg-white"
                                   key={contentIndex}
                                   onMouseEnter={onHover}
                                   onMouseLeave={() => setHovering({
@@ -253,49 +247,6 @@ export default function Home() {
                   )
                 })
               }
-              <div className='mt-8'>
-                <Button
-                  onClick={signIn}
-                >
-                  + Make your own stream
-                </Button>
-              </div>
-              <div className='text-[17px]'>
-                <div className='font-medium mb-4 text-gray-500 mt-52'>
-                  Looking for clues
-                </div>
-                {/* Make these */}
-                <div className='mb-4 font-medium'>
-                  <p className="mb-4">Everyday we scan the web for you, collecting podcasts, papers, blogs, etc.</p>
-                  <p className="mb-4">Anytime you want, you can pop in to get something new to read, listen to, or watch.</p>
-                  <p className="mb-4">Sometimes you find a direct answer to a question. Sometimes you find new questions. And other times you find material you&apos;re able to build on in your current work.</p>
-                  <p className="mb-4">This website is made to provide you with the clues you need—whether you&apos;re learning something new, optimizing your health, or writing your next paper.</p>
-                  <p className="">We just opened up our sign up. <Link href="/sign-in" className='underline'>Start now.</Link></p>
-                </div>
-                <div className='font-medium mb-4 text-gray-500 mt-44'>Links</div>
-                <div className='font-medium mb-52'>
-                  <Link href='/sign-in'>
-                    <div className='cursor-pointer mb-3'>
-                      Get started
-                    </div>
-                  </Link>
-                  <Link href='/sign-in'>
-                    <div className='cursor-pointer mb-3'>
-                      Sign in
-                    </div>
-                  </Link>
-                  <Link href='/faqs'>
-                    <div className='cursor-pointer mb-3'>
-                      FAQs
-                    </div>
-                  </Link>
-                  <Link href='mailto:thomas@streams.app'>
-                    <div className='cursor-pointer mb-3'>
-                      Email us
-                    </div>
-                  </Link>
-                </div>
-              </div>
             </main>
           </>
         )
