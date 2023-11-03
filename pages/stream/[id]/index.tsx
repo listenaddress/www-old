@@ -54,7 +54,7 @@ export default function Stream() {
 
             if (index === 2 && authors.length > 3) {
                 result += ', ' + authors[authors.length - 1].name;
-                result += '... ';
+                result += `, +${authors.length - 3}`
             } else if (index === 2 && authors.length === 3) {
                 result += ', ' + authors[authors.length - 1].name;
             }
@@ -203,7 +203,7 @@ export default function Stream() {
             <div className='m-4 mb-28 sm:ml-20'>
                 <Toaster />
             </div>
-            <div className='mt-6 px-4 max-w-2xl mx-auto'>
+            <div className='mt-6 px-4 max-w-[43rem] mx-auto'>
                 <div className='flex justify-between items-center'>
                     <div className="flex items-center relative">
                         <h2 className="text-xl font-semibold">{stream.name}</h2>
@@ -339,10 +339,10 @@ export default function Stream() {
                                             }}
                                             data-entry-index={index}
                                         >
-                                            <div className='w-[40px] h-[40px] rounded-md flex justify-center items-center'>
+                                            <div className='w-[40px] h-[40px] flex justify-center items-center'>
                                                 <img
                                                     src={item.content.platformImage}
-                                                    className='rounded-md h-[42px] m-auto'
+                                                    className='h-[42px] m-auto'
                                                 />
                                             </div>
                                             <div
@@ -350,7 +350,7 @@ export default function Stream() {
                                                 key="1"
                                                 className='pt-[2px] pl-3'
                                             >
-                                                <div className='text-gray-900 font-medium overflow-ellipsis overflow-hidden whitespace-nowrap' style={{ lineHeight: '1.2', maxHeight: '20px' }} key="2">
+                                                <div className='text-gray-900 font-[500] overflow-ellipsis overflow-hidden whitespace-nowrap' style={{ lineHeight: '1.2', maxHeight: '20px' }} key="2">
                                                     {item.content.title}
                                                 </div>
                                                 <div className='text-gray-500 mt-1 text-sm overflow-ellipsis overflow-hidden whitespace-nowrap' style={{ maxHeight: '20px' }} key="3">
