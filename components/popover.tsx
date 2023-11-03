@@ -3,12 +3,14 @@ import { useRef } from 'react';
 
 interface PopoverProps {
     text: string;
+    command?: string;
     left?: string;
     bottom?: string;
 }
 
 function Popover({
     text = "No text provided",
+    command,
     left = String(-10 * (text.length > 70 ? 73 : text.length) / 4),
     bottom = "36"
 }: PopoverProps) {
@@ -27,8 +29,13 @@ function Popover({
                 left: `${left}px`
             }}
         >
-            <div className="py-1 rounded-md">
-                <p className="block px-4 py-2 text-sm font-medium">{text}</p>
+            <div className="py-1 rounded-md pr-3">
+                <p className="block px-[.85rem] pr-[.5rem] py-[.65rem] text-sm font-medium inline-block">{text}</p>
+                {command &&
+                    <div className="rounded bg-gray-500 text-white px-[9px] py-[3px] ml-1 inline-block">
+                        {command}
+                    </div>
+                }
             </div>
         </div>
     );

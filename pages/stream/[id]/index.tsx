@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useRef } from 'react';
 import { parseContentForTable, getTime, extractDomainFromUrl } from '@/lib/helpers';
 import { ArrowUpRightIcon, ChevronDownIcon, PencilSquareIcon, InformationCircleIcon, HandThumbDownIcon, HandThumbUpIcon, DocumentDuplicateIcon, QuestionMarkCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { HandThumbDownIcon as HandThumbDownIconSolid, HandThumbUpIcon as HandThumbUpIconSolid, LinkIcon as LinkIconSolid, DocumentDuplicateIcon as DocumentDuplicateIconSolid, CogIcon, TrashIcon as TrashIconSolid } from '@heroicons/react/24/solid';
@@ -13,11 +13,15 @@ import Link from 'next/link';
 import { Toaster, toast } from 'sonner'
 import Popover from '@/components/popover'
 
+const NUMBER_OF_OPTIONS = 2;
+
 export default function Stream() {
     const [stream, setStream] = useState({ name: '', description: '', created_by: '', created_at: '', updated_at: '' })
     const [entries, setEntries] = useState<any[]>([])
     const [noResultsFound, setNoResultsFound] = useState(false)
     const [hoveringIndex, setHoveringIndex] = useState(-1)
+    const [selectedIndex, setSelectedIndex] = useState(-1)
+    const [lastAction, setLastAction] = useState('')
     const [error, setError] = useState('')
     const [hoveringIndexMoreOptions, setHoveringIndexMoreOptions] = useState(-1)
     const [adminOptionsOpen, setAdminOptionsOpen] = useState(false)
@@ -29,6 +33,8 @@ export default function Stream() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
     const dropdownItems = []
+    const inputRef = useRef(null);
+    const firstEntryRef = useRef(null);
     // @ts-ignore
     if (user?.id && stream?.created_by === user.id) {
         dropdownItems.push({
@@ -108,6 +114,26 @@ export default function Stream() {
         fetchStreamContent()
     }, [id])
 
+    useEffect(() => {
+        // Check if the inputRef is defined before trying to focus
+        if (inputRef && inputRef.current) {
+            // @ts-ignore
+            inputRef.current.focus();
+        }
+    }, [user, stream]);
+
+    const handleKeyDown = (e: any) => {
+        if (e.key === 'Enter') {
+            addEntry();
+        } else if ((e.key === 'Tab' || e.key === 'ArrowDown') && !e.shiftKey && entries.length > 0) {
+            e.preventDefault();
+            // @ts-ignore
+            firstEntryRef.current?.focus();
+            setSelectedIndex(0);
+            setLastAction('select');
+        }
+    };
+
     const addEntry = async () => {
         let accessTokenFromCookie = ''
         if (document.cookie.split('accessToken=')[1]) {
@@ -142,7 +168,7 @@ export default function Stream() {
         }
     }
 
-    const deleteEntry = async (entryId: string) => {
+    const deleteEntry = async (entryId: string, index: string) => {
         let accessTokenFromCookie = ''
         if (document.cookie.split('accessToken=')[1]) {
             accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
@@ -164,7 +190,11 @@ export default function Stream() {
 
         if (data.status === 204) {
             const newEntries = entries.filter((entry) => entry.id !== entryId)
+            const entryDeleted = entries.find((entry) => entry.id === entryId)
             setEntries(newEntries)
+            setHoveringIndexMoreOptions(-1)
+            // @ts-ignore
+            document.querySelector(`[data-entry-index="${index}"]`)?.focus();
         } setError("There was an issue deleting entry.")
     }
 
@@ -217,16 +247,13 @@ export default function Stream() {
                 <div className='mt-9'>
                     {user && user.id === stream.created_by && (
                         <input
+                            ref={inputRef}
                             className='w-full px-3 py-2 border border-gray-300 rounded-md'
                             type='text'
-                            placeholder='Enter text here'
+                            placeholder='Add text or a link here'
                             value={textInput}
                             onChange={(e) => setTextInput(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    addEntry();
-                                }
-                            }}
+                            onKeyDown={handleKeyDown}
                         />
                     )}
                 </div>
@@ -237,12 +264,80 @@ export default function Stream() {
                                 entries.map((item, index) => (
                                     <div className='relative' key={index}>
                                         <div
-                                            className={`flex items-center h-[40px] mx-[-.75rem] py-9 px-[1.09rem] rounded-md ${hoveringIndex === index ? 'bg-gray-200' : ''}`}
+                                            ref={index === 0 ? firstEntryRef : null}
+                                            tabIndex={0}
+                                            className={`flex items-center h-[40px] mx-[-.75rem] py-9 px-[1.09rem] rounded-md ${selectedIndex === index ? 'z-10 bg-gray-300' : hoveringIndex === index ? 'bg-gray-200' : ''}`}
+                                            style={navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome') ? { outlineOffset: '-5px' } : {}}
                                             onMouseEnter={() => {
                                                 setHoveringIndex(index)
                                                 setHoveringIndexMoreOptions(-1)
+                                                setLastAction('hover')
                                             }}
                                             onMouseLeave={() => setHoveringIndex(-1)}
+                                            onClick={() => {
+                                                setSelectedIndex(index)
+                                                setLastAction('select')
+                                            }}
+                                            onKeyDown={(e) => {
+                                                console.log("Handling keydown on entry", e.key)
+                                                if (e.key === 'Backspace' || e.key === 'Delete') {
+                                                    e.preventDefault();
+                                                    deleteEntry(item.id, index.toString())
+                                                    // setHoveringIndex(index + 1)
+                                                }
+                                                if (e.key === 'Tab') {
+                                                    e.preventDefault();
+                                                    let nextIndex = index + (e.shiftKey ? -1 : 1);
+                                                    if ((hoveringIndexMoreOptions < NUMBER_OF_OPTIONS - 1) && !e.shiftKey) {
+                                                        // Move focus to the next option within the same entry
+                                                        setHoveringIndexMoreOptions(hoveringIndexMoreOptions + 1);
+                                                        // @ts-ignore
+                                                        document.querySelector(`[data-entry-index="${index}"][data-option-index="${hoveringIndexMoreOptions + 1}"]`)?.focus();
+                                                    } else {
+                                                        // Reset the options index and move focus to the next/previous entry
+                                                        setHoveringIndexMoreOptions(-1);
+                                                        setSelectedIndex(nextIndex);
+                                                        setLastAction('select');
+
+                                                        if (nextIndex < 0) {
+                                                            // Focus on the input field if we're at the beginning
+                                                            // @ts-ignore
+                                                            inputRef.current?.focus();
+                                                        } else if (nextIndex >= entries.length) {
+                                                            // Loop back to the first entry if we're at the end
+                                                            // @ts-ignore
+                                                            firstEntryRef.current?.focus();
+                                                        } else {
+                                                            // Focus on the next/previous entry
+                                                            // @ts-ignore
+                                                            document.querySelector(`[data-entry-index="${nextIndex}"]`)?.focus();
+                                                        }
+                                                    }
+                                                }
+                                                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                                                    e.preventDefault();
+                                                    let nextIndex = index + (e.key === 'ArrowUp' ? -1 : 1);
+                                                    setSelectedIndex(nextIndex);
+                                                    setHoveringIndexMoreOptions(-1);
+                                                    setLastAction('select');
+                                                    if (nextIndex < 0) {
+                                                        // @ts-ignore
+                                                        inputRef.current?.focus();
+                                                    } else if (nextIndex >= entries.length) {
+                                                        // @ts-ignore
+                                                        firstEntryRef.current?.focus();
+                                                        setSelectedIndex(0);
+                                                    } else {
+                                                        // @ts-ignore
+                                                        document.querySelector(`[data-entry-index="${nextIndex}"]`)?.focus();
+                                                    }
+                                                }
+                                                if (e.key.toLowerCase() === 'c') {
+                                                    navigator.clipboard.writeText(item.content.url)
+                                                    toast.success('Copied url to clipboard.')
+                                                }
+                                            }}
+                                            data-entry-index={index}
                                         >
                                             <div className='w-[40px] h-[40px] rounded-md flex justify-center items-center'>
                                                 <img
@@ -274,42 +369,103 @@ export default function Stream() {
                                                 </div>
                                             </div>
                                             {
-                                                hoveringIndex === index && (
-                                                    <div className='absolute right-2 top-[14px] rounded-lg bg-gray-200'>
+                                                (hoveringIndex === index || selectedIndex === index) && (
+                                                    <div className={`absolute right-2 top-[14px] pl-4 ${selectedIndex === index ? 'bg-gray-300' : hoveringIndex === index ? 'bg-gray-200' : ''}`}>
                                                         <div className='flex items-center h-full'>
                                                             <div
-                                                                onMouseEnter={() => setHoveringIndexMoreOptions(0)}
+                                                                onMouseEnter={() => {
+                                                                    setHoveringIndexMoreOptions(0)
+                                                                    setLastAction('hover')
+                                                                }}
                                                                 onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
                                                                 className='cursor-pointer'
                                                                 onClick={() => {
-                                                                    navigator.clipboard.writeText(item.url)
+                                                                    navigator.clipboard.writeText(item.content.url)
                                                                     toast.success('Copied url to clipboard.')
                                                                 }}
-                                                            >
-                                                                {
-                                                                    hoveringIndexMoreOptions !== 0 ? (
-                                                                        <DocumentDuplicateIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
-                                                                    ) : (
-                                                                        <DocumentDuplicateIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
-                                                                    )
-                                                                }
-                                                            </div>
-                                                            <div
-                                                                onMouseEnter={() => setHoveringIndexMoreOptions(1)}
-                                                                onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
-                                                                className='cursor-pointer'
-                                                                onClick={() => {
-                                                                    deleteEntry(item.id)
+                                                                tabIndex={0}
+                                                                data-entry-index={index}
+                                                                data-option-index={0}
+                                                                onKeyDown={(e) => {
+                                                                    e.preventDefault();
+                                                                    if (e.key === 'Enter') {
+                                                                        navigator.clipboard.writeText(item.content.url)
+                                                                        toast.success('Copied url to clipboard.')
+                                                                    }
                                                                 }}
                                                             >
                                                                 {
-                                                                    hoveringIndexMoreOptions !== 1 ? (
-                                                                        <TrashIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                    (hoveringIndexMoreOptions === 0 && ((hoveringIndex === index && lastAction === 'hover') || (selectedIndex === index && (hoveringIndex < 0 || lastAction === 'select')))) ? (
+                                                                        // true ? (
+                                                                        <>
+                                                                            <DocumentDuplicateIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                        </>
                                                                     ) : (
-                                                                        <TrashIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                        <DocumentDuplicateIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
                                                                     )
                                                                 }
                                                             </div>
+                                                            {
+                                                                (hoveringIndexMoreOptions === 0 && ((hoveringIndex === index && lastAction === 'hover') || (selectedIndex === index && (hoveringIndex < 0 || lastAction === 'select')))) && (
+                                                                    <Popover
+                                                                        text='Copy url'
+                                                                        left="-22"
+                                                                        bottom="-57"
+                                                                        command="C"
+                                                                    />
+                                                                )
+                                                            }
+                                                            <div
+                                                                onMouseEnter={() => {
+                                                                    setHoveringIndexMoreOptions(1)
+                                                                    setLastAction('hover')
+                                                                }}
+                                                                onMouseLeave={() => setHoveringIndexMoreOptions(-1)}
+                                                                className='cursor-pointer'
+                                                                onClick={() => {
+                                                                    deleteEntry(item.id, index.toString())
+                                                                }}
+                                                                tabIndex={0}
+                                                                data-entry-index={index}
+                                                                data-option-index={1}
+                                                                onKeyDown={(e) => {
+                                                                    e.preventDefault();
+                                                                    if (e.key === 'Enter') {
+                                                                        deleteEntry(item.id, index.toString())
+                                                                    }
+                                                                    if (e.key === 'Tab') {
+                                                                        let nextIndex
+                                                                        nextIndex = index + (e.shiftKey ? -1 : 1);
+                                                                        setSelectedIndex(nextIndex);
+                                                                        setLastAction('select');
+                                                                        if (!e.shiftKey) {
+                                                                            // @ts-ignore
+                                                                            document.querySelector(`[data-entry-index="${nextIndex}"]`)?.focus();
+                                                                        } else {
+                                                                            // @ts-ignore
+                                                                            document.querySelector(`[data-entry-index="${index}"][data-option-index="0"]`)?.focus();
+                                                                        }
+                                                                    }
+                                                                }}
+                                                            >
+                                                                {
+                                                                    (hoveringIndexMoreOptions === 1 && ((hoveringIndex === index && lastAction === 'hover') || (selectedIndex === index && (hoveringIndex < 0 || lastAction === 'select')))) ? (
+                                                                        <TrashIconSolid className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                    ) : (
+                                                                        <TrashIcon className='w-10 h-10 pl-2 pr-2 pt-1 pb-1' />
+                                                                    )
+                                                                }
+                                                            </div>
+                                                            {
+                                                                (hoveringIndexMoreOptions === 1 && ((hoveringIndex === index && lastAction === 'hover') || (selectedIndex === index && (hoveringIndex < 0 || lastAction === 'select')))) && (
+                                                                    <Popover
+                                                                        text='Delete'
+                                                                        left="2"
+                                                                        bottom="-57"
+                                                                        command="⌫"
+                                                                    />
+                                                                )
+                                                            }
                                                         </div>
                                                     </div>
                                                 )
