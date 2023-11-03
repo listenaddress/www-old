@@ -62,6 +62,19 @@ export default function Stream() {
         return result;
     }
 
+    const formatFirstLastAndRest = (authors: any[]) => {
+        if (authors.length === 0) return "";
+        if (authors.length === 1) return authors[0].name;
+        if (authors.length === 2) return `${authors[0].name}, ${authors[1].name}`;
+        return `${authors[0].name}, ${authors[1].name}, +${authors.length - 2}`;
+    }
+
+    const formatFirstAndRest = (authors: any[]) => {
+        if (authors.length === 0) return "";
+        if (authors.length === 1) return authors[0].name;
+        return `${authors[0].name}, +${authors.length - 1}`;
+    }
+
     useEffect(() => {
         if (!id) return
         const fetchStream = async () => {
@@ -203,7 +216,7 @@ export default function Stream() {
             <div className='m-4 mb-28 sm:ml-20'>
                 <Toaster />
             </div>
-            <div className='mt-6 px-4 max-w-2xl mx-auto'>
+            <div className='mt-6 px-4 max-w-[51rem] mx-auto'>
                 <div className='flex justify-between items-center'>
                     <div className="flex items-center relative">
                         <h2 className="text-xl font-semibold">{stream.name}</h2>
@@ -266,7 +279,7 @@ export default function Stream() {
                                         <div
                                             ref={index === 0 ? firstEntryRef : null}
                                             tabIndex={0}
-                                            className={`flex items-center h-[40px] mx-[-.75rem] py-9 px-[1.09rem] rounded-md ${selectedIndex === index ? 'z-10 bg-gray-300' : hoveringIndex === index ? 'bg-gray-200' : ''}`}
+                                            className={`flex items-center h-[40px] mx-[-.75rem] py-8 px-[1.09rem] rounded-md ${selectedIndex === index ? 'z-10 bg-gray-300' : hoveringIndex === index ? 'bg-gray-200' : ''}`}
                                             style={navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome') ? { outlineOffset: '-5px' } : {}}
                                             onMouseEnter={() => {
                                                 setHoveringIndex(index)
@@ -339,27 +352,24 @@ export default function Stream() {
                                             }}
                                             data-entry-index={index}
                                         >
-                                            <div className='w-[40px] h-[40px] rounded-md flex justify-center items-center'>
+                                            <div className='w-[34px] h-[34px] rounded-md flex justify-center items-center'>
                                                 <img
                                                     src={item.content.platformImage}
-                                                    className='rounded-md h-[42px] m-auto'
+                                                    className='rounded-md h-[34px] min-w-[34px] max-w-[34px] m-auto'
                                                 />
                                             </div>
                                             <div
-                                                style={{ maxWidth: 'calc(100% - 40px)' }}
+                                                style={{ maxWidth: 'calc(100% - 34px)' }}
                                                 key="1"
-                                                className='pt-[2px] pl-3'
+                                                className='pl-3 flex justify-between items-center'
                                             >
-                                                <div className='text-gray-900 font-medium overflow-ellipsis overflow-hidden whitespace-nowrap' style={{ lineHeight: '1.2', maxHeight: '20px' }} key="2">
+                                                <div className='text-gray-900 pr-1 text-[15px] overflow-ellipsis overflow-hidden whitespace-nowrap max-w-[475px]' key="2">
                                                     {item.content.title}
                                                 </div>
-                                                <div className='text-gray-500 mt-1 text-sm overflow-ellipsis overflow-hidden whitespace-nowrap' style={{ maxHeight: '20px' }} key="3">
-                                                    {item.content.authors && item.content.authors.length > 0 && formatAuthors(item.content.authors) + ' • '}
+                                                <div className='text-gray-500 text-sm mt-[2px] overflow-ellipsis overflow-hidden whitespace-nowrap' key="3">
+                                                    {item.content.authors && item.content.authors.length > 0 && (item.content.title.length > 56 ? formatFirstAndRest(item.content.authors) : formatFirstLastAndRest(item.content.authors))}
                                                     {
-                                                        item.content.time && item.content.time
-                                                    }
-                                                    {
-                                                        !item.content.time && (
+                                                        !item.content.authors || item.content.authors.length === 0 && (
                                                             <>
                                                                 {/* Added {getTime(item.created_at)} */}
                                                                 {extractDomainFromUrl(item.content.url)}
@@ -368,9 +378,14 @@ export default function Stream() {
                                                     }
                                                 </div>
                                             </div>
+                                            <div className='text-gray-500 mt-[2px] text-sm overflow-ellipsis overflow-hidden whitespace-nowrap ml-auto' key="4">
+                                                {
+                                                    item.content.time && item.content.time
+                                                }
+                                            </div>
                                             {
                                                 (hoveringIndex === index || selectedIndex === index) && (
-                                                    <div className={`absolute right-2 top-[14px] pl-4 ${selectedIndex === index ? 'bg-gray-300' : hoveringIndex === index ? 'bg-gray-200' : ''}`}>
+                                                    <div className={`absolute right-2 mr-[-1rem] pr- top-[14px] pl-4 ${selectedIndex === index ? 'bg-gray-300' : hoveringIndex === index ? 'bg-gray-200' : ''}`}>
                                                         <div className='flex items-center h-full'>
                                                             <div
                                                                 onMouseEnter={() => {
@@ -476,7 +491,6 @@ export default function Stream() {
                             }
                         </div>
                     )
-
                 }
             </div>
         </>
