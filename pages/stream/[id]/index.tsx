@@ -21,6 +21,7 @@ export default function Stream() {
     const [noResultsFound, setNoResultsFound] = useState(false)
     const [hoveringIndex, setHoveringIndex] = useState(-1)
     const [selectedIndex, setSelectedIndex] = useState(-1)
+    const [dragOverIndex, setDragOverIndex] = useState(-1)
     const [lastAction, setLastAction] = useState('')
     const [error, setError] = useState('')
     const [hoveringIndexMoreOptions, setHoveringIndexMoreOptions] = useState(-1)
@@ -43,6 +44,37 @@ export default function Stream() {
             icon: PencilSquareIcon
         })
     }
+
+    const onDragStart = (e: any, index: any) => {
+        setSelectedIndex(index); // Mark the item as selected (being dragged)
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', e.target.innerHTML);
+        e.dataTransfer.setDragImage(e.target, 20, 20); // Sets the position of the drag image relative to the mouse/touch event
+    };
+
+    const onDrop = (e: any, index: any) => {
+        e.preventDefault();
+
+        const draggedIndex = selectedIndex;
+        if (draggedIndex === -1 || draggedIndex === index) {
+            return; // No item was dragged or it was dropped in its original position
+        }
+
+        // Update the entries state to reflect the new order
+        const updatedEntries = [...entries];
+        const item = updatedEntries[draggedIndex];
+        updatedEntries.splice(draggedIndex, 1); // Remove the item from its original position
+        updatedEntries.splice(index, 0, item); // Insert the item at the new position
+
+        setEntries(updatedEntries);
+        setSelectedIndex(-1); // Reset the selected index as the drop is completed
+        setDragOverIndex(-1); // Reset the drag over index as the drop is completed
+    };
+
+    const onDragOver = (e: any, index: any) => {
+        e.preventDefault();
+        setDragOverIndex(index); // Mark the item as being hovered over
+    };
 
     const formatAuthors = (authors: any[]) => {
         let result = "";
@@ -263,7 +295,19 @@ export default function Stream() {
                             {
                                 entries.map((item, index) => (
                                     <div className='relative' key={index}>
+                                        {dragOverIndex === index && (
+                                            <div
+                                                style={{ height: '2px', backgroundColor: '#929295', position: 'absolute', top: 0, left: '-9px', width: 'calc(100% + 18px)' }}
+                                                className='rounded-lg'
+                                            >
+
+                                            </div>
+                                        )}
                                         <div
+                                            draggable
+                                            onDragStart={(e) => onDragStart(e, index)}
+                                            onDrop={(e) => onDrop(e, index)}
+                                            onDragOver={(e) => onDragOver(e, index)}
                                             ref={index === 0 ? firstEntryRef : null}
                                             tabIndex={0}
                                             className={`flex items-center h-[40px] mx-[-.75rem] py-9 px-[1.09rem] rounded-md ${selectedIndex === index ? 'z-10 bg-gray-300' : hoveringIndex === index ? 'bg-gray-200' : ''}`}
