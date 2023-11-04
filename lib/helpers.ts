@@ -141,7 +141,7 @@ const getTime = (time: string) => {
     } else if (moment(time).isAfter(lastYear)) {
         return moment(time).format("MMM D");
     } else {
-        return moment(time).format("YYYY MMM D");
+        return moment(time).format("YYYY");
     }
 }
 
