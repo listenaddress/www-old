@@ -52,7 +52,7 @@ export default function Stream() {
         e.dataTransfer.setDragImage(e.target, 20, 20); // Sets the position of the drag image relative to the mouse/touch event
     };
 
-    const onDrop = (e: any, index: any) => {
+    const onDrop = async (e: any, index: any) => {
         e.preventDefault();
 
         const draggedIndex = selectedIndex;
@@ -69,6 +69,28 @@ export default function Stream() {
         setEntries(updatedEntries);
         setSelectedIndex(-1); // Reset the selected index as the drop is completed
         setDragOverIndex(-1); // Reset the drag over index as the drop is completed
+
+        // Call the move_entry endpoint
+        let accessTokenFromCookie = ''
+        if (document.cookie.split('accessToken=')[1]) {
+            accessTokenFromCookie = document.cookie.split('accessToken=')[1].split(';')[0]
+        }
+        const targetId = index === updatedEntries.length - 1 ? undefined : updatedEntries[index + 1].id;
+        console.log("targetId", targetId)
+        // Log the items we're moving in between
+        console.log("Moving item", item.id, "to position", index, "in between", index === updatedEntries.length - 1 ? undefined : updatedEntries[index !== 0 ? index - 1 : 0].id, "and", targetId)
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + 'entry/' + item.id + '/move', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + accessTokenFromCookie
+            },
+            body: JSON.stringify({ target_id: targetId })
+        });
+        const data = await response.json();
+        if (data.error) {
+            toast.error(data.error);
+        }
     };
 
     const onDragOver = (e: any, index: any) => {
@@ -395,7 +417,7 @@ export default function Stream() {
                                                 className='pt-[2px] pl-3'
                                             >
                                                 <div className='text-gray-900 font-[500] overflow-ellipsis overflow-hidden whitespace-nowrap' style={{ lineHeight: '1.2', maxHeight: '20px' }} key="2">
-                                                    {item.content.title}
+                                                    {item.content.title} {item.id}
                                                 </div>
                                                 <div className='text-gray-500 mt-1 text-sm overflow-ellipsis overflow-hidden whitespace-nowrap' style={{ maxHeight: '20px' }} key="3">
                                                     {item.content.authors && item.content.authors.length > 0 && formatAuthors(item.content.authors) + ' • '}

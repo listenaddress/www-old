@@ -101,7 +101,7 @@ function StreamForm({
 
     return (
         <div className='max-w-[34rem] m-auto mb-28 px-4 text-black'>
-            <h3 className='text-l mt-12 mb-3'>Name</h3>
+            <h3 className='text-l mt-28 mb-3'>Name</h3>
             <input
                 type="text"
                 id="name"
@@ -133,68 +133,6 @@ function StreamForm({
                 id="about"
                 onChange={(e) => setAbout(e.target.value)}
             ></textarea> */}
-            <h3 className='text-l mt-10 mb-1'>References <span className='text-gray-500'>(optional)</span></h3>
-            <span className='text-sm text-gray-500'>
-                Any links, papers, podcasts, books, etc. that&apos;d be examples of what you&apos;re looking for?
-            </span>
-            <input
-                type="text"
-                placeholder="https://www.youtube.com/watch?v=2Oe6HUgrRlQ"
-                className="w-full mb-4 mt-4 px-4 py-2 border-none bg-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
-                value={inspiration}
-                id="inspiration"
-                onChange={(e) => setInspiration(e.target.value)}
-            />
-            <div>
-                <Button
-                    onClick={handleAddClick}
-                    size='md'
-                    variant={inspiration && !loading ? 'default' : 'disabled'}
-                    className='mt-4'
-                    disabled={!inspiration || loading}
-                >
-                    Add
-                </Button>
-                {
-                    error && (
-                        <div className='mt-4 text-red-500'>
-                            {error}
-                        </div>
-                    )
-                }
-                {
-                    inspirations && (
-                        <div className='mt-4'>
-                            <div className='text-sm text-gray-500'>
-                                {
-                                    inspirations.map((inspiration, index) => {
-                                        return (
-                                            <div
-                                                key={index}
-                                                className='mt-2'
-                                                onMouseEnter={() => setInspirationHover(index)}
-                                                onMouseLeave={() => setInspirationHover(-1)}
-                                            >
-                                                {inspiration.title}
-                                                {
-                                                    inspirationHover === index && (
-                                                        <TrashIcon
-                                                            onClick={() => {
-                                                                handleDelete(index)
-                                                            }}
-                                                            className={`inline-block w-4 h-4 ml-2 cursor-pointer ${deleting ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                                                        />
-                                                    )
-                                                }
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                        </div>
-                    )
-                }
-            </div>
             <h3 className='text-l mt-10 mb-1'>Privacy</h3>
             <span className='text-sm text-gray-500'>
                 Do you want this stream to be public or private?
